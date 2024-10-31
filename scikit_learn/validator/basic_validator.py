@@ -9,7 +9,7 @@ from tabulate import tabulate
 from scikit_learn.validator.common_validator import BaseValidator, Result
 
 
-class ClassifierBasicValidator(BaseValidator):
+class ClassifierAdditionalValidator:
 
     def __init__(self,
                  estimator,
@@ -18,19 +18,12 @@ class ClassifierBasicValidator(BaseValidator):
                  log_level: int = 1,
                  n_jobs: int = -1,
                  random_state=42):
-        super().__init__(log_level, n_jobs)
-
         self.estimator = estimator
         self.data_x = data_x
         self.data_y = data_y
         self.random_state = random_state
 
-    def validate(self,
-                 searcher,
-                 data_x,
-                 data_y,
-                 cv=None,
-                 scoring=None) -> Result | None:
+    def validate(self):
         x_train, x_test, y_train, y_test = train_test_split(self.data_x,
                                                             self.data_y,
                                                             test_size=0.2,
@@ -41,8 +34,6 @@ class ClassifierBasicValidator(BaseValidator):
 
         self.__show_classification_report(y_test, y_pred)
         self.__show_confusion_matrix(y_test, y_pred)
-
-        return None
 
     def __show_confusion_matrix(self, y_test, y_pred):
         matrix = confusion_matrix(y_test, y_pred)

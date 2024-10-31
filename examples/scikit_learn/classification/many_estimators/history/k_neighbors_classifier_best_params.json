@@ -1,0 +1,29 @@
+[
+    {
+        "estimator": "KNeighborsClassifier",
+        "mean": 0.7675465379690731,
+        "standard_deviation": 0.028511900844778535,
+        "median": 0.7692307692307693,
+        "variance": 0.0008129284897824829,
+        "standard_error": 0.012750909691331696,
+        "min_max_score": [
+            0.7203,
+            0.7972
+        ],
+        "estimator_params": {
+            "algorithm": "ball_tree",
+            "leaf_size": 8,
+            "metric": "manhattan",
+            "metric_params": null,
+            "n_jobs": null,
+            "n_neighbors": 8,
+            "p": 2,
+            "weights": "uniform"
+        },
+        "scoring": "accuracy",
+        "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:00.000",
+        "validation_time": "00:00:01.000"
+    }
+]

@@ -1,0 +1,40 @@
+[
+    {
+        "estimator": "RandomForestClassifier",
+        "mean": 0.7451787648970749,
+        "standard_deviation": 0.0762153346761537,
+        "median": 0.7762237762237763,
+        "variance": 0.005808777239798117,
+        "standard_error": 0.03408453385275532,
+        "min_max_score": [
+            0.5944,
+            0.8028
+        ],
+        "estimator_params": {
+            "bootstrap": true,
+            "ccp_alpha": 0.0,
+            "class_weight": null,
+            "criterion": "log_loss",
+            "max_depth": 7,
+            "max_features": "sqrt",
+            "max_leaf_nodes": null,
+            "max_samples": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 3,
+            "min_samples_split": 14,
+            "min_weight_fraction_leaf": 0.10454145790696763,
+            "monotonic_cst": null,
+            "n_estimators": 37,
+            "n_jobs": null,
+            "oob_score": false,
+            "random_state": null,
+            "verbose": 0,
+            "warm_start": false
+        },
+        "scoring": "accuracy",
+        "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:00.000",
+        "validation_time": "00:00:07.000"
+    }
+]

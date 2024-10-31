@@ -40,9 +40,9 @@ class MultiProcessManager:
         np.random.seed(seed)
 
         if stratified:
-            self.cv = StratifiedKFold(n_splits=fold_splits, shuffle=True)
+            self.cv = StratifiedKFold(n_splits=fold_splits, shuffle=True, random_state=seed)
         else:
-            self.cv = KFold(n_splits=fold_splits, shuffle=True)
+            self.cv = KFold(n_splits=fold_splits, shuffle=True, random_state=seed)
 
 
     def process_pipelines(self):
