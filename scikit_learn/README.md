@@ -10,7 +10,7 @@ utilizadas para classificação ou regressão, sabendo disso, foram implementada
 wrapper que utilizam implementações do scikit-learn para a busca das melhores features e evitar
 uma análise manual.
 
-Cada uma das implementações presentes estão mais detalhadas dentro [desse readme]().
+Cada uma das implementações presentes estão mais detalhadas dentro [desse readme](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/features_search/README.md).
 
 ### Busca dos Melhores Parâmetros do Modelo
 
@@ -19,7 +19,7 @@ descobrir quais os melhores parâmetros para o modelo e os dados que você está
 biblioteca também fornece implementações wrapper para utilizar algumas variações de busca o
 que vai possibilitar experimentar a que melhor se encaixa.
 
-Cada uma das implementações presentes estão mais detalhadas dentro [desse readme]().
+Cada uma das implementações presentes estão mais detalhadas dentro [desse readme](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/hiper_params_search/README.md).
 
 ### Validação do Modelo
 
