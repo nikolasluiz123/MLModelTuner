@@ -2,7 +2,7 @@
 
 Esse módulo tem como foco validar o modelo encontrado com os melhores parâmetros e conseguir
 demonstrar se realmente o modelo trará os resultados desejados. Para isso foi implementada
-a classe [BaseValidator]() a qual define aquilo que é esperado por um validador e todos
+a classe [BaseValidator](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/validator/common_validator.py#L8) a qual define aquilo que é esperado por um validador e todos
 os wrappers implementados deverão utilizar essa classe como base.
 
 ### Validação Cruzada
@@ -18,10 +18,10 @@ A classe wrapper para execução dessa validação cruzada no processo de busca 
 modelo é [CrossValidator](), essa implementação utiliza a função cross_val_score já mencionada
 e ao fim do processo são realizados cálculos de métricas matemáticas, as quais são salvas
 em um objeto e o mesmo é retornado para que o fluxo seja seguido. Esse objeto de retorno
-será utilizado principalmente pelo módulo de histórico, o qual é detalhado [nesse readme]().
+será utilizado principalmente pelo módulo de histórico, o qual é detalhado [nesse readme](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/history_manager/README.md).
 
-Os objetos de resultado das validações devem implementar [ValidationResult](). A classe
-concreta existente para o uso das implementações atualmente é [CrossValidationResult](),
+Os objetos de resultado das validações devem implementar [ValidationResult](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/validator/results/common.py#L5). A classe
+concreta existente para o uso das implementações atualmente é [CrossValidationResult](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/validator/results/cross_validation.py#L6),
 nele podemos armazenar métricas matemáticas básicas: média, mediana e desvio padrão. Além
 disso, também armazenamos o modelo que foi validado e qual a métrica de avaliação utilizada
 na validação.
@@ -30,7 +30,7 @@ na validação.
 
 Além do uso de métricas matemáticas gerais podemos utilizar algumas implementações fornecidas
 pelo scikit-learn que são especificamente úteis para os cenários de classificação. A implementação
-[ClassifierAdditionalValidator]() faz uso de [classification_report](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html)
+[ClassifierAdditionalValidator](ClassifierAdditionalValidator) faz uso de [classification_report](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html)
 e [confusion_matrix](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html) para trazer
 uma visão diferenciada sobre o modelo e possibilitar o julgamento dele como uma validação final,
 utilizada apenas após validá-lo de forma cruzada.

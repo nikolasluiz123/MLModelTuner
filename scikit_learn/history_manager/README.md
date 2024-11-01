@@ -5,7 +5,7 @@ possibilitando que, após uma série de tentativas de melhorar o seu modelo de m
 você possa ir até um local e analisar tudo que você já tentou e redirecionar seus esforços
 para um caminho diferente ou seguir no mesmo.
 
-A implementação base é [HistoryManager](), esse manager é totalmente ligado a classe
+A implementação base é [HistoryManager](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/history_manager/README.md), esse manager é totalmente ligado a classe
 de resultado da validação, ou seja, ela precisa ser implementada especificamente para 
 um objeto de resultado pois os campos presentes na classe serão salvos no histórico.
 

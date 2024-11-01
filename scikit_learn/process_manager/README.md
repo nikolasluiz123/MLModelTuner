@@ -5,8 +5,8 @@ presentes nos módulos anteriores e realiza as execuções em uma sequência def
 da implementação de um ProcessManager além de centralizar é possibilitar a execução dos processos
 padrões de busca do melhor modelo para N modelos, sejam eles totalmente diferentes ou alterando algum detalhe.
 
-A implementação está contida em [MultiProcessManager]() que solicitará os parâmetros de
-configuração que são aplicados em todos os [Pipelines](), para configurações específicas
+A implementação está contida em [MultiProcessManager](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/process_manager/multi_process_manager.py#L17) que solicitará os parâmetros de
+configuração que são aplicados em todos os [Pipelines](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/process_manager/pipeline.py#L9), para configurações específicas
 do modelo você deve definir diretamente dentro do Pipeline de execução.
 
 Um Pipeline contem o modelo que se deseja testar juntamente com: os parâmetros que deseja testar, 
