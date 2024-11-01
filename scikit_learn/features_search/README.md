@@ -6,7 +6,7 @@ sempre a documentação do próprio scikit-learn para garantir total entendiment
 
 ### CommonFeaturesSearcher
 
-A classe [CommonFeaturesSearcher]()
+A classe [CommonFeaturesSearcher](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/features_search/common_searcher.py#L4)
 é utilizada como classe base para a implementação de todas as classes wrapper de seleção de features.
 Ela considera os parâmetros que são normalmente utilizados pelas implementações do scikit-learn se beneficiando
 na maioria das vezes da definição de valores padrões para que seja possível utilizar de uma melhor forma
