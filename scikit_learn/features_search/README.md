@@ -16,8 +16,8 @@ implementações diferentes que não necessitam dos mesmos parâmetros.
 
 | Implementação do Scikit-Learn                                                                                                       | Implementação Wrapper               | 
 |-------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|
-| [SelectKBest](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html)                         | [SelectKBestSearcher]()             | 
-| [SelectPercentile](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectPercentile.html)               | [SelectPercentileSearcher]()        |
-| [GenericUnivariateSelect](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.GenericUnivariateSelect.html) | [GenericUnivariateSelectSearcher]() | 
-| [RFE](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFE.html)                                         | [RecursiveFeatureSearcher]()        |
-| [RFECV](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFECV.html)                                     | [RecursiveFeatureCVSearcher]()      |
+| [SelectKBest](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html)                         | [SelectKBestSearcher](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/features_search/select_k_best_searcher.py#L8)             | 
+| [SelectPercentile](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectPercentile.html)               | [SelectPercentileSearcher](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/features_search/select_percentile_searcher.py#L8)        |
+| [GenericUnivariateSelect](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.GenericUnivariateSelect.html) | [GenericUnivariateSelectSearcher](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/features_search/generic_univariate_select_searcher.py#L8) | 
+| [RFE](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFE.html)                                         | [RecursiveFeatureSearcher](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/features_search/rfe_searcher.py#L8)        |
+| [RFECV](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFECV.html)                                     | [RecursiveFeatureCVSearcher](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/features_search/rfe_searcher.py#L34)      |
