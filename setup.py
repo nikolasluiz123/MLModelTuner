@@ -2,14 +2,15 @@ from setuptools import setup, find_packages
 
 setup(
     name='MLModelTunner',
-    version='0.1.0',
+    use_scm_version=True,
+    setup_requires=['setuptools-scm'],
     description='Biblioteca para auxiliar na busca do melhor modelo de machine learning.',
-    # long_description=open('README.md').read(),# Descrição detalhada (exibe README.md)
+    long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    author='Nikolas Luiz Schmitt',                        # Nome do autor
-    author_email='nikolas.luiz.schmitt@gmail.com',      # Email do autor
-    url='https://github.com/nikolasluiz123/MLModelTunner',  # URL do projeto
-    packages=find_packages(),                 # Inclui todos os pacotes do projeto
+    author='Nikolas Luiz Schmitt',
+    author_email='nikolas.luiz.schmitt@gmail.com',
+    url='https://github.com/nikolasluiz123/MLModelTunner',
+    packages=find_packages(),
     install_requires=[
         'contourpy', 'cycler', 'fonttools', 'joblib', 'kiwisolver', 'matplotlib',
         'numpy', 'packaging', 'pandas', 'pillow', 'pyaml', 'pyparsing', 'python-dateutil',
