@@ -43,7 +43,7 @@ class HalvingRandomCVHipperParamsSearcher(CommonHiperParamsSearcher):
     """
 
     def __init__(self,
-                 number_candidates: int,
+                 number_candidates,
                  resource='n_samples',
                  max_resources='auto',
                  min_resources='exhaust',
