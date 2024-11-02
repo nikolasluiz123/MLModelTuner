@@ -113,15 +113,18 @@ class MultiProcessManager:
         :param pipeline: O pipeline que contém a lógica de seleção de features.
         """
         if self.history_index is None:
-            features =  pipeline.feature_searcher.select_features(
-                estimator=pipeline.estimator,
-                data_x=self.data_x,
-                data_y=self.data_y,
-                scoring=self.scoring,
-                cv=self.cv
-            )
+            if pipeline.feature_searcher is None:
+                self.data_x_best_features = self.data_x
+            else:
+                features =  pipeline.feature_searcher.select_features(
+                    estimator=pipeline.estimator,
+                    data_x=self.data_x,
+                    data_y=self.data_y,
+                    scoring=self.scoring,
+                    cv=self.cv
+                )
 
-            self.data_x_best_features = features
+                self.data_x_best_features = features
 
     def _process_hiper_params_search(self, pipeline: Pipe) -> Searcher | None:
         """

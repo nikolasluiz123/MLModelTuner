@@ -17,7 +17,8 @@ class Pipeline:
 
     :param estimator: O estimador de machine learning a ser utilizado no pipeline.
     :param params: Parâmetros a serem utilizados na busca de hiperparâmetros.
-    :param feature_searcher: Objeto responsável pela seleção de características.
+    :param feature_searcher: Objeto responsável pela seleção de features. Pode ser None caso as features possam ser
+    definidas sem a necessidade de um algorítmo.
     :param params_searcher: Objeto responsável pela busca de hiperparâmetros.
     :param history_manager: Gerenciador de histórico para armazenar resultados da validação.
     :param validator: Validador que executa a validação do modelo.
@@ -26,7 +27,7 @@ class Pipeline:
     def __init__(self,
                  estimator,
                  params,
-                 feature_searcher: CommonFeaturesSearcher,
+                 feature_searcher: CommonFeaturesSearcher | None,
                  params_searcher: CommonHiperParamsSearcher,
                  history_manager: HistoryManager[Result],
                  validator: BaseValidator):
