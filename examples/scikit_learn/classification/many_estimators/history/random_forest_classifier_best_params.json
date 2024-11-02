@@ -36,5 +36,43 @@
         "feature_selection_time": "00:00:00.000",
         "search_time": "00:00:00.000",
         "validation_time": "00:00:07.000"
+    },
+    {
+        "estimator": "RandomForestClassifier",
+        "mean": 0.7801437998621097,
+        "standard_deviation": 0.012466497670757694,
+        "median": 0.7762237762237763,
+        "variance": 0.00015541356417500703,
+        "standard_error": 0.005575187246631399,
+        "min_max_score": [
+            0.7692,
+            0.8028
+        ],
+        "estimator_params": {
+            "bootstrap": true,
+            "ccp_alpha": 0.0,
+            "class_weight": null,
+            "criterion": "entropy",
+            "max_depth": 16,
+            "max_features": "sqrt",
+            "max_leaf_nodes": null,
+            "max_samples": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 12,
+            "min_samples_split": 16,
+            "min_weight_fraction_leaf": 0.2502331810559776,
+            "monotonic_cst": null,
+            "n_estimators": 11,
+            "n_jobs": null,
+            "oob_score": false,
+            "random_state": null,
+            "verbose": 0,
+            "warm_start": false
+        },
+        "scoring": "accuracy",
+        "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:01.000",
+        "validation_time": "00:00:12.000"
     }
 ]

@@ -30,5 +30,37 @@
         "feature_selection_time": "00:00:00.000",
         "search_time": "00:00:00.000",
         "validation_time": "00:00:00.000"
+    },
+    {
+        "estimator": "DecisionTreeClassifier",
+        "mean": 0.742381562099872,
+        "standard_deviation": 0.07501516187588315,
+        "median": 0.7692307692307693,
+        "variance": 0.005627274511264954,
+        "standard_error": 0.03354780025952507,
+        "min_max_score": [
+            0.5944,
+            0.8028
+        ],
+        "estimator_params": {
+            "ccp_alpha": 0.0,
+            "class_weight": null,
+            "criterion": "gini",
+            "max_depth": 4,
+            "max_features": "sqrt",
+            "max_leaf_nodes": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 4,
+            "min_samples_split": 15,
+            "min_weight_fraction_leaf": 0.12770172251434397,
+            "monotonic_cst": null,
+            "random_state": null,
+            "splitter": "best"
+        },
+        "scoring": "accuracy",
+        "features": "classe_social,  idade,  sexo_female,  sexo_male,  porta_embarque_Q",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:00.000",
+        "validation_time": "00:00:01.000"
     }
 ]

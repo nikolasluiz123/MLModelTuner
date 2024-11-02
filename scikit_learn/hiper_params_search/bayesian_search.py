@@ -6,8 +6,14 @@ from scikit_learn.hiper_params_search.common_searcher import CommonHiperParamsSe
 
 
 class BayesianHipperParamsSearcher(CommonHiperParamsSearcher):
+    """
+    Implementação wrapper da busca BayesSearchCV o qual é detalhado na `documentação do scikit-optimize <https://scikit-optimize.github.io/stable/modules/generated/skopt.BayesSearchCV.html>`_.
+    """
 
     def __init__(self, number_iterations: int, n_jobs: int = -1, log_level: int = 0):
+        """
+        :param number_iterations: Número máximo de iterações realizadas para testar as combinações de valores dos parâmetros.
+        """
         super().__init__(n_jobs, log_level)
         self.number_iterations = number_iterations
 

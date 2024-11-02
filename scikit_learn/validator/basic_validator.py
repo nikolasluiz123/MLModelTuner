@@ -10,20 +10,41 @@ from scikit_learn.validator.common_validator import BaseValidator, Result
 
 
 class ClassifierAdditionalValidator:
+    """
+    Classe responsável por validar um classificador por meio de métricas de desempenho e visualizações.
+
+    Esta classe permite realizar a validação de um modelo de classificação, incluindo a geração de um
+    relatório de classificação e a exibição de uma matriz de confusão.
+
+    :param estimator: O modelo de classificador a ser validado.
+    :param data_x: Conjunto de dados de entrada (features) para treinamento e teste.
+    :param data_y: Conjunto de dados de saída (rótulos) para treinamento e teste.
+    :param random_state: Semente para geração de números aleatórios, utilizada na divisão dos dados.
+    """
 
     def __init__(self,
                  estimator,
                  data_x,
                  data_y,
-                 log_level: int = 1,
-                 n_jobs: int = -1,
                  random_state=42):
+        """
+        Inicializa um novo validador adicional de classificador.
+
+        :param estimator: O modelo de classificador a ser validado.
+        :param data_x: Conjunto de dados de entrada (features).
+        :param data_y: Conjunto de dados de saída (rótulos).
+        :param random_state: Semente para divisão dos dados. Padrão é 42.
+        """
         self.estimator = estimator
         self.data_x = data_x
         self.data_y = data_y
         self.random_state = random_state
 
     def validate(self):
+        """
+        Realiza a validação do classificador, dividindo os dados em conjuntos de treinamento e teste,
+        ajustando o modelo e exibindo o relatório de classificação e a matriz de confusão.
+        """
         x_train, x_test, y_train, y_test = train_test_split(self.data_x,
                                                             self.data_y,
                                                             test_size=0.2,
@@ -36,6 +57,12 @@ class ClassifierAdditionalValidator:
         self.__show_confusion_matrix(y_test, y_pred)
 
     def __show_confusion_matrix(self, y_test, y_pred):
+        """
+        Exibe a matriz de confusão para os rótulos reais e previstos.
+
+        :param y_test: Rótulos reais do conjunto de teste.
+        :param y_pred: Rótulos previstos pelo classificador.
+        """
         matrix = confusion_matrix(y_test, y_pred)
 
         classes = np.unique(np.concatenate([y_test, y_pred]))
@@ -51,6 +78,12 @@ class ClassifierAdditionalValidator:
         plt.show()
 
     def __show_classification_report(self, y_test, y_pred):
+        """
+        Exibe o relatório de classificação em formato tabular.
+
+        :param y_test: Rótulos reais do conjunto de teste.
+        :param y_pred: Rótulos previstos pelo classificador.
+        """
         report = classification_report(y_test, y_pred, output_dict=True)
         df_report = pd.DataFrame(report).transpose()
 

@@ -38,8 +38,8 @@ y = df_train['sobreviveu']
 recursive_feature_cv_searcher = RecursiveFeatureCVSearcher(log_level=1)
 recursive_feature_searcher = RecursiveFeatureSearcher(features_number=5, log_level=1)
 select_k_best_searcher = SelectKBestSearcher(features_number=5, score_func=f_classif, log_level=1)
-generic_univariate_select_searcher_kbest = GenericUnivariateSelectSearcher(score_func=f_classif, mode='k_best', features_number=5, log_level=1)
-generic_univariate_select_searcher_percentil = GenericUnivariateSelectSearcher(score_func=f_classif, mode='percentile', features_number=5, log_level=1)
+generic_univariate_select_searcher_kbest = GenericUnivariateSelectSearcher(score_func=f_classif, mode='k_best', mode_param=5, log_level=1)
+generic_univariate_select_searcher_percentil = GenericUnivariateSelectSearcher(score_func=f_classif, mode='percentile', mode_param=5, log_level=1)
 select_percentile_searcher = SelectPercentileSearcher(percent=10, score_func=f_classif, log_level=1)
 sequential_feature_searcher = SequentialFeatureSearcher(number_features=5, log_level=1)
 

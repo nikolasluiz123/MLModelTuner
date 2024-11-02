@@ -222,5 +222,229 @@
         "feature_selection_time": "00:00:00.000",
         "search_time": "00:00:00.000",
         "validation_time": "00:00:00.000"
+    },
+    {
+        "estimator": "DecisionTreeClassifier",
+        "mean": 0.7703535900718999,
+        "standard_deviation": 0.022754292103151212,
+        "median": 0.7692307692307693,
+        "variance": 0.0005177578091155297,
+        "standard_error": 0.010176028784506554,
+        "min_max_score": [
+            0.7343,
+            0.8028
+        ],
+        "estimator_params": {
+            "ccp_alpha": 0.0,
+            "class_weight": null,
+            "criterion": "entropy",
+            "max_depth": 9,
+            "max_features": null,
+            "max_leaf_nodes": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 9,
+            "min_samples_split": 4,
+            "min_weight_fraction_leaf": 0.10278085221247629,
+            "monotonic_cst": null,
+            "random_state": null,
+            "splitter": "random"
+        },
+        "scoring": "accuracy",
+        "features": "classe_social, idade, sexo_female",
+        "feature_selection_time": "00:00:02.000",
+        "search_time": "00:00:07.000",
+        "validation_time": "00:00:02.000"
+    },
+    {
+        "estimator": "DecisionTreeClassifier",
+        "mean": 0.7479759676942775,
+        "standard_deviation": 0.057570430736646465,
+        "median": 0.7692307692307693,
+        "variance": 0.003314354495203008,
+        "standard_error": 0.025746279324216956,
+        "min_max_score": [
+            0.6364,
+            0.8028
+        ],
+        "estimator_params": {
+            "ccp_alpha": 0.0,
+            "class_weight": null,
+            "criterion": "log_loss",
+            "max_depth": 3,
+            "max_features": null,
+            "max_leaf_nodes": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 14,
+            "min_samples_split": 6,
+            "min_weight_fraction_leaf": 0.13766279530742406,
+            "monotonic_cst": null,
+            "random_state": null,
+            "splitter": "random"
+        },
+        "scoring": "accuracy",
+        "features": "classe_social, idade, qtd_irmaos_conjuges, qtd_pais_filhos, sexo_male",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:00.000",
+        "validation_time": "00:00:01.000"
+    },
+    {
+        "estimator": "DecisionTreeClassifier",
+        "mean": 0.7507731704914804,
+        "standard_deviation": 0.039339492816444145,
+        "median": 0.7622377622377622,
+        "variance": 0.0015475956950550605,
+        "standard_error": 0.01759315602758675,
+        "min_max_score": [
+            0.6853,
+            0.8028
+        ],
+        "estimator_params": {
+            "ccp_alpha": 0.0,
+            "class_weight": null,
+            "criterion": "gini",
+            "max_depth": 6,
+            "max_features": "sqrt",
+            "max_leaf_nodes": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 10,
+            "min_samples_split": 6,
+            "min_weight_fraction_leaf": 0.12534998818910711,
+            "monotonic_cst": null,
+            "random_state": null,
+            "splitter": "random"
+        },
+        "scoring": "accuracy",
+        "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:00.000",
+        "validation_time": "00:00:02.000"
+    },
+    {
+        "estimator": "DecisionTreeClassifier",
+        "mean": 0.7801437998621097,
+        "standard_deviation": 0.012466497670757694,
+        "median": 0.7762237762237763,
+        "variance": 0.00015541356417500703,
+        "standard_error": 0.005575187246631399,
+        "min_max_score": [
+            0.7692,
+            0.8028
+        ],
+        "estimator_params": {
+            "ccp_alpha": 0.0,
+            "class_weight": null,
+            "criterion": "log_loss",
+            "max_depth": 4,
+            "max_features": null,
+            "max_leaf_nodes": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 14,
+            "min_samples_split": 17,
+            "min_weight_fraction_leaf": 0.13477000598013975,
+            "monotonic_cst": null,
+            "random_state": null,
+            "splitter": "random"
+        },
+        "scoring": "accuracy",
+        "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:00.000",
+        "validation_time": "00:00:01.000"
+    },
+    {
+        "estimator": "DecisionTreeClassifier",
+        "mean": 0.7801437998621097,
+        "standard_deviation": 0.033956109302769065,
+        "median": 0.7692307692307693,
+        "variance": 0.0011530173589816,
+        "standard_error": 0.015185633730480923,
+        "min_max_score": [
+            0.7343,
+            0.8322
+        ],
+        "estimator_params": {
+            "ccp_alpha": 0.0,
+            "class_weight": null,
+            "criterion": "gini",
+            "max_depth": 3,
+            "max_features": "sqrt",
+            "max_leaf_nodes": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 18,
+            "min_samples_split": 18,
+            "min_weight_fraction_leaf": 0.16155836253594202,
+            "monotonic_cst": null,
+            "random_state": null,
+            "splitter": "random"
+        },
+        "scoring": "accuracy",
+        "features": "sexo_male",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:00.000",
+        "validation_time": "00:00:01.000"
+    },
+    {
+        "estimator": "DecisionTreeClassifier",
+        "mean": 0.7801437998621097,
+        "standard_deviation": 0.033956109302769065,
+        "median": 0.7692307692307693,
+        "variance": 0.0011530173589816,
+        "standard_error": 0.015185633730480923,
+        "min_max_score": [
+            0.7343,
+            0.8322
+        ],
+        "estimator_params": {
+            "ccp_alpha": 0.0,
+            "class_weight": null,
+            "criterion": "gini",
+            "max_depth": 8,
+            "max_features": "log2",
+            "max_leaf_nodes": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 2,
+            "min_samples_split": 8,
+            "min_weight_fraction_leaf": 0.16540954903400912,
+            "monotonic_cst": null,
+            "random_state": null,
+            "splitter": "best"
+        },
+        "scoring": "accuracy",
+        "features": "sexo_male",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:00.000",
+        "validation_time": "00:00:01.000"
+    },
+    {
+        "estimator": "DecisionTreeClassifier",
+        "mean": 0.742381562099872,
+        "standard_deviation": 0.07501516187588315,
+        "median": 0.7692307692307693,
+        "variance": 0.005627274511264954,
+        "standard_error": 0.03354780025952507,
+        "min_max_score": [
+            0.5944,
+            0.8028
+        ],
+        "estimator_params": {
+            "ccp_alpha": 0.0,
+            "class_weight": null,
+            "criterion": "gini",
+            "max_depth": 4,
+            "max_features": "sqrt",
+            "max_leaf_nodes": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 4,
+            "min_samples_split": 15,
+            "min_weight_fraction_leaf": 0.12770172251434397,
+            "monotonic_cst": null,
+            "random_state": null,
+            "splitter": "best"
+        },
+        "scoring": "accuracy",
+        "features": "classe_social, idade, sexo_female, sexo_male, porta_embarque_Q",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:00.000",
+        "validation_time": "00:00:02.000"
     }
 ]

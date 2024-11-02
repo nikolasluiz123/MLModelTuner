@@ -6,16 +6,23 @@ from scikit_learn.features_search.common_searcher import CommonFeaturesSearcher
 
 
 class RecursiveFeatureSearcher(CommonFeaturesSearcher):
+    """
+    Implementação wrapper do algoritmo RFE o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFE.html>`_.
+    """
 
     def __init__(self,
+                 features_number: int = None,
                  n_jobs: int = -1,
-                 log_level: int = 0,
-                 features_number: int = None):
+                 log_level: int = 0):
+        """
+        :param features_number: Número exato de features que serão buscadas. Se passar None a metade das features será
+        retornada.
+        """
         super().__init__(n_jobs, log_level)
 
         self.features_number = features_number
 
-    def select_features(self, data_x, data_y, scoring, estimator=None, cv=None):
+    def select_features(self, data_x, data_y, scoring=None, estimator=None, cv=None):
         if estimator is None:
             raise Exception("The parameter estimator can't be None")
 
@@ -32,21 +39,30 @@ class RecursiveFeatureSearcher(CommonFeaturesSearcher):
 
 
 class RecursiveFeatureCVSearcher(CommonFeaturesSearcher):
+    """
+    Implementação wrapper do algoritmo RFECV o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFECV.html>`_.
+    """
 
     def __init__(self,
+                 min_features: int = 3,
                  n_jobs: int = -1,
-                 log_level: int = 0,
-                 min_features: int = 3):
+                 log_level: int = 0):
+        """
+        :param min_features: Número mínimo de features esperado.
+        """
         super().__init__(n_jobs, log_level)
 
         self.min_feeatures = min_features
 
-    def select_features(self, data_x, data_y, scoring, estimator=None, cv=None):
+    def select_features(self, data_x, data_y, scoring=None, estimator=None, cv=None):
         if estimator is None:
             raise Exception("The parameter estimator can't be None")
 
         if cv is None:
             raise Exception("The parameter cv can't be None")
+
+        if scoring is None:
+            raise Exception("The parameter scoring can't be None")
 
         self.start_search_features_time = time.time()
 

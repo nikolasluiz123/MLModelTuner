@@ -26,5 +26,32 @@
         "feature_selection_time": "00:00:00.000",
         "search_time": "00:00:11.000",
         "validation_time": "00:00:36.000"
+    },
+    {
+        "estimator": "KNeighborsClassifier",
+        "mean": 0.7899635575691913,
+        "standard_deviation": 0.033135968424264035,
+        "median": 0.7832167832167832,
+        "variance": 0.0010979924034138233,
+        "standard_error": 0.014818855579388194,
+        "min_max_score": [
+            0.7483,
+            0.8322
+        ],
+        "estimator_params": {
+            "algorithm": "kd_tree",
+            "leaf_size": 15,
+            "metric": "minkowski",
+            "metric_params": null,
+            "n_jobs": null,
+            "n_neighbors": 9,
+            "p": 1,
+            "weights": "uniform"
+        },
+        "scoring": "accuracy",
+        "features": "classe_social,  sexo_female,  sexo_male,  porta_embarque_C,  porta_embarque_S",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:00.000",
+        "validation_time": "00:00:01.000"
     }
 ]
