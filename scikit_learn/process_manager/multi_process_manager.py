@@ -186,9 +186,14 @@ class MultiProcessManager:
         :param pipeline: O pipeline que contém as informações de tempo.
         :return: Tupla com os tempos de seleção de features, busca e validação.
         """
-        feature_selection_time = pipeline.feature_searcher.end_search_features_time - pipeline.feature_searcher.start_search_features_time
+        if pipeline.feature_searcher is not None:
+            feature_selection_time = pipeline.feature_searcher.end_search_features_time - pipeline.feature_searcher.start_search_features_time
+        else:
+            feature_selection_time = 0.0
+
         search_time = pipeline.params_searcher.end_search_parameter_time - pipeline.params_searcher.start_search_parameter_time
         validation_time = pipeline.validator.end_best_model_validation - pipeline.validator.start_best_model_validation
+
         return feature_selection_time, search_time, validation_time
 
     def _append_new_result(self, pipeline: Pipe, result: Result):
