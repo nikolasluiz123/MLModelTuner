@@ -51,6 +51,16 @@ para que possa entender melhor.
 Além de testar diferentes modelos, você pode querer realizar algum tipo de validação adicional
 apenas com o melhor dos melhores encontrado, isso também é possível, [veja esse exemplo](https://github.com/nikolasluiz123/MLModelTunner/blob/master/examples/scikit_learn/classification/additional_validation/testing_models_with_additional_validation.py).
 
+### Escalando Dados
+
+Alguns modelos, dependendo dos dados, podem se beneficiar de um escalonamento, a biblioteca permite que seja passada
+uma implementação de forma opcional ao pipeline para que possa ser comparado se o escalonamento dos dados auxiliaria o
+modelo que está sendo testado ou não.
+
+[Esse exemplo](https://github.com/nikolasluiz123/MLModelTunner/blob/master/examples/scikit_learn/regression/scaling_data/testing_scaling_data.py)
+mostra que pode ser obtida uma diferença entre dados escalados e não escalados, mesmo que pequena. A grandeza da mudança
+vai depender do modelo utilizado e em como são seus dados.
+
 ## XGBoost
 
 Futuramente...
