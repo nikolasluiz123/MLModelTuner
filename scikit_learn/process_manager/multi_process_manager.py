@@ -111,13 +111,14 @@ class MultiProcessManager:
         self._append_new_result(pipeline, validation_result)
 
     def __show_log_init_process(self, pipeline):
-        print()
-        print('Iniciando o Processamento')
-        data = pipeline.get_dict_pipeline_data()
-        data = {k: [v] for k, v in data.items()}
-        df = pd.DataFrame.from_dict(data, orient='columns')
-        print(tabulate(df, headers='keys', tablefmt='fancy_grid', showindex=False))
-        print()
+        if self.history_index is None:
+            print()
+            print('Iniciando o Processamento')
+            data = pipeline.get_dict_pipeline_data()
+            data = {k: [v] for k, v in data.items()}
+            df = pd.DataFrame.from_dict(data, orient='columns')
+            print(tabulate(df, headers='keys', tablefmt='fancy_grid', showindex=False))
+            print()
 
     def __scale_data(self, pipeline: Pipe):
         if pipeline.scaler is not None:
