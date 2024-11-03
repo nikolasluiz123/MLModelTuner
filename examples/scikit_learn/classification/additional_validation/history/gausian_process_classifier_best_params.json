@@ -13,18 +13,18 @@
         "estimator_params": {
             "copy_X_train": true,
             "kernel": null,
-            "max_iter_predict": 100,
+            "max_iter_predict": 700,
             "multi_class": "one_vs_one",
             "n_jobs": null,
-            "n_restarts_optimizer": 3,
-            "optimizer": null,
+            "n_restarts_optimizer": 7,
+            "optimizer": "fmin_l_bfgs_b",
             "random_state": null,
             "warm_start": false
         },
         "scoring": "accuracy",
         "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
         "feature_selection_time": "00:00:00.000",
-        "search_time": "00:00:11.000",
-        "validation_time": "00:00:36.000"
+        "search_time": "00:00:25.000",
+        "validation_time": "00:00:42.000"
     }
 ]

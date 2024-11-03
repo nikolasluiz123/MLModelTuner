@@ -6,7 +6,7 @@ from sklearn.feature_selection import f_classif
 from sklearn.tree import DecisionTreeClassifier
 from skopt.space import Real, Categorical, Integer
 
-from examples.data.data_processing import get_train_data
+from examples.data.data_processing import get_titanic_train_data
 from scikit_learn.features_search.select_k_best_searcher import SelectKBestSearcher
 from scikit_learn.hiper_params_search.bayesian_search import BayesianHipperParamsSearcher
 from sklearn.experimental import enable_halving_search_cv
@@ -23,7 +23,7 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 ########################################################################################################################
 #                                            Preparando os Dados                                                       #
 ########################################################################################################################
-df_train = get_train_data()
+df_train = get_titanic_train_data()
 
 x = df_train.drop(columns=['sobreviveu'], axis=1)
 
@@ -41,11 +41,13 @@ validator = CrossValidator(log_level=1)
 
 history_manager = CrossValidatorHistoryManager(output_directory='history',
                                                models_directory='decision_tree_classifier_models',
-                                               params_file_name='decision_tree_classifier_best_params')
+                                               params_file_name='decision_tree_classifier_best_params',
+                                               cv_results_file_name='decision_tree_classifier_cv_results')
 
 best_params_history_manager = CrossValidatorHistoryManager(output_directory='history_bests',
                                                            models_directory='best_models',
-                                                           params_file_name='best_params')
+                                                           params_file_name='best_params',
+                                                           cv_results_file_name='best_params_cv_results')
 
 ########################################################################################################################
 #                                               Criando os Pipelines                                                   #

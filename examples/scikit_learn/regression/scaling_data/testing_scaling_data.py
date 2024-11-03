@@ -1,0 +1,93 @@
+import pandas as pd
+from scipy.stats import randint, uniform
+from sklearn.feature_selection import f_classif, f_regression
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.tree import DecisionTreeClassifier
+
+from examples.data.data_processing import get_titanic_train_data, get_workout_train_data
+from scikit_learn.features_search.rfe_searcher import RecursiveFeatureCVSearcher
+from scikit_learn.features_search.select_k_best_searcher import SelectKBestSearcher
+from scikit_learn.hiper_params_search.random_searcher import RandomCVHipperParamsSearcher
+from scikit_learn.history_manager.cross_validator import CrossValidatorHistoryManager
+from scikit_learn.process_manager.multi_process_manager import MultiProcessManager
+from scikit_learn.process_manager.pipeline import Pipeline
+from scikit_learn.validator.cross_validator import CrossValidator
+
+########################################################################################################################
+#                                            Preparando os Dados                                                       #
+########################################################################################################################
+
+df_train = get_workout_train_data()
+
+label_encoder = LabelEncoder()
+df_train['exercicio'] = label_encoder.fit_transform(df_train['exercicio'])
+
+x = df_train.drop(columns=['peso', 'data'])
+y = df_train['peso']
+
+########################################################################################################################
+#                                    Preparando Implementações que serão Testadas                                      #
+########################################################################################################################
+
+params_searcher = RandomCVHipperParamsSearcher(number_iterations=100, log_level=1)
+
+history_manager = CrossValidatorHistoryManager(output_directory='history',
+                                               models_directory='models',
+                                               params_file_name='params',
+                                               cv_results_file_name='cv_results')
+
+best_params_history_manager = CrossValidatorHistoryManager(output_directory='history_bests',
+                                                           models_directory='best_models',
+                                                           params_file_name='best_params',
+                                                           cv_results_file_name='best_cv_results')
+cross_validator = CrossValidator(log_level=1)
+
+########################################################################################################################
+#                                               Criando o Pipeline                                                     #
+########################################################################################################################
+
+pipelines = [
+    Pipeline(
+        estimator=KNeighborsRegressor(),
+        params={
+            'n_neighbors': randint(1, 20),
+            'weights': ['uniform', 'distance'],
+            'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
+        },
+        scaler=StandardScaler(),
+        feature_searcher=None,
+        params_searcher=params_searcher,
+        history_manager=history_manager,
+        validator=cross_validator
+    ),
+    Pipeline(
+        estimator=KNeighborsRegressor(),
+        params={
+            'n_neighbors': randint(1, 20),
+            'weights': ['uniform', 'distance'],
+            'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
+        },
+        feature_searcher=None,
+        params_searcher=params_searcher,
+        history_manager=history_manager,
+        validator=cross_validator
+    )
+]
+
+########################################################################################################################
+#                                      Criando e Executando o Process Manager                                          #
+########################################################################################################################
+
+manager = MultiProcessManager(
+    data_x=x,
+    data_y=y,
+    seed=42,
+    pipelines=pipelines,
+    fold_splits=5,
+    history_manager=best_params_history_manager,
+    scoring='neg_mean_squared_error',
+    save_history=True
+)
+
+manager.process_pipelines()

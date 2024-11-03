@@ -1,66 +1,34 @@
 [
     {
         "estimator": "DecisionTreeClassifier",
-        "mean": 0.7731507928691027,
-        "standard_deviation": 0.022442191301914202,
-        "median": 0.7762237762237763,
-        "variance": 0.0005036519504317134,
-        "standard_error": 0.010036453063026932,
+        "mean": 0.8011228208411307,
+        "standard_deviation": 0.02522786922626094,
+        "median": 0.8028169014084507,
+        "variance": 0.0006364453856973238,
+        "standard_error": 0.011282246103478897,
         "min_max_score": [
-            0.7343,
-            0.8028
+            0.7692,
+            0.8322
         ],
         "estimator_params": {
             "ccp_alpha": 0.0,
             "class_weight": null,
-            "criterion": "gini",
-            "max_depth": 10,
+            "criterion": "entropy",
+            "max_depth": 9,
             "max_features": null,
             "max_leaf_nodes": null,
             "min_impurity_decrease": 0.0,
-            "min_samples_leaf": 5,
-            "min_samples_split": 17,
-            "min_weight_fraction_leaf": 0.1,
+            "min_samples_leaf": 15,
+            "min_samples_split": 12,
+            "min_weight_fraction_leaf": 0.1281485028794379,
             "monotonic_cst": null,
             "random_state": null,
-            "splitter": "best"
+            "splitter": "random"
         },
         "scoring": "accuracy",
         "features": "classe_social,  sexo_female,  sexo_male,  porta_embarque_C,  porta_embarque_S",
         "feature_selection_time": "00:00:00.000",
-        "search_time": "00:00:02.000",
-        "validation_time": "00:00:00.000"
-    },
-    {
-        "estimator": "DecisionTreeClassifier",
-        "mean": 0.7801437998621097,
-        "standard_deviation": 0.012466497670757694,
-        "median": 0.7762237762237763,
-        "variance": 0.00015541356417500703,
-        "standard_error": 0.005575187246631399,
-        "min_max_score": [
-            0.7692,
-            0.8028
-        ],
-        "estimator_params": {
-            "ccp_alpha": 0.0,
-            "class_weight": null,
-            "criterion": "log_loss",
-            "max_depth": 7,
-            "max_features": "log2",
-            "max_leaf_nodes": null,
-            "min_impurity_decrease": 0.0,
-            "min_samples_leaf": 19,
-            "min_samples_split": 10,
-            "min_weight_fraction_leaf": 0.18630157752713625,
-            "monotonic_cst": null,
-            "random_state": null,
-            "splitter": "best"
-        },
-        "scoring": "accuracy",
-        "features": "classe_social,  sexo_female,  sexo_male,  porta_embarque_C,  porta_embarque_S",
-        "feature_selection_time": "00:00:00.000",
-        "search_time": "00:00:00.000",
-        "validation_time": "00:00:02.000"
+        "search_time": "00:00:14.000",
+        "validation_time": "00:02:23.000"
     }
 ]

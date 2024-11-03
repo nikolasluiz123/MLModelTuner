@@ -4,6 +4,8 @@ import pickle
 from abc import abstractmethod, ABC
 from typing import Generic
 
+from sklearn.preprocessing import StandardScaler
+
 from scikit_learn.validator.common_validator import Result
 
 
@@ -19,36 +21,42 @@ class HistoryManager(ABC, Generic[Result]):
     forma, é possível reutilizar o modelo treinado e validado para algum fim específico.
     """
 
-    def __init__(self, output_directory: str, models_directory: str, params_file_name: str):
+    def __init__(self, output_directory: str, models_directory: str, params_file_name: str, cv_results_file_name: str):
         """
         Inicializa o HistoryManager com os diretórios e nome de arquivo apropriados.
 
         :param output_directory: Diretório de histórico que vai armazenar o arquivo JSON e os modelos.
         :param models_directory: Diretório específico para os modelos.
-        :param params_file_name: Nome do arquivo JSON.
+        :param params_file_name: Nome do arquivo JSON o qual conterá os parâmetros e resultados.
+        :param cv_results_file_name: Nome do arquivo JSON que conterá as combinações de valores dos parâmetros da execução.
         """
         self.output_directory = output_directory
         self.models_directory = os.path.join(self.output_directory, models_directory)
         self.params_file_name = params_file_name
-        self._create_output_dir()  # Cria os diretórios se não existirem.
+        self.cv_results_file_name = cv_results_file_name
+        self._create_output_dir()
 
     @abstractmethod
     def save_result(self,
                     classifier_result: Result,
+                    cv_results,
                     feature_selection_time: str,
                     search_time: str,
                     validation_time: str,
                     scoring: str,
-                    features: list[str]):
+                    features: list[str],
+                    scaler: StandardScaler | None):
         """
         Função que deve ser implementada para salvar os dados do objeto `Result` no arquivo JSON.
 
         :param classifier_result: Objeto com os dados da validação do melhor modelo encontrado.
+        :param cv_results: Dicionário obtido da implementação de busca de parâmetros com as combinações testadas.
         :param feature_selection_time: Implementação de seleção de features utilizada.
         :param search_time: Tempo que demorou o processamento de busca de parâmetros.
         :param validation_time: Tempo que demorou o processamento de validação do melhor modelo.
         :param scoring: Métrica de validação utilizada.
         :param features: Features selecionadas pela implementação.
+        :param scaler: Implementação opcional utilizada para escalar os dados
         """
 
     def _create_output_dir(self):
@@ -61,13 +69,13 @@ class HistoryManager(ABC, Generic[Result]):
         if not os.path.exists(self.models_directory):
             os.makedirs(self.models_directory)
 
-    def _save_dictionary_in_json(self, dictionary):
+    def _save_dictionary_in_json(self, dictionary, file_name: str):
         """
         Salva um dicionário em formato JSON, adicionando os dados ao arquivo existente.
 
         :param dictionary: Dicionário contendo os dados a serem salvos no arquivo JSON.
         """
-        output_path = os.path.join(self.output_directory, f"{self.params_file_name}.json")
+        output_path = os.path.join(self.output_directory, f"{file_name}.json")
 
         if os.path.exists(output_path):
             with open(output_path, 'r') as file:
@@ -104,20 +112,27 @@ class HistoryManager(ABC, Generic[Result]):
         :return: O objeto Result correspondente ao histórico solicitado.
         """
 
-    def get_dictionary_from_json(self, index):
+    def get_dictionary_from_params_json(self, index: int):
+        return self._get_dictionary_from_json(index, self.params_file_name)
+
+    def get_dictionary_from_cv_results_json(self, index: int):
+        return self._get_dictionary_from_json(index, self.cv_results_file_name)
+
+    def _get_dictionary_from_json(self, index: int, file_name: str):
         """
         Obtém um dicionário de resultados a partir do arquivo JSON.
 
         :param index: Índice do resultado a ser recuperado.
+        :param file_name: Nome do arquivo JSON a ser utilizado.
         :return: Dicionário contendo os dados do resultado.
         :raises FileNotFoundError: Se o arquivo JSON não for encontrado.
         :raises IndexError: Se o índice estiver fora dos limites do histórico.
         """
-        output_path = os.path.join(self.output_directory, f"{self.params_file_name}.json")
+        output_path = os.path.join(self.output_directory, f"{file_name}.json")
 
         if not os.path.exists(output_path):
             raise FileNotFoundError(
-                f"O arquivo {self.params_file_name}.json não foi encontrado no diretório {self.output_directory}.")
+                f"O arquivo {file_name}.json não foi encontrado no diretório {self.output_directory}.")
 
         with open(output_path, 'r') as file:
             data = json.load(file)

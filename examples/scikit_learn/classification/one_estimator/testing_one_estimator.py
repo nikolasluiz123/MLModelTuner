@@ -2,7 +2,7 @@ import pandas as pd
 from scipy.stats import randint, uniform
 from sklearn.tree import DecisionTreeClassifier
 
-from examples.data.data_processing import get_train_data
+from examples.data.data_processing import get_titanic_train_data
 from scikit_learn.features_search.rfe_searcher import RecursiveFeatureCVSearcher
 from scikit_learn.hiper_params_search.random_searcher import RandomCVHipperParamsSearcher
 from scikit_learn.history_manager.cross_validator import CrossValidatorHistoryManager
@@ -14,7 +14,7 @@ from scikit_learn.validator.cross_validator import CrossValidator
 #                                            Preparando os Dados                                                       #
 ########################################################################################################################
 
-df_train = get_train_data()
+df_train = get_titanic_train_data()
 
 x = df_train.drop(columns=['sobreviveu'], axis=1)
 
@@ -33,11 +33,13 @@ random_cv_hyper_params_searcher = RandomCVHipperParamsSearcher(number_iterations
 
 cross_validator_history_manager = CrossValidatorHistoryManager(output_directory='history',
                                                                models_directory='models',
-                                                               params_file_name='params')
+                                                               params_file_name='params',
+                                                               cv_results_file_name='cv_results')
 
 best_params_history_manager = CrossValidatorHistoryManager(output_directory='history_bests',
                                                            models_directory='best_models',
-                                                           params_file_name='best_params')
+                                                           params_file_name='best_params',
+                                                           cv_results_file_name='best_cv_results')
 cross_validator = CrossValidator(log_level=1)
 
 ########################################################################################################################

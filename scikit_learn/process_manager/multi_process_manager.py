@@ -14,6 +14,7 @@ from scikit_learn.validator.common_validator import Result
 Pipe = TypeVar('Pipe', bound=Pipeline)
 History = TypeVar('History', bound=HistoryManager)
 
+
 class MultiProcessManager:
     """
     Gerencia a execução de múltiplos pipelines de machine learning em um processo de validação cruzada.
@@ -67,6 +68,7 @@ class MultiProcessManager:
         self.history_index = history_index
 
         self.results = []
+        self.data_x_scaled = None
 
         np.random.seed(seed)
 
@@ -98,13 +100,34 @@ class MultiProcessManager:
 
         :param pipeline: O pipeline a ser processado.
         """
+        self.__show_log_init_process(pipeline)
+        self.__scale_data(pipeline)
         self._process_feature_selection(pipeline)
 
         search_cv = self._process_hiper_params_search(pipeline)
         validation_result = self._process_validation(pipeline, search_cv)
 
-        self._save_data_in_history(pipeline, validation_result)
+        self._save_data_in_history(pipeline, validation_result, search_cv)
         self._append_new_result(pipeline, validation_result)
+
+    def __show_log_init_process(self, pipeline):
+        print()
+        print('Iniciando o Processamento')
+        data = pipeline.get_dict_pipeline_data()
+        data = {k: [v] for k, v in data.items()}
+        df = pd.DataFrame.from_dict(data, orient='columns')
+        print(tabulate(df, headers='keys', tablefmt='fancy_grid', showindex=False))
+        print()
+
+    def __scale_data(self, pipeline: Pipe):
+        if pipeline.scaler is not None:
+            self.data_x_scaled = pipeline.scaler.fit_transform(self.data_x)
+
+    def __get_dataframe_from_scaled_data(self):
+        if self.data_x_scaled is not None:
+            return pd.DataFrame(self.data_x_scaled, columns=self.data_x.columns)
+        else:
+            return self.data_x
 
     def _process_feature_selection(self, pipeline: Pipe):
         """
@@ -116,9 +139,9 @@ class MultiProcessManager:
             if pipeline.feature_searcher is None:
                 self.data_x_best_features = self.data_x
             else:
-                features =  pipeline.feature_searcher.select_features(
+                features = pipeline.feature_searcher.select_features(
                     estimator=pipeline.estimator,
-                    data_x=self.data_x,
+                    data_x=self.__get_dataframe_from_scaled_data(),
                     data_y=self.data_y,
                     scoring=self.scoring,
                     cv=self.cv
@@ -151,7 +174,6 @@ class MultiProcessManager:
 
         :param pipeline: O pipeline a ser validado.
         :param search_cv: O objeto Searcher resultante da busca de hiperparâmetros.
-        :return: O resultado da validação.
         """
         if search_cv is None:
             return pipeline.history_manager.load_validation_result_from_history(self.history_index)
@@ -162,7 +184,7 @@ class MultiProcessManager:
                                                scoring=self.scoring,
                                                cv=self.cv)
 
-    def _save_data_in_history(self, pipeline: Pipe, result: Result):
+    def _save_data_in_history(self, pipeline: Pipe, result: Result, searcher: Searcher):
         """
         Salva os resultados da validação no gerenciador de histórico, se a opção de salvar estiver habilitada.
 
@@ -177,7 +199,9 @@ class MultiProcessManager:
                                                  search_time=self._format_time(search_time),
                                                  validation_time=self._format_time(validation_time),
                                                  scoring=self.scoring,
-                                                 features=self.data_x_best_features.columns.tolist())
+                                                 features=self.data_x_best_features.columns.tolist(),
+                                                 cv_results=searcher.cv_results_,
+                                                 scaler=pipeline.scaler)
 
     def _get_execution_times(self, pipeline):
         """
@@ -233,7 +257,7 @@ class MultiProcessManager:
         :param performance_metrics: Dicionário contendo as métricas de desempenho.
         :param pipeline: O pipeline cujas informações estão sendo carregadas.
         """
-        history_dict = pipeline.history_manager.get_dictionary_from_json(self.history_index)
+        history_dict = pipeline.history_manager.get_dictionary_from_params_json(self.history_index)
 
         performance_metrics['feature_selection_time'] = history_dict['feature_selection_time']
         performance_metrics['search_time'] = history_dict['search_time']
@@ -271,14 +295,17 @@ class MultiProcessManager:
 
             best_pipeline = self.get_best_pipeline(best)
             validation_result = best_pipeline.history_manager.load_validation_result_from_history()
-            dict_history = best_pipeline.history_manager.get_dictionary_from_json(index=-1)
+            dict_history = best_pipeline.history_manager.get_dictionary_from_params_json(index=-1)
+            dict_cv_results = best_pipeline.history_manager.get_dictionary_from_cv_results_json(index=-1)
 
             self.history_manager.save_result(classifier_result=validation_result,
                                              feature_selection_time=best['feature_selection_time'].values[0],
                                              search_time=best['search_time'].values[0],
                                              validation_time=best['validation_time'].values[0],
                                              scoring=best['scoring'].values[0],
-                                             features=dict_history['features'].split(','))
+                                             features=dict_history['features'].split(','),
+                                             cv_results=dict_cv_results,
+                                             scaler=dict_history['scaler'])
 
     def get_best_pipeline(self, best):
         """

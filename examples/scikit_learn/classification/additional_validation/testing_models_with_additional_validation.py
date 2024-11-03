@@ -8,7 +8,7 @@ from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 
-from examples.data.data_processing import get_train_data
+from examples.data.data_processing import get_titanic_train_data
 from scikit_learn.features_search.select_k_best_searcher import SelectKBestSearcher
 from scikit_learn.hiper_params_search.random_searcher import RandomCVHipperParamsSearcher
 from scikit_learn.history_manager.cross_validator import CrossValidatorHistoryManager
@@ -22,7 +22,7 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 ########################################################################################################################
 #                                            Preparando os Dados                                                       #
 ########################################################################################################################
-df_train = get_train_data()
+df_train = get_titanic_train_data()
 
 x = df_train.drop(columns=['sobreviveu'], axis=1)
 
@@ -41,7 +41,8 @@ validator = CrossValidator(log_level=1)
 
 best_params_history_manager = CrossValidatorHistoryManager(output_directory='history_bests',
                                                            models_directory='best_models',
-                                                           params_file_name='best_params')
+                                                           params_file_name='best_params',
+                                                           cv_results_file_name='best_params_cv_results')
 
 ########################################################################################################################
 #                           Criando os Pipelines com os Modelos e suas Especificidades                                 #
@@ -65,7 +66,9 @@ pipelines = [
         history_manager=CrossValidatorHistoryManager(
             output_directory='history',
             models_directory='decision_tree_classifier_models',
-            params_file_name='decision_tree_classifier_best_params')
+            params_file_name='decision_tree_classifier_best_params',
+            cv_results_file_name='decision_tree_classifier_cv_results',
+        )
     ),
     Pipeline(
         estimator=RandomForestClassifier(),
@@ -84,7 +87,9 @@ pipelines = [
         history_manager=CrossValidatorHistoryManager(
             output_directory='history',
             models_directory='random_forest_classifier_models',
-            params_file_name='random_forest_classifier_best_params')
+            params_file_name='random_forest_classifier_best_params',
+            cv_results_file_name='random_forest_classifier_cv_results',
+        )
     ),
     Pipeline(
         estimator=GaussianProcessClassifier(),
@@ -100,7 +105,9 @@ pipelines = [
         history_manager=CrossValidatorHistoryManager(
             output_directory='history',
             models_directory='gausian_process_classifier_models',
-            params_file_name='gausian_process_classifier_best_params')
+            params_file_name='gausian_process_classifier_best_params',
+            cv_results_file_name='gausian_process_classifier_cv_results',
+        )
     ),
     Pipeline(
         estimator=KNeighborsClassifier(),
@@ -118,7 +125,9 @@ pipelines = [
         history_manager=CrossValidatorHistoryManager(
             output_directory='history',
             models_directory='k_neighbors_classifier_models',
-            params_file_name='k_neighbors_classifier_best_params')
+            params_file_name='k_neighbors_classifier_best_params',
+            cv_results_file_name='k_neighbors_classifier_cv_results',
+        )
     )
 ]
 
@@ -136,7 +145,6 @@ manager = MultiProcessManager(
     scoring='accuracy',
     stratified=True,
     save_history=True,
-    history_index=-1
 )
 
 manager.process_pipelines()

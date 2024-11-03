@@ -1,5 +1,8 @@
 from typing import Any
 
+from sklearn.base import TransformerMixin
+from sklearn.preprocessing import StandardScaler
+
 from scikit_learn.features_search.common_searcher import CommonFeaturesSearcher
 from scikit_learn.hiper_params_search.common_searcher import CommonHiperParamsSearcher
 from scikit_learn.history_manager.common import HistoryManager
@@ -14,14 +17,6 @@ class Pipeline:
     Esta classe fornece uma estrutura para integrar todos os componentes
     necessários para a modelagem e validação, permitindo uma execução fluida
     de processos de machine learning.
-
-    :param estimator: O estimador de machine learning a ser utilizado no pipeline.
-    :param params: Parâmetros a serem utilizados na busca de hiperparâmetros.
-    :param feature_searcher: Objeto responsável pela seleção de features. Pode ser None caso as features possam ser
-    definidas sem a necessidade de um algorítmo.
-    :param params_searcher: Objeto responsável pela busca de hiperparâmetros.
-    :param history_manager: Gerenciador de histórico para armazenar resultados da validação.
-    :param validator: Validador que executa a validação do modelo.
     """
 
     def __init__(self,
@@ -30,7 +25,8 @@ class Pipeline:
                  feature_searcher: CommonFeaturesSearcher | None,
                  params_searcher: CommonHiperParamsSearcher,
                  history_manager: HistoryManager[Result],
-                 validator: BaseValidator):
+                 validator: BaseValidator,
+                 scaler: StandardScaler | None = None):
         """
         Inicializa o Pipeline com os componentes fornecidos.
 
@@ -40,9 +36,12 @@ class Pipeline:
         :param params_searcher: Objeto que realiza a busca de hiperparâmetros.
         :param history_manager: Gerenciador de histórico para salvar resultados.
         :param validator: Validador para a validação do modelo.
+        :param scaler: Transformer para manipular os dados de alguma maneira, por exemplo, escalar eles. É opcional,
+        pois alguns modelos não se beneficiam dessa estratégia.
         """
         self.estimator = estimator
         self.params = params
+        self.scaler = scaler
         self.feature_searcher = feature_searcher
         self.params_searcher = params_searcher
         self.history_manager = history_manager
@@ -58,6 +57,7 @@ class Pipeline:
         """
         return {
             'estimator': type(self.estimator).__name__,
+            'scaler': type(self.scaler).__name__,
             'feature_searcher': type(self.feature_searcher).__name__,
             'params_searcher': type(self.params_searcher).__name__,
             'validator': type(self.validator).__name__,

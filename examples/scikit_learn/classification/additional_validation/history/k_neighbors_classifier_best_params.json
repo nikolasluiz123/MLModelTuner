@@ -1,11 +1,11 @@
 [
     {
         "estimator": "KNeighborsClassifier",
-        "mean": 0.7660100462917363,
-        "standard_deviation": 0.04629005573332432,
-        "median": 0.7622377622377622,
-        "variance": 0.0021427692597942717,
-        "standard_error": 0.02070154226039341,
+        "mean": 0.7660100462917365,
+        "standard_deviation": 0.04754087096514386,
+        "median": 0.7552447552447552,
+        "variance": 0.0022601344121244587,
+        "standard_error": 0.02126092383752154,
         "min_max_score": [
             0.6972,
             0.8322
@@ -24,6 +24,6 @@
         "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
         "feature_selection_time": "00:00:00.000",
         "search_time": "00:00:00.000",
-        "validation_time": "00:00:01.000"
+        "validation_time": "00:00:02.000"
     }
 ]
