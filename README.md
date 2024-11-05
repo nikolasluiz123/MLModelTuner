@@ -61,6 +61,10 @@ modelo que está sendo testado ou não.
 mostra que pode ser obtida uma diferença entre dados escalados e não escalados, mesmo que pequena. A grandeza da mudança
 vai depender do modelo utilizado e em como são seus dados.
 
+## Tesorflow Keras (Redes Neurais)
+
+Futuramente...
+
 ## XGBoost
 
 Futuramente...
