@@ -5,6 +5,13 @@ Machine Learning em uma única implementação modularizada a qual auxiliará de
 que desejam buscar pelo melhor algoritmo que resolva o problema que desejarem, sendo possível testar diferentes tipos de modelos presentes em uma mesma biblioteca utilizando
 diferentes implementações nos processos padrões de avaliação de modelos.
 
+## Instalação em Seu Projeto
+
+Por enquanto essa biblioteca não está disponibilizada diretamente no [PyPI](https://pypi.org/), mas é possível utilizar o pip para baixar a biblioteca diretamente desse repositório do gihub e instalar ela.
+
+O comando que pode ser utilizado em seu console é o seguinte: ```pip install git+https://github.com/nikolasluiz123/MLModelTunner.git```. Esse comando fará o download da biblioteca na última versão disponível,
+se você desejar instalar alguma versão específica, pode utilizar uma variação desse mesmo comando, por exemplo: ```pip install git+https://github.com/username/MLModelTunner.git@v0.1.10```.
+
 # Bibliotecas Suportadas
 
 Abaixo serão declaradas as bibliotecas as quais damos suporte e possuimos implementações
