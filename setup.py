@@ -15,12 +15,12 @@ setup(
         'contourpy', 'cycler', 'fonttools', 'joblib', 'kiwisolver', 'matplotlib',
         'numpy', 'packaging', 'pandas', 'pillow', 'pyaml', 'pyparsing', 'python-dateutil',
         'pytz', 'PyYAML', 'scikit-learn', 'scikit-optimize', 'scipy', 'seaborn', 'six',
-        'tabulate', 'threadpoolctl', 'tzdata', 'xgboost'
+        'tabulate', 'threadpoolctl', 'tzdata', 'xgboost', 'keras', 'keras-tuner'
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
     ],
-    python_requires='>=3.12',
+    python_requires='>=3.10',
 )
