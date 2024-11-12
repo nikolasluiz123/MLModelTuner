@@ -184,6 +184,5 @@ fabric.properties
 # idea folder, uncomment if you don't need it
 .idea
 
-examples/keras/test_variation_1_video/frames
 examples/keras/search_hp_history
 *.keras
