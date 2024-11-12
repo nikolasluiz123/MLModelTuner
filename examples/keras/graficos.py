@@ -2,10 +2,10 @@ from matplotlib import pyplot as plt
 
 
 def plotar_resultados(history, fig_file_name):
-    acc = history['accuracy']
-    val_acc = history['val_accuracy']
-    loss = history['loss']
-    val_loss = history['val_loss']
+    acc = history.history['accuracy']
+    val_acc = history.history['val_accuracy']
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
 
     intervalo_epocas = range(len(acc))
 

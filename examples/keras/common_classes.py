@@ -1,102 +1,158 @@
+import numpy as np
 import tensorflow as tf
 import keras
-import numpy as np
+
 from keras.src.callbacks import EarlyStopping
+from keras_tuner import Hyperband
 from sklearn.model_selection import KFold
 
-class CrossValidator:
-    def __init__(self, model_class, base_model, num_classes, num_folds=5, batch_size=32, epochs=10, tuner=None):
-        self.model_class = model_class
-        self.base_model = base_model
-        self.num_classes = num_classes
-        self.num_folds = num_folds
-        self.batch_size = batch_size
+class HyperBandConfig:
+
+    def __init__(self,
+               objective,
+               factor,
+               max_epochs,
+               directory,
+               project_name):
+        self.objective = objective
+        self.factor = factor
+        self.max_epochs = max_epochs
+        self.directory = directory
+        self.project_name = project_name
+
+class SearchConfig:
+
+    def __init__(self,
+                 epochs,
+                 batch_size,
+                 callbacks,
+                 folds,
+                 log_level):
         self.epochs = epochs
-        self.tuner = tuner
-        self.best_hp = None
+        self.batch_size = batch_size
+        self.callbacks = callbacks
+        self.folds = folds
+        self.log_level = log_level
 
-    def train_and_evaluate(self, model, train_data, val_data):
-        # Treinando o modelo
-        history = model.fit(train_data,
-                            validation_data=val_data,
-                            epochs=self.epochs,
-                            batch_size=self.batch_size,
-                            verbose=1)
+class FinalFitConfig:
 
-        # Avaliando o modelo
-        val_loss, val_accuracy = model.evaluate(val_data, verbose=0)
+    def __init__(self,
+                 epochs,
+                 batch_size,
+                 log_level):
+        self.epochs = epochs
+        self.batch_size = batch_size
+        self.log_level = log_level
 
-        return history, val_accuracy
 
-    def run(self, treino, model_path="final_model.keras"):
-        if self.tuner:
-            self.best_hp = self.tuner.oracle.get_best_trials()[0].hyperparameters
-        else:
-            self.best_hp = None
+class CrossValidator:
 
-        accuracies = []
-        all_history = {
-            'accuracy': np.zeros(self.epochs),
-            'val_accuracy': np.zeros(self.epochs),
-            'loss': np.zeros(self.epochs),
-            'val_loss': np.zeros(self.epochs)
-        }
+    def __init__(self,
+                 train_data,
+                 validation_data,
+                 hyper_band_config: HyperBandConfig,
+                 search_config: SearchConfig,
+                 final_fit_config: FinalFitConfig):
+        self.train_data = train_data
+        self.validation_data = validation_data
+        self.hyper_band_config = hyper_band_config
+        self.search_config = search_config
+        self.final_fit_config = final_fit_config
 
-        # kf.split(treino) gera índices, não precisamos converter para lista ou numpy
-        kf = KFold(n_splits=self.num_folds, shuffle=True, random_state=42)
-
-        x, y = self.__dataset_to_array(treino)
-
-        for fold, (train_index, val_index) in enumerate(kf.split(x, y), 1):
-            print(f"Training fold {fold}")
-
-            # Divida os dados em treino e validação para o fold atual
-            train_fold = tf.data.Dataset.from_tensor_slices((x[train_index], y[train_index])).batch(self.batch_size)
-            val_fold = tf.data.Dataset.from_tensor_slices((x[val_index], y[val_index])).batch(self.batch_size)
-
-            # Criando o modelo
-            model = self.model_class(base_model=self.base_model, num_classes=self.num_classes)
-            model_instance = model.build(self.best_hp) if self.best_hp else model.build(None)
-
-            # Treinando e avaliando o modelo
-            history, accuracy = self.train_and_evaluate(model_instance, train_fold, val_fold)
-            accuracies.append(accuracy)
-
-            # Somando os resultados de cada fold para depois calcular a média
-            all_history['accuracy'] += np.array(history.history['accuracy'])
-            all_history['val_accuracy'] += np.array(history.history['val_accuracy'])
-            all_history['loss'] += np.array(history.history['loss'])
-            all_history['val_loss'] += np.array(history.history['val_loss'])
-
-        mean_accuracy = np.mean(accuracies)
-        std_accuracy = np.std(accuracies)
-
-        # Calculando a média dos históricos de todos os folds
-        for key in all_history:
-            all_history[key] /= self.num_folds
-
-        # Treinando o modelo final com os melhores hiperparâmetros em todos os dados
-        print("Treinando o modelo final com todos os dados de treino...")
-        final_model = self.model_class(base_model=self.base_model, num_classes=self.num_classes)
-        final_model_instance = final_model.build(self.best_hp) if self.best_hp else final_model.build(None)
-        final_model_instance.fit(treino, epochs=self.epochs, batch_size=self.batch_size, verbose=1)
-
-        # Salvando o modelo final
-        final_model_instance.save(model_path)
-        print(f"Modelo final salvo em {model_path}")
-
-        return {
-            "mean_accuracy": mean_accuracy,
-            "std_accuracy": std_accuracy,
-            "history": all_history,
-        }
-
-    @staticmethod
-    def __dataset_to_array(dataset):
+    def execute(self, model):
         images, labels = [], []
 
-        for batch_images, batch_labels in dataset:
-            images.extend(batch_images.numpy())
-            labels.extend(batch_labels.numpy())
+        for image, label in self.train_data:
+            images.append(image.numpy())
+            labels.append(label.numpy())
 
-        return np.array(images), np.array(labels)
+        images = np.concatenate(images, axis=0)
+        labels = np.concatenate(labels, axis=0)
+
+        tuner = Hyperband(
+            model,
+            objective=self.hyper_band_config.objective,
+            factor=self.hyper_band_config.factor,
+            directory=self.hyper_band_config.directory,
+            project_name=self.hyper_band_config.project_name,
+            max_epochs=self.hyper_band_config.max_epochs,
+        )
+
+        fold = KFold(n_splits=self.search_config.folds, shuffle=True)
+
+        for train_index, validation_index in fold.split(images):
+            train_fold_images, validation_fold_images = images[train_index], images[validation_index]
+            train_fold_labels, validation_fold_labels = labels[train_index], labels[validation_index]
+
+            train_fold = (tf.data.Dataset.from_tensor_slices((train_fold_images, train_fold_labels))
+                          .batch(self.search_config.batch_size)
+                          .prefetch(buffer_size=tf.data.AUTOTUNE))
+
+            validation_fold = (tf.data.Dataset.from_tensor_slices((validation_fold_images, validation_fold_labels))
+                               .batch(self.search_config.batch_size)
+                               .prefetch(buffer_size=tf.data.AUTOTUNE))
+
+            tuner.search(
+                train_fold,
+                epochs=self.search_config.epochs,
+                validation_data=validation_fold,
+                batch_size=self.search_config.batch_size,
+                verbose=self.search_config.log_level,
+                callbacks=self.search_config.callbacks,
+            )
+
+        best_hyperparams = tuner.get_best_hyperparameters(num_trials=1)[0]
+        model_instance = model.build(best_hyperparams)
+
+        history = model_instance.fit(
+            self.train_data,
+            epochs=self.final_fit_config.epochs,
+            batch_size=self.final_fit_config.batch_size,
+            verbose=self.final_fit_config.log_level,
+            validation_data=self.validation_data,
+        )
+
+        return model_instance, history
+
+
+class ImageAugmentation:
+    def __init__(self,
+                 flip=True,
+                 rotation=0.1,
+                 zoom=0.1,
+                 contrast=0.1,
+                 translation=0.1,
+                 brightness=0.2,
+                 noise=0.1):
+        self.data_augmentation = keras.Sequential()
+
+        if flip:
+            self.data_augmentation.add(keras.layers.RandomFlip("horizontal"))
+
+        if rotation > 0:
+            self.data_augmentation.add(keras.layers.RandomRotation(rotation))
+
+        if zoom > 0:
+            self.data_augmentation.add(keras.layers.RandomZoom(zoom))
+
+        if contrast > 0:
+            self.data_augmentation.add(keras.layers.RandomContrast(contrast))
+
+        if translation > 0:
+            self.data_augmentation.add(keras.layers.RandomTranslation(translation, translation))
+
+        if brightness > 0:
+            self.data_augmentation.add(keras.layers.RandomBrightness(brightness))
+
+        if noise > 0:
+            self.data_augmentation.add(keras.layers.GaussianNoise(noise))
+
+    def apply(self, dataset, training=True):
+        return dataset.map(lambda x, y: (self.data_augmentation(x, training=training), y))
+
+class ImageRescaler:
+    def __init__(self, scale=1./255):
+        self.rescale_layer = keras.layers.Rescaling(scale)
+
+    def apply(self, dataset):
+        return dataset.map(lambda x, y: (self.rescale_layer(x), y))

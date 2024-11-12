@@ -7,7 +7,7 @@ from tensorflow.python.keras.mixed_precision.policy import set_global_policy
 from examples.keras.common_classes import CrossValidator, HyperBandConfig, SearchConfig, FinalFitConfig, \
     ImageAugmentation, ImageRescaler
 from examples.keras.graficos import plotar_resultados
-from examples.keras.test_variation_1_images.classes import TestVariation1
+from examples.keras.test_variation_2_images.classes import TestVariation2
 
 set_global_policy('mixed_float16')
 
@@ -21,7 +21,7 @@ img_height = 128
 img_width = 128
 input_shape = (img_height, img_width, 3)
 
-batch_size = 128
+batch_size = 64
 
 keras.utils.set_random_seed(seed)
 
@@ -84,7 +84,7 @@ validacao = validacao.map(lambda x, y: (rescaler.rescale_layer(x), y), num_paral
 ########################################################################################################################
 #                                      Criando o Modelo Final para Avaliar                                             #
 ########################################################################################################################
-modelo = TestVariation1(base_model=modelo_base, num_classes=22)
+modelo = TestVariation2(base_model=modelo_base, num_classes=22)
 
 ########################################################################################################################
 #                                          Buscando os Melhores Parâmetros                                             #
@@ -97,7 +97,7 @@ hyper_band_config = HyperBandConfig(
     factor=3,
     max_epochs=10,
     directory='../search_hp_history',
-    project_name='test_variation_1_images'
+    project_name='test_variation_2_images'
 )
 
 search_config = SearchConfig(
@@ -123,5 +123,5 @@ validator = CrossValidator(
 )
 
 model, history = validator.execute(modelo)
-model.save('modelo_final_v1.keras')
-plotar_resultados(history, 'resultado_v1')
+model.save('modelo_final_v2.keras')
+plotar_resultados(history, 'resultado_v2')
