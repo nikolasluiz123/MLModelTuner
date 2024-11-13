@@ -100,7 +100,7 @@ hyper_band_config = HyperBandConfig(
     project_name='test_variation_1_images'
 )
 
-search_config = SearchConfig(
+search_config = SearchConfig(#Ru
     epochs=5,
     batch_size=batch_size,
     callbacks=[early_stopping, reduce_lr],

@@ -7,16 +7,15 @@ from sklearn.tree import DecisionTreeClassifier
 from skopt.space import Real, Categorical, Integer
 
 from examples.data.data_processing import get_titanic_train_data
-from scikit_learn.features_search.select_k_best_searcher import SelectKBestSearcher
-from scikit_learn.hiper_params_search.bayesian_search import BayesianHipperParamsSearcher
-from sklearn.experimental import enable_halving_search_cv
-from scikit_learn.hiper_params_search.grid_searcher import GridCVHipperParamsSearcher, HalvingGridCVHipperParamsSearcher
-from scikit_learn.hiper_params_search.random_searcher import RandomCVHipperParamsSearcher, \
+from wrappers.scikit_learn import SelectKBestSearcher
+from wrappers.scikit_learn import BayesianHipperParamsSearcher
+from wrappers.scikit_learn import GridCVHipperParamsSearcher, HalvingGridCVHipperParamsSearcher
+from wrappers.scikit_learn import RandomCVHipperParamsSearcher, \
     HalvingRandomCVHipperParamsSearcher
-from scikit_learn.history_manager.cross_validator import CrossValidatorHistoryManager
-from scikit_learn.process_manager.multi_process_manager import MultiProcessManager
-from scikit_learn.process_manager.pipeline import Pipeline
-from scikit_learn.validator.cross_validator import CrossValidator
+from wrappers.scikit_learn import CrossValidatorHistoryManager
+from wrappers.scikit_learn import MultiProcessManager
+from wrappers.scikit_learn import Pipeline
+from wrappers.scikit_learn import CrossValidator
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 

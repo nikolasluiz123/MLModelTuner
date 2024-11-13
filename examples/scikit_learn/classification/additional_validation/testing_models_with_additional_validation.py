@@ -9,13 +9,13 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 
 from examples.data.data_processing import get_titanic_train_data
-from scikit_learn.features_search.select_k_best_searcher import SelectKBestSearcher
-from scikit_learn.hiper_params_search.random_searcher import RandomCVHipperParamsSearcher
-from scikit_learn.history_manager.cross_validator import CrossValidatorHistoryManager
-from scikit_learn.process_manager.multi_process_manager import MultiProcessManager
-from scikit_learn.process_manager.pipeline import Pipeline
-from scikit_learn.validator.basic_validator import ClassifierAdditionalValidator
-from scikit_learn.validator.cross_validator import CrossValidator
+from wrappers.scikit_learn import SelectKBestSearcher
+from wrappers.scikit_learn import RandomCVHipperParamsSearcher
+from wrappers.scikit_learn import CrossValidatorHistoryManager
+from wrappers.scikit_learn import MultiProcessManager
+from wrappers.scikit_learn import Pipeline
+from wrappers.scikit_learn import ClassifierAdditionalValidator
+from wrappers.scikit_learn import CrossValidator
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 

@@ -1,18 +1,13 @@
-import pandas as pd
-from scipy.stats import randint, uniform
-from sklearn.feature_selection import f_classif, f_regression
-from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from scipy.stats import randint
+from sklearn.neighbors import KNeighborsRegressor
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.tree import DecisionTreeClassifier
 
-from examples.data.data_processing import get_titanic_train_data, get_workout_train_data
-from scikit_learn.features_search.rfe_searcher import RecursiveFeatureCVSearcher
-from scikit_learn.features_search.select_k_best_searcher import SelectKBestSearcher
-from scikit_learn.hiper_params_search.random_searcher import RandomCVHipperParamsSearcher
-from scikit_learn.history_manager.cross_validator import CrossValidatorHistoryManager
-from scikit_learn.process_manager.multi_process_manager import MultiProcessManager
-from scikit_learn.process_manager.pipeline import Pipeline
-from scikit_learn.validator.cross_validator import CrossValidator
+from examples.data.data_processing import get_workout_train_data
+from wrappers.scikit_learn import RandomCVHipperParamsSearcher
+from wrappers.scikit_learn import CrossValidatorHistoryManager
+from wrappers.scikit_learn import MultiProcessManager
+from wrappers.scikit_learn import Pipeline
+from wrappers.scikit_learn import CrossValidator
 
 ########################################################################################################################
 #                                            Preparando os Dados                                                       #
