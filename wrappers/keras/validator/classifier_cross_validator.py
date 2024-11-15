@@ -1,95 +1,115 @@
-import os
-from datetime import datetime
-
 import numpy as np
+import pandas as pd
 import tensorflow as tf
-from keras_tuner import Hyperband
-from sklearn.model_selection import StratifiedKFold, KFold
+import seaborn as sns
 
-from wrappers.keras.process_manager.pipeline import KerasPipeline
+from keras_tuner import Hyperband
+from matplotlib import pyplot as plt
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.model_selection import StratifiedKFold, KFold
+from tabulate import tabulate
+
+from wrappers.keras.config.configurators import HyperBandConfig, SearchConfig, FinalFitConfig
 from wrappers.keras.validator.common_cross_validator import KerasCrossValidator
+from wrappers.keras.validator.results.classifier import KerasClassifierValidationResult
 from wrappers.keras.validator.results.common import KerasValidationResult
 
 
 class ClassifierKerasCrossValidator(KerasCrossValidator):
 
-    def _on_execute(self, train_data, validation_data, pipeline: KerasPipeline, history_index: int = None) -> KerasValidationResult:
-        data, labels = self.__get_tuple_data_labels(train_data)
-
+    def _on_execute(self,
+                    train_data,
+                    validation_data,
+                    model,
+                    project_name: str,
+                    hyper_band_config: HyperBandConfig,
+                    search_config: SearchConfig,
+                    final_fit_config: FinalFitConfig) -> KerasValidationResult:
         tuner = Hyperband(
-            pipeline.model,
-            objective=pipeline.hyper_band_config.objective,
-            factor=pipeline.hyper_band_config.factor,
-            directory=pipeline.hyper_band_config.directory,
-            project_name=self.__get_project_name(pipeline, history_index),
-            max_epochs=pipeline.hyper_band_config.max_epochs,
+            model,
+            objective=hyper_band_config.objective,
+            factor=hyper_band_config.factor,
+            directory=hyper_band_config.directory,
+            project_name=project_name,
+            max_epochs=hyper_band_config.max_epochs,
         )
 
-        self.__process_cross_validation(data, labels, tuner, pipeline)
+        tuner.search(
+            train_data,
+            epochs=search_config.epochs,
+            validation_data=validation_data,
+            batch_size=search_config.batch_size,
+            verbose=search_config.log_level,
+            callbacks=search_config.callbacks,
+        )
 
         best_hyperparams = tuner.get_best_hyperparameters(num_trials=1)[0]
-        model_instance = pipeline.model.build(best_hyperparams)
+        model_instance = model.build(best_hyperparams)
 
-        history = self.__execute_final_fit(model_instance, train_data, validation_data, pipeline, history_index)
+        history = self.__execute_final_fit(model_instance=model_instance,
+                                           train_data=train_data,
+                                           validation_data=validation_data,
+                                           final_fit_config=final_fit_config)
 
-        return KerasValidationResult(model_instance, history)
+        history_dict = {
+            'mean_accuracy': round(np.mean(history.history['accuracy']), 2),
+            'standard_deviation_accuracy': round(np.std(history.history['accuracy']), 2),
 
-    def __execute_final_fit(self, model_instance, train_data, validation_data, pipeline: KerasPipeline, history_index: int):
-        if history_index is None:
-            return model_instance.fit(
-                train_data,
-                epochs=pipeline.final_fit_config.epochs,
-                batch_size=pipeline.final_fit_config.batch_size,
-                verbose=pipeline.final_fit_config.log_level,
-                validation_data=validation_data,
-            )
-        else:
-            return pipeline.history_manager.get_history_from_best_model_executions(history_index)
+            'mean_val_accuracy': round(np.mean(history.history['val_accuracy']), 2),
+            'standard_deviation_val_accuracy': round(np.mean(history.history['val_accuracy']), 2),
 
-    def __get_project_name(self, pipeline: KerasPipeline, history_index: int):
-        if history_index is not None:
-            directory = pipeline.hyper_band_config.directory
-            projects = os.listdir(directory)
+            'mean_loss': round(np.mean(history.history['loss']), 2),
+            'standard_deviation_loss': round(np.std(history.history['loss']), 2),
 
-            project_names = [p for p in projects if os.path.isdir(os.path.join(directory, p))]
+            'mean_val_loss': round(np.mean(history.history['val_loss']), 2),
+            'standard_deviation_val_loss': round(np.std(history.history['val_loss']), 2),
+        }
 
-            if history_index >= len(project_names):
-                raise IndexError(f'Não foi possível recuperar a pasta do histórico de execuções com o índice {history_index}')
+        return KerasClassifierValidationResult(model_instance, history_dict)
 
-            return project_names[history_index]
-        else:
-            date_time_now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
-            return f'{pipeline.hyper_band_config.project_name}_{date_time_now}'
+    def __execute_final_fit(self,
+                            model_instance,
+                            train_data,
+                            validation_data,
+                            final_fit_config: FinalFitConfig):
+        return model_instance.fit(
+            train_data,
+            epochs=final_fit_config.epochs,
+            batch_size=final_fit_config.batch_size,
+            verbose=final_fit_config.log_level,
+            validation_data=validation_data,
+            callbacks=final_fit_config.callbacks,
+        )
 
-    def __process_cross_validation(self, data, labels, tuner, pipeline: KerasPipeline):
-        fold = self.__get_fold_implementation(pipeline)
+    def __process_cross_validation(self, data, labels, tuner: Hyperband, search_config: SearchConfig):
+        fold = self.__get_fold_implementation(search_config)
 
-        for train_index, validation_index in fold.split(data):
+        for train_index, validation_index in fold.split(data, labels):
             train_fold_data, validation_fold_data = data[train_index], data[validation_index]
             train_fold_labels, validation_fold_labels = labels[train_index], labels[validation_index]
 
-            train_fold = self.__get_fold_dataset(train_fold_data, train_fold_labels, pipeline)
-            validation_fold = self.__get_fold_dataset(validation_fold_data, validation_fold_labels, pipeline)
+            train_fold = self.__get_fold_dataset(train_fold_data, train_fold_labels, search_config)
+            validation_fold = self.__get_fold_dataset(validation_fold_data, validation_fold_labels, search_config)
 
             tuner.search(
                 train_fold,
-                epochs=pipeline.search_config.epochs,
+                epochs=search_config.epochs,
                 validation_data=validation_fold,
-                batch_size=pipeline.search_config.batch_size,
-                verbose=pipeline.search_config.log_level,
-                callbacks=pipeline.search_config.callbacks,
+                batch_size=search_config.batch_size,
+                verbose=search_config.log_level,
+                callbacks=search_config.callbacks,
             )
 
-    def __get_fold_implementation(self, pipeline: KerasPipeline):
-        if pipeline.search_config.stratified:
-            fold = StratifiedKFold(n_splits=pipeline.search_config.folds, shuffle=True)
+    def __get_fold_implementation(self, search_config: SearchConfig):
+        if search_config.stratified:
+            fold = StratifiedKFold(n_splits=search_config.folds, shuffle=True)
         else:
-            fold = KFold(n_splits=pipeline.search_config.folds, shuffle=True)
+            fold = KFold(n_splits=search_config.folds, shuffle=True)
         return fold
 
-    def __get_fold_dataset(self, data_fold, label_fold, pipeline: KerasPipeline):
+    def __get_fold_dataset(self, data_fold, label_fold, search_config: SearchConfig):
         return (tf.data.Dataset.from_tensor_slices((data_fold, label_fold))
-                .batch(pipeline.search_config.batch_size)
+                .batch(search_config.batch_size)
                 .prefetch(buffer_size=tf.data.AUTOTUNE))
 
     def __get_tuple_data_labels(self, train_data) -> tuple:
@@ -103,3 +123,59 @@ class ClassifierKerasCrossValidator(KerasCrossValidator):
         labels = np.concatenate(labels, axis=0)
 
         return data, labels
+
+
+class KerasAdditionalClassifierValidator:
+
+    def __init__(self, model_instance, model, history_dict: dict, data):
+        self.model_instance = model_instance
+        self.model = model
+        self.history_dict = history_dict
+        self.data = data
+
+    def validate(self, show_graphic: bool = False):
+        true_labels = []
+
+        for _, label in self.data:
+            true_labels.extend(label.numpy())
+
+        predictions = self.model_instance.predict(self.data)
+        predicted_classes = np.argmax(predictions, axis=1)
+
+        classes_names = sorted(set(self.data.class_names))
+
+        predicted_class_names = [classes_names[i] for i in predicted_classes]
+        true_class_names = [classes_names[i] for i in true_labels]
+
+        self.__show_classification_report(predicted_class_names, true_class_names)
+        self.__show_confusion_matrix(predicted_class_names, true_class_names, classes_names, show_graphic)
+
+    def __show_classification_report(self, predicted_classes, true_labels):
+        report = classification_report(true_labels, predicted_classes, output_dict=True)
+        df_report = pd.DataFrame(report).transpose()
+        print()
+        print('Relatório de Classificação:\n')
+        print(tabulate(df_report, headers='keys', tablefmt="fancy_grid"))
+
+    def __show_confusion_matrix(self, predicted_classes, true_labels, classes_names, show_graphic: bool):
+        conf_matrix = confusion_matrix(true_labels, predicted_classes, labels=classes_names)
+        plt.figure(figsize=(16, 9))
+        sns.heatmap(conf_matrix,
+                    annot=True,
+                    fmt="d",
+                    cmap="Blues",
+                    cbar=False,
+                    xticklabels=classes_names,
+                    yticklabels=classes_names)
+
+        plt.xticks(rotation=45, ha='right')
+        plt.yticks(rotation=0)
+
+        plt.xlabel("Classes Previstas")
+        plt.ylabel("Classes Reais")
+        plt.title("Matriz de Confusão")
+
+        plt.savefig(f'confusion_matrix_{type(self.model).__name__}.svg', format='svg')
+
+        if show_graphic:
+            plt.show()

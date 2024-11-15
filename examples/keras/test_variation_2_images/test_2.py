@@ -6,7 +6,7 @@ from tensorflow.python.keras.mixed_precision.policy import set_global_policy
 
 from examples.keras.common_classes import CrossValidator, HyperBandConfig, SearchConfig, FinalFitConfig, \
     ImageAugmentation, ImageRescaler
-from examples.keras.graficos import plotar_resultados
+from examples.keras.graficos import plot_history
 from examples.keras.test_variation_2_images.classes import TestVariation2
 
 set_global_policy('mixed_float16')
@@ -124,4 +124,4 @@ validator = CrossValidator(
 
 model, history = validator.execute(modelo)
 model.save('modelo_final_v2.keras')
-plotar_resultados(history, 'resultado_v2')
+plot_history(history, 'resultado_v2')

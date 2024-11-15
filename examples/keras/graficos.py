@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
 
 
-def plotar_resultados(history, fig_file_name):
+def plot_history(history, fig_file_name):
     acc = history.history['accuracy']
     val_acc = history.history['val_accuracy']
     loss = history.history['loss']

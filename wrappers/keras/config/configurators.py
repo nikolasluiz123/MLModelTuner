@@ -1,3 +1,5 @@
+import math
+
 from keras.src.callbacks import Callback
 
 
@@ -36,7 +38,9 @@ class FinalFitConfig:
     def __init__(self,
                  epochs: int,
                  batch_size: int,
-                 log_level: int):
+                 log_level: int,
+                 callbacks: list[Callback]=None):
         self.epochs = epochs
         self.batch_size = batch_size
         self.log_level = log_level
+        self.callbacks = callbacks

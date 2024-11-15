@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-from wrappers.scikit_learn import HistoryManager
+from wrappers.scikit_learn.history_manager.common import HistoryManager
 from wrappers.scikit_learn.validator.results.cross_validation import CrossValidationResult
 
 

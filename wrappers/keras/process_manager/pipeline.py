@@ -1,7 +1,7 @@
 from keras_tuner import HyperModel
 
 from wrappers.keras.config.configurators import HyperBandConfig, SearchConfig, FinalFitConfig
-from wrappers.keras.history_manager.common import KerasHistoryManager
+from wrappers.keras.history_manager.common_history_manager import KerasHistoryManager
 from wrappers.keras.pre_processing.pre_processor import KerasDataPreProcessor
 from wrappers.keras.validator.common_cross_validator import KerasCrossValidator
 
@@ -35,7 +35,7 @@ class KerasPipeline:
 
             'search_epochs': str(self.search_config.epochs),
             'search_batch_size': str(self.search_config.batch_size),
-            'search_callbacks': str(self.search_config.callbacks),
+            'search_callbacks': [type(c).__name__ for c in self.search_config.callbacks],
             'search_folds': str(self.search_config.folds),
 
             'final_fit_epochs': str(self.final_fit_config.epochs),

@@ -4,7 +4,7 @@ from typing import Any
 
 class KerasValidationResult(ABC):
 
-    def __init__(self, model, history):
+    def __init__(self, model, history: dict):
         self.model = model
         self.history = history
 

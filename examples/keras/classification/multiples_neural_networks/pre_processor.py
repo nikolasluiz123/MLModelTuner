@@ -1,3 +1,4 @@
+
 import kagglehub
 import keras
 
@@ -9,7 +10,7 @@ input_shape = (img_height, img_width, 3)
 
 seed = 42
 
-batch_size = 128
+batch_size = 256
 
 class ExamplePreProcessor(KerasDataPreProcessor):
 
@@ -35,13 +36,3 @@ class ExamplePreProcessor(KerasDataPreProcessor):
         )
 
         return train, validation
-
-    def get_data_additional_validation(self):
-        path_image = kagglehub.dataset_download('hasyimabdillah/workoutexercises-images')
-
-        return keras.utils.image_dataset_from_directory(
-            path_image,
-            seed=seed,
-            image_size=(img_height, img_width),
-            batch_size=batch_size
-        )

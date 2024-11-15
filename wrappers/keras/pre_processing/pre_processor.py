@@ -8,13 +8,16 @@ class KerasDataPreProcessor(ABC):
         self.start_pre_processing = 0
         self.end_pre_processing = 0
 
-    def process(self) -> tuple:
+    def get_train_data(self) -> tuple:
         self.start_pre_processing = time.time()
-        data = self._on_execute()
+        data = self._on_execute_train_process()
         self.end_pre_processing = time.time()
 
         return data
 
     @abstractmethod
-    def _on_execute(self) -> tuple:
+    def _on_execute_train_process(self) -> tuple:
+        ...
+
+    def get_data_additional_validation(self):
         ...

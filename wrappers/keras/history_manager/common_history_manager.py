@@ -1,8 +1,12 @@
 import json
 import os
-from abc import ABC
+import shutil
+from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
+import keras
+
+from wrappers.keras.config.configurators import HyperBandConfig
 from wrappers.keras.validator.results.common import KerasValidationResult
 
 Result = TypeVar('Result', bound=KerasValidationResult)
@@ -19,6 +23,10 @@ class KerasHistoryManager(ABC, Generic[Result]):
 
         self._create_output_dir()
 
+    @abstractmethod
+    def get_validation_result(self, index: int) -> Result:
+        ...
+
     def _create_output_dir(self):
         if not os.path.exists(self.output_directory):
             os.makedirs(self.output_directory)
@@ -28,6 +36,7 @@ class KerasHistoryManager(ABC, Generic[Result]):
 
     def save_result(self,
                     model,
+                    model_instance,
                     final_fit_history,
                     hyper_band_executions_directory: str,
                     pre_processing_time: str,
@@ -36,8 +45,7 @@ class KerasHistoryManager(ABC, Generic[Result]):
         oracle_data = self.__get_oracle_file(hyper_band_executions_directory, last_project)
 
         self.__save_best_model_execution_data(model, final_fit_history, oracle_data, pre_processing_time, validation_time)
-        self.__save_keras_model(model)
-        self.__delete_trials()
+        self.__save_keras_model(model_instance)
 
     def __save_best_model_execution_data(self,
                                          model,
@@ -47,7 +55,7 @@ class KerasHistoryManager(ABC, Generic[Result]):
                                          validation_time: str):
         best_model_execution_data = {
             'model': type(model).__name__,
-            'history': final_fit_history.history,
+            'history': final_fit_history,
             'hyperband_iterations': oracle_data['hyperband_iterations'],
             'max_epochs': oracle_data['max_epochs'],
             'min_epochs': oracle_data['min_epochs'],
@@ -70,10 +78,10 @@ class KerasHistoryManager(ABC, Generic[Result]):
         with open(output_path, 'w') as file:
             json.dump(data, file, indent=4)
 
-    def get_history_from_best_model_executions(self, index: int):
-        executions = self.__get_dictionary_from_json(self.output_directory, index, self.best_executions_file_name)
+    def get_best_model_executions(self, index: int):
+        executions = self._get_dictionary_from_json(self.output_directory, index, self.best_executions_file_name)
 
-        return executions['history']
+        return executions
 
     def __get_oracle_file(self, hyper_band_executions_directory, last_project):
         oracle_file_path = os.path.join(hyper_band_executions_directory, last_project, 'oracle.json')
@@ -86,7 +94,7 @@ class KerasHistoryManager(ABC, Generic[Result]):
 
         return oracle_data
 
-    def __get_dictionary_from_json(self, directory: str, index: int, file_name: str):
+    def _get_dictionary_from_json(self, directory: str, index: int, file_name: str):
         output_path = os.path.join(directory, f"{file_name}.json")
 
         if not os.path.exists(output_path):
@@ -111,8 +119,30 @@ class KerasHistoryManager(ABC, Generic[Result]):
         return last_project
 
     def __save_keras_model(self, model):
-        model.save(f'{str(model)}.keras')
+        path = os.path.join(self.models_directory, f"model_{self.get_history_len()}.keras")
+        model.save(path)
 
-    def __delete_trials(self):
-        pass
+    def get_history_len(self) -> int:
+        output_path = os.path.join(self.output_directory, f"{self.best_executions_file_name}.json")
 
+        if not os.path.exists(output_path):
+            return 0
+
+        with open(output_path, 'r') as file:
+            data = json.load(file)
+            return len(data)
+
+    def delete_trials(self, hyper_band_config: HyperBandConfig):
+        trials_path = os.path.join(hyper_band_config.directory, hyper_band_config.project_name)
+        shutil.rmtree(trials_path)
+
+        print(f'Diretório "{trials_path}" e todos os arquivos/subdiretórios foram removidos com sucesso.')
+
+    def get_saved_model(self, version: int):
+        output_path = os.path.join(self.models_directory, f"model_{version}.keras")
+
+        if not os.path.exists(output_path):
+            raise FileNotFoundError(
+                f"O modelo versão {version} não foi encontrado no diretório {self.models_directory}.")
+
+        return keras.models.load_model(output_path)

@@ -1,3 +1,4 @@
+
 import kagglehub
 import keras
 
@@ -9,7 +10,7 @@ input_shape = (img_height, img_width, 3)
 
 seed = 42
 
-batch_size = 128
+batch_size = 256
 
 class ExamplePreProcessor(KerasDataPreProcessor):
 
@@ -22,7 +23,7 @@ class ExamplePreProcessor(KerasDataPreProcessor):
             subset="training",
             image_size=(img_height, img_width),
             batch_size=batch_size,
-            seed=seed
+            seed=seed,
         )
 
         validation = keras.utils.image_dataset_from_directory(

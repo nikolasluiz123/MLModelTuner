@@ -6,10 +6,10 @@ from pandas import DataFrame
 from sklearn.model_selection import StratifiedKFold, KFold
 from tabulate import tabulate
 
-from wrappers.scikit_learn import Searcher
-from wrappers.scikit_learn import HistoryManager
-from wrappers.scikit_learn import Pipeline
-from wrappers.scikit_learn import Result
+from wrappers.scikit_learn.hiper_params_search.common_searcher import Searcher
+from wrappers.scikit_learn.history_manager.common import HistoryManager
+from wrappers.scikit_learn.process_manager.pipeline import Pipeline
+from wrappers.scikit_learn.validator.common_validator import Result
 
 Pipe = TypeVar('Pipe', bound=Pipeline)
 History = TypeVar('History', bound=HistoryManager)
