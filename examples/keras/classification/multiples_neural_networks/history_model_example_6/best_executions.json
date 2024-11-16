@@ -1,0 +1,262 @@
+[
+    {
+        "model": "ExampleKerasHyperModelV5",
+        "history": {
+            "mean_accuracy": 0.73,
+            "standard_deviation_accuracy": 0.21,
+            "mean_val_accuracy": 0.51,
+            "standard_deviation_val_accuracy": 0.51,
+            "mean_loss": 1.15,
+            "standard_deviation_loss": 0.73,
+            "mean_val_loss": 2.05,
+            "standard_deviation_val_loss": 0.63
+        },
+        "hyperband_iterations": 1,
+        "max_epochs": 10,
+        "min_epochs": 1,
+        "factor": 3,
+        "neural_structure": {
+            "space": [
+                {
+                    "class_name": "Int",
+                    "config": {
+                        "name": "dense_units_1",
+                        "default": null,
+                        "conditions": [],
+                        "min_value": 16,
+                        "max_value": 1024,
+                        "step": 64,
+                        "sampling": "linear"
+                    }
+                },
+                {
+                    "class_name": "Float",
+                    "config": {
+                        "name": "dropout_rate1",
+                        "default": 0.1,
+                        "conditions": [],
+                        "min_value": 0.1,
+                        "max_value": 0.8,
+                        "step": 0.1,
+                        "sampling": "linear"
+                    }
+                },
+                {
+                    "class_name": "Float",
+                    "config": {
+                        "name": "learning_rate",
+                        "default": 0.0001,
+                        "conditions": [],
+                        "min_value": 0.0001,
+                        "max_value": 0.01,
+                        "step": null,
+                        "sampling": "linear"
+                    }
+                }
+            ],
+            "values": {
+                "dense_units_1": 16,
+                "dropout_rate1": 0.1,
+                "learning_rate": 0.0001
+            }
+        },
+        "pre_processing_time": "00:00:01.000",
+        "params_search_time": "00:02:23.000",
+        "validation_time": "00:00:12.000"
+    },
+    {
+        "model": "ExampleKerasHyperModelV6",
+        "history": {
+            "mean_accuracy": 0.74,
+            "standard_deviation_accuracy": 0.12,
+            "mean_val_accuracy": 0.14,
+            "standard_deviation_val_accuracy": 0.14,
+            "mean_loss": 1.15,
+            "standard_deviation_loss": 0.43,
+            "mean_val_loss": 49.91,
+            "standard_deviation_val_loss": 63.17
+        },
+        "hyperband_iterations": 1,
+        "max_epochs": 10,
+        "min_epochs": 1,
+        "factor": 3,
+        "neural_structure": {
+            "space": [
+                {
+                    "class_name": "Int",
+                    "config": {
+                        "name": "dense_units_1",
+                        "default": null,
+                        "conditions": [],
+                        "min_value": 16,
+                        "max_value": 256,
+                        "step": 32,
+                        "sampling": "linear"
+                    }
+                },
+                {
+                    "class_name": "Float",
+                    "config": {
+                        "name": "dropout_rate1",
+                        "default": 0.1,
+                        "conditions": [],
+                        "min_value": 0.1,
+                        "max_value": 0.8,
+                        "step": 0.1,
+                        "sampling": "linear"
+                    }
+                },
+                {
+                    "class_name": "Float",
+                    "config": {
+                        "name": "learning_rate",
+                        "default": 0.0001,
+                        "conditions": [],
+                        "min_value": 0.0001,
+                        "max_value": 0.01,
+                        "step": null,
+                        "sampling": "linear"
+                    }
+                }
+            ],
+            "values": {
+                "dense_units_1": 16,
+                "dropout_rate1": 0.1,
+                "learning_rate": 0.0001
+            }
+        },
+        "pre_processing_time": "00:00:01.000",
+        "params_search_time": "00:00:00.000",
+        "validation_time": "00:01:05.000"
+    },
+    {
+        "model": "ExampleKerasHyperModelV6",
+        "history": {
+            "mean_accuracy": 0.69,
+            "standard_deviation_accuracy": 0.06,
+            "mean_val_accuracy": 0.92,
+            "standard_deviation_val_accuracy": 0.92,
+            "mean_loss": 0.81,
+            "standard_deviation_loss": 0.27,
+            "mean_val_loss": 0.38,
+            "standard_deviation_val_loss": 0.3
+        },
+        "hyperband_iterations": 1,
+        "max_epochs": 10,
+        "min_epochs": 1,
+        "factor": 3,
+        "neural_structure": {
+            "space": [
+                {
+                    "class_name": "Int",
+                    "config": {
+                        "name": "dense_units_1",
+                        "default": null,
+                        "conditions": [],
+                        "min_value": 16,
+                        "max_value": 256,
+                        "step": 32,
+                        "sampling": "linear"
+                    }
+                },
+                {
+                    "class_name": "Float",
+                    "config": {
+                        "name": "dropout_rate1",
+                        "default": 0.1,
+                        "conditions": [],
+                        "min_value": 0.1,
+                        "max_value": 0.8,
+                        "step": 0.1,
+                        "sampling": "linear"
+                    }
+                },
+                {
+                    "class_name": "Float",
+                    "config": {
+                        "name": "learning_rate",
+                        "default": 0.0001,
+                        "conditions": [],
+                        "min_value": 0.0001,
+                        "max_value": 0.01,
+                        "step": null,
+                        "sampling": "linear"
+                    }
+                }
+            ],
+            "values": {
+                "dense_units_1": 16,
+                "dropout_rate1": 0.1,
+                "learning_rate": 0.0001
+            }
+        },
+        "pre_processing_time": "00:00:01.000",
+        "params_search_time": "00:11:43.000",
+        "validation_time": "00:01:17.000"
+    },
+    {
+        "model": "ExampleKerasHyperModelV6",
+        "history": {
+            "mean_accuracy": 0.4,
+            "standard_deviation_accuracy": 0.08,
+            "mean_val_accuracy": 0.11,
+            "standard_deviation_val_accuracy": 0.11,
+            "mean_loss": 1.76,
+            "standard_deviation_loss": 0.36,
+            "mean_val_loss": 14.03,
+            "standard_deviation_val_loss": 6.29
+        },
+        "hyperband_iterations": 1,
+        "max_epochs": 10,
+        "min_epochs": 1,
+        "factor": 3,
+        "neural_structure": {
+            "space": [
+                {
+                    "class_name": "Int",
+                    "config": {
+                        "name": "dense_units_1",
+                        "default": null,
+                        "conditions": [],
+                        "min_value": 16,
+                        "max_value": 256,
+                        "step": 32,
+                        "sampling": "linear"
+                    }
+                },
+                {
+                    "class_name": "Float",
+                    "config": {
+                        "name": "dropout_rate1",
+                        "default": 0.1,
+                        "conditions": [],
+                        "min_value": 0.1,
+                        "max_value": 0.8,
+                        "step": 0.1,
+                        "sampling": "linear"
+                    }
+                },
+                {
+                    "class_name": "Float",
+                    "config": {
+                        "name": "learning_rate",
+                        "default": 0.0001,
+                        "conditions": [],
+                        "min_value": 0.0001,
+                        "max_value": 0.01,
+                        "step": null,
+                        "sampling": "linear"
+                    }
+                }
+            ],
+            "values": {
+                "dense_units_1": 16,
+                "dropout_rate1": 0.1,
+                "learning_rate": 0.0001
+            }
+        },
+        "pre_processing_time": "00:00:01.000",
+        "params_search_time": "00:00:00.000",
+        "validation_time": "00:01:09.000"
+    }
+]
