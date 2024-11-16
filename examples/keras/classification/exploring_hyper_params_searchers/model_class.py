@@ -32,7 +32,7 @@ class ExampleKerasHyperModel(HyperModel):
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=learning_rate),
             loss=keras.losses.SparseCategoricalCrossentropy(),
-            metrics=['val_accuracy']
+            metrics=['accuracy']
         )
 
         return model
