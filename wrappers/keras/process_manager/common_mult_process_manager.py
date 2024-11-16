@@ -6,7 +6,6 @@ import pandas as pd
 from pandas import DataFrame
 from tabulate import tabulate
 from tensorflow.python.keras.mixed_precision.policy import set_global_policy
-from tensorflow.tools.pip_package.setup import project_name
 
 from wrappers.keras.history_manager.common_history_manager import KerasHistoryManager
 from wrappers.keras.process_manager.pipeline import KerasPipeline
