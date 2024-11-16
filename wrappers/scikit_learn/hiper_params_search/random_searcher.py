@@ -3,10 +3,11 @@ import time
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import HalvingRandomSearchCV
 
-from wrappers.scikit_learn import CommonHiperParamsSearcher, Searcher
+from wrappers.scikit_learn.hiper_params_search.common_hyper_params_searcher import ScikitLearnCommonHyperParamsSearcher, \
+    ScikitLearnSearcher
 
 
-class RandomCVHipperParamsSearcher(CommonHiperParamsSearcher):
+class ScikitLearnRandomCVHyperParamsSearcher(ScikitLearnCommonHyperParamsSearcher):
     """
     Implementação wrapper da busca RandomizedSearchCV o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html>`_.
     """
@@ -18,7 +19,7 @@ class RandomCVHipperParamsSearcher(CommonHiperParamsSearcher):
         super().__init__(n_jobs, log_level)
         self.number_iterations = number_iterations
 
-    def search_hiper_parameters(self, estimator, params, data_x, data_y, cv, scoring: str) -> Searcher:
+    def search_hyper_parameters(self, estimator, params, data_x, data_y, cv, scoring: str) -> ScikitLearnSearcher:
         self.start_search_parameter_time = time.time()
 
         search = RandomizedSearchCV(estimator=estimator,
@@ -36,7 +37,7 @@ class RandomCVHipperParamsSearcher(CommonHiperParamsSearcher):
         return search
 
 
-class HalvingRandomCVHipperParamsSearcher(CommonHiperParamsSearcher):
+class ScikitLearnHalvingRandomCVHyperParamsSearcher(ScikitLearnCommonHyperParamsSearcher):
     """
     Implementação wrapper da busca HalvingRandomSearchCV o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.HalvingRandomSearchCV.html>`_.
     """
@@ -74,7 +75,7 @@ class HalvingRandomCVHipperParamsSearcher(CommonHiperParamsSearcher):
         self.min_resources = min_resources
         self.factor = factor
 
-    def search_hiper_parameters(self, estimator, params, data_x, data_y, cv, scoring: str) -> Searcher:
+    def search_hyper_parameters(self, estimator, params, data_x, data_y, cv, scoring: str) -> ScikitLearnSearcher:
         self.start_search_parameter_time = time.time()
 
         search = HalvingRandomSearchCV(estimator=estimator,

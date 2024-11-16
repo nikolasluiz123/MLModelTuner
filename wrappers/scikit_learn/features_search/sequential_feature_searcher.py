@@ -2,10 +2,10 @@ import time
 
 from sklearn.feature_selection import SequentialFeatureSelector
 
-from wrappers.scikit_learn import CommonFeaturesSearcher
+from wrappers.scikit_learn.features_search.common_feature_searcher import ScikitLearnCommonFeaturesSearcher
 
 
-class SequentialFeatureSearcher(CommonFeaturesSearcher):
+class ScikitLearnSequentialFeatureSearcher(ScikitLearnCommonFeaturesSearcher):
     """
     Implementação wrapper do algoritmo SequentialFeatureSelector o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SequentialFeatureSelector.html>`_.
     """

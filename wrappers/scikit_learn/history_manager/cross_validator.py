@@ -1,11 +1,11 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-from wrappers.scikit_learn.history_manager.common import HistoryManager
-from wrappers.scikit_learn.validator.results.cross_validation import CrossValidationResult
+from wrappers.scikit_learn.history_manager.common_history_manager import ScikitLearnCommonHistoryManager
+from wrappers.scikit_learn.validator.results.cross_validation import ScikitLearnCrossValidationResult
 
 
-class CrossValidatorHistoryManager(HistoryManager[CrossValidationResult]):
+class CrossValidatorScikitLearnCommonHistoryManager(ScikitLearnCommonHistoryManager[ScikitLearnCrossValidationResult]):
     """
     Classe que gerencia o histórico de validação cruzada dos modelos.
 
@@ -18,7 +18,7 @@ class CrossValidatorHistoryManager(HistoryManager[CrossValidationResult]):
         super().__init__(output_directory, models_directory, params_file_name, cv_results_file_name)
 
     def save_result(self,
-                    classifier_result: CrossValidationResult,
+                    classifier_result: ScikitLearnCrossValidationResult,
                     cv_results,
                     feature_selection_time: str,
                     search_time: str,
@@ -52,10 +52,10 @@ class CrossValidatorHistoryManager(HistoryManager[CrossValidationResult]):
         df = pd.DataFrame.from_dict(cv_results, orient='columns')
         self._save_dictionary_in_json(df.to_dict(), file_name=self.cv_results_file_name)
 
-    def load_validation_result_from_history(self, index: int = -1) -> CrossValidationResult:
+    def load_validation_result_from_history(self, index: int = -1) -> ScikitLearnCrossValidationResult:
         result_dict = self.get_dictionary_from_params_json(index)
 
-        return CrossValidationResult(
+        return ScikitLearnCrossValidationResult(
             mean=result_dict['mean'],
             standard_deviation=result_dict['standard_deviation'],
             median=result_dict['median'],

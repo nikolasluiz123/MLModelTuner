@@ -4,9 +4,9 @@ from typing import TypeVar
 
 from sklearn.model_selection._search import BaseSearchCV
 
-Searcher = TypeVar('Searcher', bound=BaseSearchCV)
+ScikitLearnSearcher = TypeVar('ScikitLearnSearcher', bound=BaseSearchCV)
 
-class CommonHiperParamsSearcher(ABC):
+class ScikitLearnCommonHyperParamsSearcher(ABC):
     """
     Classe wrapper utilizada pelas implementações específicas de busca de parâmetros.
     """
@@ -33,13 +33,13 @@ class CommonHiperParamsSearcher(ABC):
         self.end_search_parameter_time = 0
 
     @abstractmethod
-    def search_hiper_parameters(self,
+    def search_hyper_parameters(self,
                                 estimator,
                                 params,
                                 data_x,
                                 data_y,
                                 cv,
-                                scoring: str) -> Searcher:
+                                scoring: str) -> ScikitLearnSearcher:
         """
         Função que deve realizar a seleção dos melhores parâmetros para o `estimator` definido. O retorno da função
         deve ser obrigatoriamente alguma implementação filha de `BaseSearchCV` que é a classe mais alta na hierarquia

@@ -1,15 +1,14 @@
 from typing import Any
 
-from sklearn.base import TransformerMixin
 from sklearn.preprocessing import StandardScaler
 
-from wrappers.scikit_learn import CommonFeaturesSearcher
-from wrappers.scikit_learn import CommonHiperParamsSearcher
-from wrappers.scikit_learn import HistoryManager
-from wrappers.scikit_learn import Result, BaseValidator
+from wrappers.scikit_learn.features_search.common_feature_searcher import ScikitLearnCommonFeaturesSearcher
+from wrappers.scikit_learn.hiper_params_search.common_hyper_params_searcher import ScikitLearnCommonHyperParamsSearcher
+from wrappers.scikit_learn.history_manager.common_history_manager import ScikitLearnCommonHistoryManager
+from wrappers.scikit_learn.validator.common_validator import Result, BaseValidator
 
 
-class Pipeline:
+class ScikitLearnPipeline:
     """
     Representa um pipeline de machine learning que combina estimadores,
     busca de hiperparâmetros, seleção de características e validação de modelos.
@@ -22,9 +21,9 @@ class Pipeline:
     def __init__(self,
                  estimator,
                  params,
-                 feature_searcher: CommonFeaturesSearcher | None,
-                 params_searcher: CommonHiperParamsSearcher,
-                 history_manager: HistoryManager[Result],
+                 feature_searcher: ScikitLearnCommonFeaturesSearcher | None,
+                 params_searcher: ScikitLearnCommonHyperParamsSearcher,
+                 history_manager: ScikitLearnCommonHistoryManager[Result],
                  validator: BaseValidator,
                  scaler: StandardScaler | None = None):
         """

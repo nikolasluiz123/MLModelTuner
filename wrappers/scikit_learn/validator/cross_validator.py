@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.model_selection import cross_val_score
 
 from wrappers.scikit_learn.validator.common_validator import BaseValidator, Result
-from wrappers.scikit_learn.validator.results.cross_validation import CrossValidationResult
+from wrappers.scikit_learn.validator.results.cross_validation import ScikitLearnCrossValidationResult
 
 
 class CrossValidator(BaseValidator):
@@ -71,7 +71,7 @@ class CrossValidator(BaseValidator):
 
         self.end_best_model_validation = time.time()
 
-        result = CrossValidationResult(
+        result = ScikitLearnCrossValidationResult(
             mean=np.mean(scores),
             standard_deviation=np.std(scores),
             median=np.median(scores),

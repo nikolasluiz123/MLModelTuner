@@ -2,10 +2,11 @@ import time
 
 from sklearn.model_selection import GridSearchCV, HalvingGridSearchCV
 
-from wrappers.scikit_learn import CommonHiperParamsSearcher, Searcher
+from wrappers.scikit_learn.hiper_params_search.common_hyper_params_searcher import ScikitLearnCommonHyperParamsSearcher, \
+    ScikitLearnSearcher
 
 
-class GridCVHipperParamsSearcher(CommonHiperParamsSearcher):
+class ScikitLearnGridCVHyperParamsSearcher(ScikitLearnCommonHyperParamsSearcher):
     """
     Implementação wrapper da busca GridSearchCV o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html>`_.
     """
@@ -13,7 +14,7 @@ class GridCVHipperParamsSearcher(CommonHiperParamsSearcher):
     def __init__(self, n_jobs: int = -1, log_level: int = 0):
         super().__init__(n_jobs, log_level)
 
-    def search_hiper_parameters(self, estimator, params, data_x, data_y, cv, scoring: str) -> Searcher:
+    def search_hyper_parameters(self, estimator, params, data_x, data_y, cv, scoring: str) -> ScikitLearnSearcher:
         self.start_search_parameter_time = time.time()
 
         search = GridSearchCV(estimator=estimator,
@@ -29,7 +30,7 @@ class GridCVHipperParamsSearcher(CommonHiperParamsSearcher):
 
         return search
 
-class HalvingGridCVHipperParamsSearcher(CommonHiperParamsSearcher):
+class ScikitLearnHalvingGridCVHyperParamsSearcher(ScikitLearnCommonHyperParamsSearcher):
     """
     Implementação wrapper da busca GridSearchCV o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.HalvingGridSearchCV.html>`_.
     """
@@ -58,7 +59,7 @@ class HalvingGridCVHipperParamsSearcher(CommonHiperParamsSearcher):
         self.max_resources = max_resources
         self.min_resources = min_resources
 
-    def search_hiper_parameters(self, estimator, params, data_x, data_y, cv, scoring: str) -> Searcher:
+    def search_hyper_parameters(self, estimator, params, data_x, data_y, cv, scoring: str) -> ScikitLearnSearcher:
         self.start_search_parameter_time = time.time()
 
         search = HalvingGridSearchCV(estimator=estimator,

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class CommonFeaturesSearcher(ABC):
+class ScikitLearnCommonFeaturesSearcher(ABC):
     """
     Classe utilizada nas implementações wrapper das implementações de busca das melhores features do scikit-learn.
     """

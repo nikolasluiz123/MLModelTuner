@@ -2,10 +2,11 @@ import time
 
 from skopt import BayesSearchCV
 
-from wrappers.scikit_learn import CommonHiperParamsSearcher, Searcher
+from wrappers.scikit_learn.hiper_params_search.common_hyper_params_searcher import ScikitLearnCommonHyperParamsSearcher, \
+    ScikitLearnSearcher
 
 
-class BayesianHipperParamsSearcher(CommonHiperParamsSearcher):
+class ScikitLearnBayesianHyperParamsSearcher(ScikitLearnCommonHyperParamsSearcher):
     """
     Implementação wrapper da busca BayesSearchCV o qual é detalhado na `documentação do scikit-optimize <https://scikit-optimize.github.io/stable/modules/generated/skopt.BayesSearchCV.html>`_.
     """
@@ -17,7 +18,7 @@ class BayesianHipperParamsSearcher(CommonHiperParamsSearcher):
         super().__init__(n_jobs, log_level)
         self.number_iterations = number_iterations
 
-    def search_hiper_parameters(self, estimator, params, data_x, data_y, cv, scoring: str) -> Searcher:
+    def search_hyper_parameters(self, estimator, params, data_x, data_y, cv, scoring: str) -> ScikitLearnSearcher:
         self.start_search_parameter_time = time.time()
 
         search = BayesSearchCV(estimator=estimator,

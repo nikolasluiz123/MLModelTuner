@@ -2,10 +2,10 @@ import time
 
 from sklearn.feature_selection import RFECV, RFE
 
-from wrappers.scikit_learn import CommonFeaturesSearcher
+from wrappers.scikit_learn.features_search.common_feature_searcher import ScikitLearnCommonFeaturesSearcher
 
 
-class RecursiveFeatureSearcher(CommonFeaturesSearcher):
+class ScikitLearnRecursiveFeatureSearcher(ScikitLearnCommonFeaturesSearcher):
     """
     Implementação wrapper do algoritmo RFE o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFE.html>`_.
     """
@@ -38,7 +38,7 @@ class RecursiveFeatureSearcher(CommonFeaturesSearcher):
         return data_x.iloc[:, searcher.support_]
 
 
-class RecursiveFeatureCVSearcher(CommonFeaturesSearcher):
+class RecursiveFeatureCVSearcherScikitLearn(ScikitLearnCommonFeaturesSearcher):
     """
     Implementação wrapper do algoritmo RFECV o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFECV.html>`_.
     """

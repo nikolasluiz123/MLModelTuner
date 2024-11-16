@@ -2,10 +2,10 @@ import time
 
 from sklearn.feature_selection import GenericUnivariateSelect
 
-from wrappers.scikit_learn import CommonFeaturesSearcher
+from wrappers.scikit_learn.features_search.common_feature_searcher import ScikitLearnCommonFeaturesSearcher
 
 
-class GenericUnivariateSelectSearcher(CommonFeaturesSearcher):
+class ScikitLearnGenericUnivariateSelectSearcher(ScikitLearnCommonFeaturesSearcher):
     """
     Implementação wrapper do algoritmo GenericUnivariateSelect o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.GenericUnivariateSelect.html>`_.
     """

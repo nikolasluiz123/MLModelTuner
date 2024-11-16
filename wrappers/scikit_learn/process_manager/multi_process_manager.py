@@ -6,16 +6,16 @@ from pandas import DataFrame
 from sklearn.model_selection import StratifiedKFold, KFold
 from tabulate import tabulate
 
-from wrappers.scikit_learn.hiper_params_search.common_searcher import Searcher
-from wrappers.scikit_learn.history_manager.common import HistoryManager
-from wrappers.scikit_learn.process_manager.pipeline import Pipeline
+from wrappers.scikit_learn.hiper_params_search.common_hyper_params_searcher import ScikitLearnSearcher
+from wrappers.scikit_learn.history_manager.common_history_manager import ScikitLearnCommonHistoryManager
+from wrappers.scikit_learn.process_manager.pipeline import ScikitLearnPipeline
 from wrappers.scikit_learn.validator.common_validator import Result
 
-Pipe = TypeVar('Pipe', bound=Pipeline)
-History = TypeVar('History', bound=HistoryManager)
+Pipe = TypeVar('Pipe', bound=ScikitLearnPipeline)
+History = TypeVar('History', bound=ScikitLearnCommonHistoryManager)
 
 
-class MultiProcessManager:
+class ScikitLearnMultiProcessManager:
     """
     Gerencia a execução de múltiplos pipelines de machine learning em um processo de validação cruzada.
 
@@ -150,7 +150,7 @@ class MultiProcessManager:
 
                 self.data_x_best_features = features
 
-    def _process_hiper_params_search(self, pipeline: Pipe) -> Searcher | None:
+    def _process_hiper_params_search(self, pipeline: Pipe) -> ScikitLearnSearcher | None:
         """
         Realiza a busca de hiperparâmetros para o pipeline especificado, se não houver histórico a ser carregado.
 
@@ -158,7 +158,7 @@ class MultiProcessManager:
         :return: O objeto Searcher resultante da busca, ou None se estiver carregando do histórico.
         """
         if self.history_index is None:
-            return pipeline.params_searcher.search_hiper_parameters(
+            return pipeline.params_searcher.search_hyper_parameters(
                 estimator=pipeline.estimator,
                 params=pipeline.params,
                 data_x=self.data_x_best_features,
@@ -169,7 +169,7 @@ class MultiProcessManager:
         else:
             return None
 
-    def _process_validation(self, pipeline: Pipe, search_cv: Searcher) -> Result:
+    def _process_validation(self, pipeline: Pipe, search_cv: ScikitLearnSearcher) -> Result:
         """
         Valida o pipeline usando os dados e a lógica de validação apropriados.
 
@@ -185,7 +185,7 @@ class MultiProcessManager:
                                                scoring=self.scoring,
                                                cv=self.cv)
 
-    def _save_data_in_history(self, pipeline: Pipe, result: Result, searcher: Searcher):
+    def _save_data_in_history(self, pipeline: Pipe, result: Result, searcher: ScikitLearnSearcher):
         """
         Salva os resultados da validação no gerenciador de histórico, se a opção de salvar estiver habilitada.
 

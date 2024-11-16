@@ -9,7 +9,7 @@ from sklearn.preprocessing import StandardScaler
 from wrappers.scikit_learn.validator.common_validator import Result
 
 
-class HistoryManager(ABC, Generic[Result]):
+class ScikitLearnCommonHistoryManager(ABC, Generic[Result]):
     """
     Classe utilizada para gerenciamento do histórico das execuções.
 

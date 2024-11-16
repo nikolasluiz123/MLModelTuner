@@ -1,9 +1,9 @@
 from typing import Any
 
-from wrappers.scikit_learn import ValidationResult
+from wrappers.scikit_learn.validator.results.common import ValidationResult
 
 
-class CrossValidationResult(ValidationResult):
+class ScikitLearnCrossValidationResult(ValidationResult):
 
     def __init__(self,
                  mean: float,
