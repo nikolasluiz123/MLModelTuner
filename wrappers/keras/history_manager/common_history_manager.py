@@ -6,7 +6,6 @@ from typing import Generic, TypeVar
 
 import keras
 
-from wrappers.keras.config.configurators import HyperBandConfig
 from wrappers.keras.validator.results.common import KerasValidationResult
 
 Result = TypeVar('Result', bound=KerasValidationResult)
@@ -37,14 +36,20 @@ class KerasHistoryManager(ABC, Generic[Result]):
     def save_result(self,
                     model,
                     model_instance,
-                    final_fit_history,
-                    hyper_band_executions_directory: str,
+                    validation_history,
+                    params_search_directory: str,
                     pre_processing_time: str,
+                    params_search_time: str,
                     validation_time: str):
-        last_project = self.__get_last_project_from_hyper_band(hyper_band_executions_directory)
-        oracle_data = self.__get_oracle_file(hyper_band_executions_directory, last_project)
+        last_project = self.__get_last_project_from_hyper_band(params_search_directory)
+        oracle_data = self.__get_oracle_file(params_search_directory, last_project)
 
-        self.__save_best_model_execution_data(model, final_fit_history, oracle_data, pre_processing_time, validation_time)
+        self.__save_best_model_execution_data(model,
+                                              validation_history,
+                                              oracle_data,
+                                              pre_processing_time,
+                                              params_search_time,
+                                              validation_time)
         self.__save_keras_model(model_instance)
 
     def __save_best_model_execution_data(self,
@@ -52,6 +57,7 @@ class KerasHistoryManager(ABC, Generic[Result]):
                                          final_fit_history,
                                          oracle_data,
                                          pre_processing_time: str,
+                                         params_search_time: str,
                                          validation_time: str):
         best_model_execution_data = {
             'model': type(model).__name__,
@@ -62,6 +68,7 @@ class KerasHistoryManager(ABC, Generic[Result]):
             'factor': oracle_data['factor'],
             'neural_structure': oracle_data['hyperparameters'],
             'pre_processing_time': pre_processing_time,
+            'params_search_time': params_search_time,
             'validation_time': validation_time,
         }
 
@@ -104,8 +111,8 @@ class KerasHistoryManager(ABC, Generic[Result]):
         with open(output_path, 'r') as file:
             data = json.load(file)
 
-        if index < -1 or index >= len(data):
-            raise IndexError(f"Índice {index} fora dos limites. O arquivo contém {len(data)} entradas.")
+        # if index < -1 or index >= len(data):
+        #     raise IndexError(f"Índice {index} fora dos limites. O arquivo contém {len(data)} entradas.")
 
         result_dict = data[index]
 
@@ -132,11 +139,21 @@ class KerasHistoryManager(ABC, Generic[Result]):
             data = json.load(file)
             return len(data)
 
-    def delete_trials(self, hyper_band_config: HyperBandConfig):
-        trials_path = os.path.join(hyper_band_config.directory, hyper_band_config.project_name)
+    def delete_trials(self, directory: str, project_name: str):
+        trials_path = os.path.join(directory, project_name)
         shutil.rmtree(trials_path)
 
         print(f'Diretório "{trials_path}" e todos os arquivos/subdiretórios foram removidos com sucesso.')
+
+    def has_history(self) -> bool:
+        output_path = os.path.join(self.output_directory, f"{self.best_executions_file_name}.json")
+
+        if not os.path.exists(output_path):
+            return False
+
+        with open(output_path, 'r') as file:
+            data = json.load(file)
+            return len(data) > 0
 
     def get_saved_model(self, version: int):
         output_path = os.path.join(self.models_directory, f"model_{version}.keras")

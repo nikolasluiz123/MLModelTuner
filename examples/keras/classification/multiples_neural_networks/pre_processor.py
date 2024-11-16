@@ -10,7 +10,7 @@ input_shape = (img_height, img_width, 3)
 
 seed = 42
 
-batch_size = 256
+batch_size = 128
 
 class ExamplePreProcessor(KerasDataPreProcessor):
 

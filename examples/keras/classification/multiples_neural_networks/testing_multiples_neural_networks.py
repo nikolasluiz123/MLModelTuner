@@ -3,11 +3,11 @@ from keras.src.callbacks import EarlyStopping, ReduceLROnPlateau
 from examples.keras.classification.multiples_neural_networks.model_class import *
 from examples.keras.classification.multiples_neural_networks.pre_processor import ExamplePreProcessor, input_shape, \
     batch_size, seed
-from wrappers.keras.config.configurators import HyperBandConfig, SearchConfig, FinalFitConfig
 from wrappers.keras.history_manager.classifier_history_manager import KerasClassifierHistoryManager
+from wrappers.keras.hyper_params_search.hyper_band_searcher import KerasHyperBandSearcher
 from wrappers.keras.process_manager.classifier_mult_process_manager import KerasClassifierMultProcessManager
 from wrappers.keras.process_manager.pipeline import KerasPipeline
-from wrappers.keras.validator.classifier_cross_validator import ClassifierKerasCrossValidator
+from wrappers.keras.validator.basic_classifier_validator import KerasBasicClassifierValidator
 
 num_classes = 22
 
@@ -18,119 +18,200 @@ base_model = keras.applications.InceptionV3(
 )
 
 pre_processor = ExamplePreProcessor()
-validator = ClassifierKerasCrossValidator()
 
-early_stopping_search = EarlyStopping(monitor='val_loss', restore_best_weights=True)
-early_stopping_final_fit = EarlyStopping(monitor='val_loss', patience=4, restore_best_weights=True)
-reduce_lr_search = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3, min_lr=1e-6)
+early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
+reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3, min_lr=1e-6)
 
-hyper_band_config_1 = HyperBandConfig(objective='val_loss',
-                                      factor=3,
-                                      max_epochs=10,
-                                      directory='executions',
-                                      project_name='test_model_example_1')
+validator = KerasBasicClassifierValidator(
+    epochs=50,
+    batch_size=batch_size,
+    log_level=1,
+    callbacks=[early_stopping, reduce_lr]
+)
 
-hyper_band_config_2 = HyperBandConfig(objective='val_loss',
-                                      factor=3,
-                                      max_epochs=10,
-                                      directory='executions',
-                                      project_name='test_model_example_2')
+validator_6 = KerasBasicClassifierValidator(
+    epochs=50,
+    batch_size=64,
+    log_level=1,
+    callbacks=[early_stopping, reduce_lr]
+)
 
-hyper_band_config_3 = HyperBandConfig(objective='val_loss',
-                                      factor=3,
-                                      max_epochs=10,
-                                      directory='executions',
-                                      project_name='test_model_example_3')
+validator_7 = KerasBasicClassifierValidator(
+    epochs=50,
+    batch_size=64,
+    log_level=1,
+    callbacks=[early_stopping, reduce_lr]
+)
 
-hyper_band_config_4 = HyperBandConfig(objective='val_loss',
-                                      factor=3,
-                                      max_epochs=10,
-                                      directory='executions',
-                                      project_name='test_model_example_4')
 
-hyper_band_config_5 = HyperBandConfig(objective='val_loss',
-                                      factor=3,
-                                      max_epochs=10,
-                                      directory='executions',
-                                      project_name='test_model_example_5')
+params_searcher_1 = KerasHyperBandSearcher(
+    objective='val_loss',
+    directory='search_params_1',
+    project_name='model_example_1',
+    epochs=10,
+    batch_size=batch_size,
+    log_level=1,
+    callbacks=[early_stopping, reduce_lr],
+    max_epochs=10,
+    factor=3,
+    hyper_band_iterations=1
+)
 
-search_config_model = SearchConfig(epochs=5,
-                                   batch_size=batch_size,
-                                   callbacks=[early_stopping_search, reduce_lr_search],
-                                   folds=5,
-                                   log_level=1,
-                                   stratified=True)
+params_searcher_2 = KerasHyperBandSearcher(
+    objective='val_loss',
+    directory='search_params_2',
+    project_name='model_example_2',
+    epochs=10,
+    batch_size=batch_size,
+    log_level=1,
+    callbacks=[early_stopping, reduce_lr],
+    max_epochs=10,
+    factor=3,
+    hyper_band_iterations=1
+)
 
-final_fit_config = FinalFitConfig(epochs=15,
-                                  batch_size=batch_size,
-                                  callbacks=[early_stopping_final_fit],
-                                  log_level=1)
+params_searcher_3 = KerasHyperBandSearcher(
+    objective='val_loss',
+    directory='search_params_3',
+    project_name='model_example_3',
+    epochs=10,
+    batch_size=batch_size,
+    log_level=1,
+    callbacks=[early_stopping, reduce_lr],
+    max_epochs=10,
+    factor=3,
+    hyper_band_iterations=1
+)
 
-history_manager_model_example_1 = KerasClassifierHistoryManager(output_directory='executions_model_example_1',
-                                                                models_directory='best_models_example_1',
-                                                                best_executions_file_name='best_executions_example_1')
+params_searcher_4 = KerasHyperBandSearcher(
+    objective='val_loss',
+    directory='search_params_4',
+    project_name='model_example_4',
+    epochs=10,
+    batch_size=batch_size,
+    log_level=1,
+    callbacks=[early_stopping, reduce_lr],
+    max_epochs=10,
+    factor=3,
+    hyper_band_iterations=1
+)
 
-history_manager_model_example_2 = KerasClassifierHistoryManager(output_directory='executions_model_example_2',
-                                                                models_directory='best_models_example_2',
-                                                                best_executions_file_name='best_executions_example_2')
+params_searcher_5 = KerasHyperBandSearcher(
+    objective='val_loss',
+    directory='search_params_5',
+    project_name='model_example_5',
+    epochs=10,
+    batch_size=batch_size,
+    log_level=1,
+    callbacks=[early_stopping, reduce_lr],
+    max_epochs=10,
+    factor=3,
+    hyper_band_iterations=1
+)
 
-history_manager_model_example_3 = KerasClassifierHistoryManager(output_directory='executions_model_example_3',
-                                                                models_directory='best_models_example_3',
-                                                                best_executions_file_name='best_executions_example_3')
+params_searcher_6 = KerasHyperBandSearcher(
+    objective='val_loss',
+    directory='search_params_6',
+    project_name='model_example_6',
+    epochs=10,
+    batch_size=64,
+    log_level=1,
+    callbacks=[early_stopping, reduce_lr],
+    max_epochs=10,
+    factor=3,
+    hyper_band_iterations=1
+)
 
-history_manager_model_example_4 = KerasClassifierHistoryManager(output_directory='executions_model_example_4',
-                                                                models_directory='best_models_example_4',
-                                                                best_executions_file_name='best_executions_example_4')
+params_searcher_7 = KerasHyperBandSearcher(
+    objective='val_loss',
+    directory='search_params_7',
+    project_name='model_example_7',
+    epochs=10,
+    batch_size=64,
+    log_level=1,
+    callbacks=[early_stopping, reduce_lr],
+    max_epochs=10,
+    factor=3,
+    hyper_band_iterations=1
+)
 
-history_manager_model_example_5 = KerasClassifierHistoryManager(output_directory='executions_model_example_5',
-                                                                models_directory='best_models_example_5',
-                                                                best_executions_file_name='best_executions_example_5')
+history_manager_model_example_1 = KerasClassifierHistoryManager(output_directory='history_model_example_1',
+                                                                models_directory='models',
+                                                                best_executions_file_name='best_executions')
+
+history_manager_model_example_2 = KerasClassifierHistoryManager(output_directory='history_model_example_2',
+                                                                models_directory='models',
+                                                                best_executions_file_name='best_executions')
+
+history_manager_model_example_3 = KerasClassifierHistoryManager(output_directory='history_model_example_3',
+                                                                models_directory='models',
+                                                                best_executions_file_name='best_executions')
+
+history_manager_model_example_4 = KerasClassifierHistoryManager(output_directory='history_model_example_4',
+                                                                models_directory='models',
+                                                                best_executions_file_name='best_executions')
+
+history_manager_model_example_5 = KerasClassifierHistoryManager(output_directory='history_model_example_5',
+                                                                models_directory='models',
+                                                                best_executions_file_name='best_executions')
+
+history_manager_model_example_6 = KerasClassifierHistoryManager(output_directory='history_model_example_6',
+                                                                models_directory='models',
+                                                                best_executions_file_name='best_executions')
+
+history_manager_model_example_7 = KerasClassifierHistoryManager(output_directory='history_model_example_7',
+                                                                models_directory='models',
+                                                                best_executions_file_name='best_executions')
 
 pipelines = [
     KerasPipeline(
         model=ExampleKerasHyperModelV1(base_model=base_model, num_classes=num_classes),
         data_pre_processor=pre_processor,
+        params_searcher=params_searcher_1,
         validator=validator,
-        hyper_band_config=hyper_band_config_1,
-        search_config=search_config_model,
-        final_fit_config=final_fit_config,
         history_manager=history_manager_model_example_1
     ),
     KerasPipeline(
         model=ExampleKerasHyperModelV2(base_model=base_model, num_classes=num_classes),
         data_pre_processor=pre_processor,
+        params_searcher=params_searcher_2,
         validator=validator,
-        hyper_band_config=hyper_band_config_2,
-        search_config=search_config_model,
-        final_fit_config=final_fit_config,
         history_manager=history_manager_model_example_2
     ),
     KerasPipeline(
         model=ExampleKerasHyperModelV3(base_model=base_model, num_classes=num_classes),
         data_pre_processor=pre_processor,
         validator=validator,
-        hyper_band_config=hyper_band_config_3,
-        search_config=search_config_model,
-        final_fit_config=final_fit_config,
+        params_searcher=params_searcher_3,
         history_manager=history_manager_model_example_3
     ),
     KerasPipeline(
         model=ExampleKerasHyperModelV4(base_model=base_model, num_classes=num_classes),
         data_pre_processor=pre_processor,
         validator=validator,
-        hyper_band_config=hyper_band_config_4,
-        search_config=search_config_model,
-        final_fit_config=final_fit_config,
+        params_searcher=params_searcher_4,
         history_manager=history_manager_model_example_4
     ),
     KerasPipeline(
         model=ExampleKerasHyperModelV5(base_model=base_model, num_classes=num_classes),
         data_pre_processor=pre_processor,
         validator=validator,
-        hyper_band_config=hyper_band_config_5,
-        search_config=search_config_model,
-        final_fit_config=final_fit_config,
+        params_searcher=params_searcher_5,
         history_manager=history_manager_model_example_5
+    ),
+    KerasPipeline(
+        model=ExampleKerasHyperModelV6(base_model=base_model, num_classes=num_classes),
+        data_pre_processor=pre_processor,
+        validator=validator_6,
+        params_searcher=params_searcher_6,
+        history_manager=history_manager_model_example_6
+    ),
+    KerasPipeline(
+        model=ExampleKerasHyperModelV7(base_model=base_model, num_classes=num_classes),
+        data_pre_processor=pre_processor,
+        validator=validator_7,
+        params_searcher=params_searcher_7,
+        history_manager=history_manager_model_example_7
     )
 ]
 
@@ -140,7 +221,10 @@ history_manager_best_model = KerasClassifierHistoryManager(output_directory='bes
 manager = KerasClassifierMultProcessManager(
     pipelines=pipelines,
     seed=seed,
-    history_manager=history_manager_best_model
+    history_manager=history_manager_best_model,
+    history_index=-1,
+    save_history=True,
+    delete_trials_after_execution=True
 )
 
 manager.process_pipelines()

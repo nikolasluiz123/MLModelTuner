@@ -20,12 +20,14 @@ class KerasMultiProcessManager:
                  history_manager: KerasHistoryManager,
                  policy='mixed_float16',
                  history_index: int | None = None,
-                 save_history=True):
+                 save_history=True,
+                 delete_trials_after_execution=False):
         self.pipelines = pipelines
         self.seed = seed
         self.history_manager = history_manager
         self.history_index = history_index
         self.save_history = save_history
+        self.delete_trials_after_execution = delete_trials_after_execution
 
         self.results = []
 
@@ -46,7 +48,8 @@ class KerasMultiProcessManager:
         self.__show_log_init_process(pipeline)
 
         train_data, validation_data = self.__execute_pre_processing(pipeline)
-        validation_result = self.__execute_validation(pipeline, train_data, validation_data)
+        model_instance = self.__execute_param_search(train_data, validation_data, pipeline)
+        validation_result = self.__execute_validation(pipeline, train_data, validation_data, model_instance)
 
         self.__save_data_in_history(pipeline, validation_result)
         self._append_new_result(pipeline, validation_result)
@@ -54,16 +57,20 @@ class KerasMultiProcessManager:
         keras.backend.clear_session()
         gc.collect()
 
-    def __execute_validation(self, pipeline: KerasPipeline, train_data, validation_data) -> KerasValidationResult:
+    def __execute_param_search(self, train_data, validation_data, pipeline: KerasPipeline):
         if self.history_index is None:
-            validation_result = pipeline.validator.process(
+            return pipeline.params_searcher.process(train_data=train_data,
+                                                    validation_data=validation_data,
+                                                    model=pipeline.model)
+        else:
+            return None
+
+    def __execute_validation(self, pipeline: KerasPipeline, train_data, validation_data, model_instance) -> KerasValidationResult:
+        if model_instance is not None:
+            validation_result = pipeline.validator.validate(
+                model_instance=model_instance,
                 train_data=train_data,
-                validation_data=validation_data,
-                model=pipeline.model,
-                project_name=pipeline.hyper_band_config.project_name,
-                hyper_band_config=pipeline.hyper_band_config,
-                search_config=pipeline.search_config,
-                final_fit_config=pipeline.final_fit_config
+                validation_data=validation_data
             )
 
             return validation_result
@@ -71,14 +78,14 @@ class KerasMultiProcessManager:
             return pipeline.history_manager.get_validation_result(self.history_index)
 
     def __execute_pre_processing(self, pipeline: KerasPipeline) -> tuple:
-        if self.history_index is None:
+        if self.history_index is None or not pipeline.history_manager.has_history():
             train_data, validation_data = pipeline.data_pre_processor.get_train_data()
             return train_data, validation_data
         else:
             return None, None
 
     def __show_log_init_process(self, pipeline: KerasPipeline):
-        if self.history_index is None:
+        if self.history_index is None or not pipeline.history_manager.has_history():
             print()
             print('Iniciando o Processamento')
 
@@ -93,7 +100,7 @@ class KerasMultiProcessManager:
         pipeline_infos = pipeline.get_dict_pipeline_data()
         performance_metrics = result.append_data(pipeline_infos)
 
-        if self.history_index is None:
+        if self.history_index is None or not pipeline.history_manager.has_history():
             self._calculate_processes_time(performance_metrics, pipeline)
         else:
             self._load_processes_time_from_history(performance_metrics, pipeline)
@@ -101,20 +108,22 @@ class KerasMultiProcessManager:
         self.results.append(performance_metrics)
 
     def __save_data_in_history(self, pipeline: KerasPipeline, validation_result):
-        if self.save_history and self.history_index is None:
-            pre_processing_time, validation_time = pipeline.get_execution_times()
+        if self.save_history and (self.history_index is None or not pipeline.history_manager.has_history()):
+            pre_processing_time, params_search_time, validation_time = pipeline.get_execution_times()
 
             pipeline.history_manager.save_result(model_instance=validation_result.model,
                                                  model=pipeline.model,
-                                                 final_fit_history=validation_result.history,
-                                                 hyper_band_executions_directory=pipeline.hyper_band_config.directory,
+                                                 validation_history=validation_result.history,
+                                                 params_search_directory=pipeline.params_searcher.directory,
                                                  pre_processing_time=self._format_time(pre_processing_time),
+                                                 params_search_time=self._format_time(params_search_time),
                                                  validation_time=self._format_time(validation_time))
 
     def _calculate_processes_time(self, performance_metrics, pipeline: KerasPipeline):
-        pre_processing_time, validation_time = pipeline.get_execution_times()
+        pre_processing_time, params_search_time, validation_time = pipeline.get_execution_times()
 
         performance_metrics['pre_processing_time'] = self._format_time(pre_processing_time)
+        performance_metrics['params_search_time'] = self._format_time(params_search_time)
         performance_metrics['validation_time'] = self._format_time(validation_time)
 
     def _load_processes_time_from_history(self, performance_metrics, pipeline: KerasPipeline):
@@ -141,7 +150,9 @@ class KerasMultiProcessManager:
 
 
     def __save_best_model(self, df_results: DataFrame):
-        if self.save_history and self.history_index is None:
+        pipeline_not_executed = self.__get_has_pipeline_not_executed()
+
+        if self.save_history and (self.history_index is None or pipeline_not_executed):
             best = df_results.head(1)
 
             best_pipeline = self.get_best_pipeline(best)
@@ -150,12 +161,25 @@ class KerasMultiProcessManager:
 
             self.history_manager.save_result(model_instance=model_instance,
                                              model=best_pipeline.model,
-                                             final_fit_history=executions_history,
-                                             hyper_band_executions_directory=best_pipeline.hyper_band_config.directory,
+                                             validation_history=executions_history,
+                                             params_search_directory=best_pipeline.params_searcher.directory,
                                              pre_processing_time=executions_history['pre_processing_time'],
+                                             params_search_time=executions_history['params_search_time'],
                                              validation_time=executions_history['validation_time'])
 
-    def get_best_pipeline(self, best):
+    def __get_has_pipeline_not_executed(self):
+        pipeline_not_executed = False
+        if type(self.pipelines) is list:
+            for p in self.pipelines:
+                if not p.history_manager.has_history():
+                    pipeline_not_executed = True
+        else:
+            if not self.pipelines.history_manager.has_history():
+                pipeline_not_executed = True
+
+        return pipeline_not_executed
+
+    def get_best_pipeline(self, best) -> KerasPipeline:
         if type(self.pipelines) is list:
             best_pipeline = [pipe for pipe in self.pipelines if self.__is_best_pipeline(best, pipe)][0]
         else:
@@ -166,21 +190,23 @@ class KerasMultiProcessManager:
     def __is_best_pipeline(self, df: DataFrame, pipe: KerasPipeline):
         return (
                 df['model'].values[0] == type(pipe.model).__name__ and
+                df['data_pre_processor'].values[0] == type(pipe.data_pre_processor).__name__ and
+                df['params_searcher'].values[0] == type(pipe.params_searcher).__name__ and
+                df['searcher_objective'].values[0] == pipe.params_searcher.objective and
+                df['searcher_epochs'].values[0] == pipe.params_searcher.epochs and
+                df['searcher_batch_size'].values[0] == pipe.params_searcher.batch_size and
+                df['project_name'].values[0] == pipe.params_searcher.project_name and
                 df['validator'].values[0] == type(pipe.validator).__name__ and
-                df['objective'].values[0] == str(pipe.hyper_band_config.objective) and
-                df['factor'].values[0] == str(pipe.hyper_band_config.factor) and
-                df['max_epochs'].values[0] == str(pipe.hyper_band_config.max_epochs) and
-                df['search_epochs'].values[0] == str(pipe.search_config.epochs) and
-                df['search_batch_size'].values[0] == str(pipe.search_config.batch_size) and
-                df['search_callbacks'].values[0] == [type(c).__name__ for c in pipe.search_config.callbacks] and
-                df['final_fit_epochs'].values[0] == str(pipe.final_fit_config.epochs) and
-                df['final_fit_batch_size'].values[0] == str(pipe.final_fit_config.batch_size)
+                df['validator_epochs'].values[0] == pipe.validator.epochs and
+                df['validator_batch_size'].values[0] == pipe.validator.batch_size
         )
 
     def __delete_all_pipeline_trials(self):
-        if self.history_index is None:
+        if self.history_index is None and self.delete_trials_after_execution:
             if type(self.pipelines) is list:
                 for pipeline in self.pipelines:
-                    pipeline.history_manager.delete_trials(pipeline.hyper_band_config)
+                    pipeline.history_manager.delete_trials(pipeline.params_searcher.directory,
+                                                           pipeline.params_searcher.project_name)
             else:
-                self.pipelines.history_manager.delete_trials(self.pipelines.hyper_band_config)
+                self.pipelines.history_manager.delete_trials(self.pipelines.params_searcher.directory,
+                                                             self.pipelines.params_searcher.project_name)
