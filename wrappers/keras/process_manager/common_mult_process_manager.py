@@ -114,6 +114,7 @@ class KerasMultiProcessManager:
             pipeline.history_manager.save_result(model_instance=validation_result.model,
                                                  model=pipeline.model,
                                                  validation_history=validation_result.history,
+                                                 oracle_fields_list=pipeline.params_searcher.get_fields_oracle_json_file(),
                                                  params_search_directory=pipeline.params_searcher.directory,
                                                  pre_processing_time=self._format_time(pre_processing_time),
                                                  params_search_time=self._format_time(params_search_time),
@@ -163,6 +164,7 @@ class KerasMultiProcessManager:
                                              model=best_pipeline.model,
                                              validation_history=executions_history,
                                              params_search_directory=best_pipeline.params_searcher.directory,
+                                             oracle_fields_list=best_pipeline.params_searcher.get_fields_oracle_json_file(),
                                              pre_processing_time=executions_history['pre_processing_time'],
                                              params_search_time=executions_history['params_search_time'],
                                              validation_time=executions_history['validation_time'])

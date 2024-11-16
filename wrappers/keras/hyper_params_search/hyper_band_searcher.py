@@ -46,3 +46,11 @@ class KerasHyperBandSearcher(KerasCommonHyperParamsSearcher):
         model_instance = model.build(best_hyperparams)
 
         return model_instance
+
+    def get_fields_oracle_json_file(self) -> list[str]:
+        return [
+            'hyperband_iterations',
+            'max_epochs',
+            'min_epochs',
+            'factor'
+        ]

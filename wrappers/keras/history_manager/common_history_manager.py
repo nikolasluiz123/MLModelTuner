@@ -38,6 +38,7 @@ class KerasHistoryManager(ABC, Generic[Result]):
                     model_instance,
                     validation_history,
                     params_search_directory: str,
+                    oracle_fields_list: list[str],
                     pre_processing_time: str,
                     params_search_time: str,
                     validation_time: str):
@@ -47,6 +48,7 @@ class KerasHistoryManager(ABC, Generic[Result]):
         self.__save_best_model_execution_data(model,
                                               validation_history,
                                               oracle_data,
+                                              oracle_fields_list,
                                               pre_processing_time,
                                               params_search_time,
                                               validation_time)
@@ -56,21 +58,22 @@ class KerasHistoryManager(ABC, Generic[Result]):
                                          model,
                                          final_fit_history,
                                          oracle_data,
+                                         oracle_fields_list: list[str],
                                          pre_processing_time: str,
                                          params_search_time: str,
                                          validation_time: str):
         best_model_execution_data = {
             'model': type(model).__name__,
             'history': final_fit_history,
-            'hyperband_iterations': oracle_data['hyperband_iterations'],
-            'max_epochs': oracle_data['max_epochs'],
-            'min_epochs': oracle_data['min_epochs'],
-            'factor': oracle_data['factor'],
             'neural_structure': oracle_data['hyperparameters'],
-            'pre_processing_time': pre_processing_time,
-            'params_search_time': params_search_time,
-            'validation_time': validation_time,
         }
+
+        for field in oracle_fields_list:
+            best_model_execution_data[field] = oracle_data[field]
+
+        best_model_execution_data['pre_processing_time'] = pre_processing_time
+        best_model_execution_data['params_search_time'] = params_search_time
+        best_model_execution_data['validation_time'] = validation_time
 
         output_path = os.path.join(self.output_directory, f"{self.best_executions_file_name}.json")
 

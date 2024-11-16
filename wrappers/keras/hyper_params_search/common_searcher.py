@@ -46,3 +46,7 @@ class KerasCommonHyperParamsSearcher(ABC):
                     validation_data,
                     model: HyperModel):
         ...
+
+    @abstractmethod
+    def get_fields_oracle_json_file(self) -> list[str]:
+        ...
