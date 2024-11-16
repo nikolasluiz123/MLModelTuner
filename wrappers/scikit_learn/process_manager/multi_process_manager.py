@@ -111,7 +111,7 @@ class ScikitLearnMultiProcessManager:
         self._append_new_result(pipeline, validation_result)
 
     def __show_log_init_process(self, pipeline):
-        if self.history_index is None:
+        if self.history_index is None or not pipeline.history_manager.has_history():
             print()
             print('Iniciando o Processamento')
             data = pipeline.get_dict_pipeline_data()
@@ -136,7 +136,7 @@ class ScikitLearnMultiProcessManager:
 
         :param pipeline: O pipeline que contém a lógica de seleção de features.
         """
-        if self.history_index is None:
+        if self.history_index is None or not pipeline.history_manager.has_history():
             if pipeline.feature_searcher is None:
                 self.data_x_best_features = self.data_x
             else:
@@ -157,7 +157,7 @@ class ScikitLearnMultiProcessManager:
         :param pipeline: O pipeline que contém a lógica de busca de hiperparâmetros.
         :return: O objeto Searcher resultante da busca, ou None se estiver carregando do histórico.
         """
-        if self.history_index is None:
+        if self.history_index is None or not pipeline.history_manager.has_history():
             return pipeline.params_searcher.search_hyper_parameters(
                 estimator=pipeline.estimator,
                 params=pipeline.params,
@@ -192,7 +192,7 @@ class ScikitLearnMultiProcessManager:
         :param pipeline: O pipeline que gerou os resultados.
         :param result: O resultado da validação a ser salvo.
         """
-        if self.save_history and self.history_index is None:
+        if self.save_history and (self.history_index is None or not pipeline.history_manager.has_history()):
             feature_selection_time, search_time, validation_time = self._get_execution_times(pipeline)
 
             pipeline.history_manager.save_result(result,
@@ -231,7 +231,7 @@ class ScikitLearnMultiProcessManager:
         pipeline_infos = pipeline.get_dict_pipeline_data()
         performance_metrics = result.append_data(pipeline_infos)
 
-        if self.history_index is None:
+        if self.history_index is None or not pipeline.history_manager.has_history():
             self._calculate_processes_time(performance_metrics, pipeline)
         else:
             self._load_processes_time_from_history(performance_metrics, pipeline)
@@ -291,7 +291,9 @@ class ScikitLearnMultiProcessManager:
 
         :param df_results: DataFrame contendo os resultados dos pipelines.
         """
-        if self.save_history and self.history_index is None:
+        pipeline_not_executed = self.__get_has_pipeline_not_executed()
+
+        if self.save_history and (self.history_index is None or pipeline_not_executed):
             best = df_results.head(1)
 
             best_pipeline = self.get_best_pipeline(best)
@@ -307,6 +309,18 @@ class ScikitLearnMultiProcessManager:
                                              features=dict_history['features'].split(','),
                                              cv_results=dict_cv_results,
                                              scaler=dict_history['scaler'])
+
+    def __get_has_pipeline_not_executed(self):
+        pipeline_not_executed = False
+        if type(self.pipelines) is list:
+            for p in self.pipelines:
+                if not p.history_manager.has_history():
+                    pipeline_not_executed = True
+        else:
+            if not self.pipelines.history_manager.has_history():
+                pipeline_not_executed = True
+
+        return pipeline_not_executed
 
     def get_best_pipeline(self, best):
         """

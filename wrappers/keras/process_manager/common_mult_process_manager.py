@@ -19,7 +19,7 @@ class KerasMultiProcessManager:
                  seed: int,
                  history_manager: KerasHistoryManager,
                  policy='mixed_float16',
-                 history_index: int | None = None,
+                 history_index: int = None,
                  save_history=True,
                  delete_trials_after_execution=False):
         self.pipelines = pipelines
