@@ -38,12 +38,12 @@ class KerasHistoryManager(ABC, Generic[Result]):
                     model_instance,
                     validation_history,
                     params_search_directory: str,
+                    params_search_project: str,
                     oracle_fields_list: list[str],
                     pre_processing_time: str,
                     params_search_time: str,
                     validation_time: str):
-        last_project = self.__get_last_project_from_hyper_band(params_search_directory)
-        oracle_data = self.__get_oracle_file(params_search_directory, last_project)
+        oracle_data = self.__get_oracle_file(params_search_directory, params_search_project)
 
         self.__save_best_model_execution_data(model,
                                               validation_history,
@@ -93,14 +93,14 @@ class KerasHistoryManager(ABC, Generic[Result]):
 
         return executions
 
-    def __get_oracle_file(self, hyper_band_executions_directory, last_project):
-        oracle_file_path = os.path.join(hyper_band_executions_directory, last_project, 'oracle.json')
+    def __get_oracle_file(self, search_directory: str, project_name: str):
+        oracle_file_path = os.path.join(search_directory, project_name, 'oracle.json')
 
         if os.path.isfile(oracle_file_path):
             with open(oracle_file_path, 'r') as file:
                 oracle_data = json.load(file)
         else:
-            print(f'O arquivo "oracle.json" não foi encontrado no diretório {hyper_band_executions_directory}.')
+            print(f'O arquivo "oracle.json" não foi encontrado no diretório {oracle_file_path}.')
 
         return oracle_data
 
@@ -120,13 +120,6 @@ class KerasHistoryManager(ABC, Generic[Result]):
         result_dict = data[index]
 
         return result_dict
-
-    def __get_last_project_from_hyper_band(self, hyper_band_executions_directory):
-        projects = os.listdir(hyper_band_executions_directory)
-        project_names = [p for p in projects if os.path.isdir(os.path.join(hyper_band_executions_directory, p))]
-        last_project = project_names[-1]
-
-        return last_project
 
     def __save_keras_model(self, model):
         path = os.path.join(self.models_directory, f"model_{self.get_history_len()}.keras")

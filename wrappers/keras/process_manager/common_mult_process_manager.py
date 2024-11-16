@@ -6,6 +6,7 @@ import pandas as pd
 from pandas import DataFrame
 from tabulate import tabulate
 from tensorflow.python.keras.mixed_precision.policy import set_global_policy
+from tensorflow.tools.pip_package.setup import project_name
 
 from wrappers.keras.history_manager.common_history_manager import KerasHistoryManager
 from wrappers.keras.process_manager.pipeline import KerasPipeline
@@ -116,6 +117,7 @@ class KerasMultiProcessManager:
                                                  validation_history=validation_result.history,
                                                  oracle_fields_list=pipeline.params_searcher.get_fields_oracle_json_file(),
                                                  params_search_directory=pipeline.params_searcher.directory,
+                                                 params_search_project=pipeline.params_searcher.project_name,
                                                  pre_processing_time=self._format_time(pre_processing_time),
                                                  params_search_time=self._format_time(params_search_time),
                                                  validation_time=self._format_time(validation_time))
@@ -164,6 +166,7 @@ class KerasMultiProcessManager:
                                              model=best_pipeline.model,
                                              validation_history=executions_history,
                                              params_search_directory=best_pipeline.params_searcher.directory,
+                                             params_search_project=best_pipeline.params_searcher.project_name,
                                              oracle_fields_list=best_pipeline.params_searcher.get_fields_oracle_json_file(),
                                              pre_processing_time=executions_history['pre_processing_time'],
                                              params_search_time=executions_history['params_search_time'],
