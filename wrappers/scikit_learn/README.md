@@ -7,7 +7,7 @@ modelos existentes dentro do [scikit-learn](https://scikit-learn.org/stable/).
 
 Antes de realizar qualquer processo precisamos tratar e organizar os dados que serão utilizados,
 seja lá de onde eles forem obtidos. Internamente essa é o primeiro passo executado e ele é detalhado
-dentro [desse readme]().
+dentro [desse readme](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/common/data_pre_processor/README.md).
 
 ### Busca das Features
 

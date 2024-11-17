@@ -1,6 +1,6 @@
 ## Módulo de Busca de Hiperparâmetros Keras Tuner
 
-É possível ver detalhes referentes a implementação comum de busca de parâmetros acessando [esse readme]().
+É possível ver detalhes referentes a implementação comum de busca de parâmetros acessando [esse readme](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/common/hyper_params_searcher/README.md).
 
 A biblioteca [Keras](https://keras.io/api/) é muito expressiva na implementação de redes neurais
 de qualquer tipo, sabendo disso, a biblioteca wrapper implementada utiliza algumas da implementações
@@ -62,18 +62,18 @@ Essa implementação do keras é uma melhoria da busca aleatória, que se baseia
 recursos e parada antecipada. Em resumo, são realizados processos capazes de 'aprender' com execuções 
 anteriores e também é possível parar o processo quando for notado que o modelo não está melhorando.
 
-| Implementação Externa                                                             | Implementação Wrapper             | 
-|-----------------------------------------------------------------------------------|-----------------------------------|
-| [Hyperband](https://keras.io/api/keras_tuner/tuners/hyperband/#hyperband-class)   | [KerasHyperBandSearcher]()        | 
+| Implementação Externa                                                              | Implementação Wrapper                                                                                                                             | 
+|------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Hyperband](https://keras.io/api/keras_tuner/tuners/hyperband/#hyperband-class)    | [KerasHyperBandSearcher](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/keras/hyper_params_search/hyper_band_searcher.py#L7) | 
 
 ### RandomSearch
 
 Essa implementação tem como objetivo trabalhar com uma grande quantidade de possibilidades de valores,
 os quais serão selecionados apenas alguns para realização do teste.
 
-| Implementação Externa                                            | Implementação Wrapper   | 
-|------------------------------------------------------------------|-------------------------|
-| [RandomSearch](https://keras.io/api/keras_tuner/tuners/random/)  | [KerasRandomSearcher]() | 
+| Implementação Externa                                            | Implementação Wrapper                                                                                                                        | 
+|------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| [RandomSearch](https://keras.io/api/keras_tuner/tuners/random/)  | [KerasRandomSearcher](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/keras/hyper_params_search/random_searcher.py#L7)   | 
 
 ### GridSearch
 
@@ -81,7 +81,7 @@ Essa implementação é parecida com RandomSearch, mas ao invés de testar apena
 de possibilidades serão testadas todas as possibilidades. Devemos ter cuidado com a gama de valores
 que testamos pois o processo pode ser demorado, principalmente se for uma rede neural muito grande.
 
-| Implementação Externa                                         | Implementação Wrapper | 
-|---------------------------------------------------------------|-----------------------|
-| [GridSearch](https://keras.io/api/keras_tuner/tuners/grid/)   | [KerasGridSearcher]() | 
+| Implementação Externa                                           | Implementação Wrapper                                                                                                                    | 
+|-----------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| [GridSearch](https://keras.io/api/keras_tuner/tuners/grid/)     | [KerasGridSearcher](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/keras/hyper_params_search/grid_searcher.py#L7)   | 
 

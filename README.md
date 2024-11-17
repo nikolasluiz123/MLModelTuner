@@ -71,7 +71,7 @@ vai depender do modelo utilizado e em como são seus dados.
 ## Tensorflow Keras (Redes Neurais)
 
 Essa biblioteca fornece muitas implementações interessantes que auxiliam na criação de redes neurais para diferentes
-finalidades. A documentação das implementações feitas baseadas nessa biblioteca podem se encontradas [aqui](), caso
+finalidades. A documentação das implementações feitas baseadas nessa biblioteca podem se encontradas [aqui](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/keras/README.md), caso
 você desejar entender de forma mais aprofundada, lhe convido a acessar o código do projeto.
 
 ### Alguns Exemplos de Utilização
@@ -84,14 +84,14 @@ exemplos de uso com códigos simples para demonstração.
 O cenário mais simples de uso da biblioteca é com apenas uma rede neural, esses casos não são exatamente o foco da biblioteca,
 por conta disso, ela pode parecer um pouco menos útil já que ela apenas faria o papel de organizar os processos.
 
-Veja o exemplo [aqui]()
+Veja o exemplo [aqui](https://github.com/nikolasluiz123/MLModelTuner/blob/master/examples/keras/classification/one_neural_network/testing_one_neural_network.py)
 
 ### Testando Várias Redes Neurais
 
 Esse exemplo demonstra um pouco do poder da biblioteca, sendo possível perceber o que uma simples alteração na sua rede
 neural pode resultar no processo que esteja tentando implementar.
 
-Veja o exemplo [aqui]()
+Veja o exemplo [aqui](https://github.com/nikolasluiz123/MLModelTuner/blob/master/examples/keras/classification/multiples_neural_networks/testing_multiples_neural_networks.py)
 
 ### Testando as Implementações de Busca de Hiperparâmetros
 
@@ -99,7 +99,7 @@ Também seria possível testar diferentes implementações de busca de hiperpar�
 cada uma delas funciona e perceber na prática as diferenças de tempos de execução, resultado do modelo e o que mais
 você imaginar.
 
-Veja o exemplo [aqui]()
+Veja o exemplo [aqui](https://github.com/nikolasluiz123/MLModelTuner/blob/master/examples/keras/classification/exploring_hyper_params_searchers/testing_hyper_params_searchers.py)
 
 ## XGBoost
 

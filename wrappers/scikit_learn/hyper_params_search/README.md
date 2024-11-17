@@ -1,6 +1,6 @@
 ## Módulo de Busca dos Melhores Parâmetros dos Modelos
 
-É possível ver detalhes referentes a implementação comum acessando [esse readme]().
+É possível ver detalhes referentes a implementação comum acessando [esse readme](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/common/hyper_params_searcher/README.md).
 
 Esse módulo é focado em implementações de busca dos hiper parâmetros dos modelos testados.
 Abaixo serão apresentados brevemente os tipos de busca implementados e será referenciada a documentação
@@ -8,7 +8,7 @@ para garantir um melhor entendimento.
 
 ### Implementação Comum para Scikit-Learn
 
-A classe [ScikitLearnCommonHyperParamsSearcher]() é a base para a implementação de todos os wrappers de busca de parâmetros,
+A classe [ScikitLearnCommonHyperParamsSearcher](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/scikit_learn/hyper_params_search/common_hyper_params_searcher.py#L11) é a base para a implementação de todos os wrappers de busca de parâmetros,
 ela define tudo que é normalmente utilizado e utiliza de valores padrões para os cenários
 excepcionais que não utilizem algo.
 
@@ -22,10 +22,10 @@ e também costumam estar presentes.
 
 Abaixo segue a relação das implementações criadas e o que é utilizado internamente: 
 
-| Implementação Externa                          | Implementação Wrapper                                                                                                                                                | 
-|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [RandomizedSearchCV]()                         | [ScikitLearnRandomCVHyperParamsSearcher](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/hiper_params_search/random_searcher.py#L10)        | 
-| [HalvingRandomSearchCV]()                      | [ScikitLearnHalvingRandomCVHyperParamsSearcher](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/hiper_params_search/random_searcher.py#L34) |
+| Implementação Externa                          | Implementação Wrapper                                                                                                                                                        | 
+|------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [RandomizedSearchCV]()                         | [ScikitLearnRandomCVHyperParamsSearcher](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/scikit_learn/hyper_params_search/random_searcher.py#L11)        | 
+| [HalvingRandomSearchCV]()                      | [ScikitLearnHalvingRandomCVHyperParamsSearcher](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/scikit_learn/hyper_params_search/random_searcher.py#L41) |
 
 Em relação a passagem de valores e parâmetros para ser testados ambas as implementações
 acima aceitam as seguintes declarações:
@@ -53,10 +53,10 @@ quais parâmetros e valores explorar.
 
 Abaixo segue a relação das implementações criadas e o que é utilizado internamente:
 
-| Implementação Externa                          | Implementação Wrapper                                                                                                                                            | 
-|------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [GridSearchCV]()                               | [ScikitLearnGridCVHyperParamsSearcher](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/hiper_params_search/grid_searcher.py#L8)         | 
-| [HalvingGridSearchCV]()                        | [ScikitLearnHalvingGridCVHyperParamsSearcher](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/hiper_params_search/grid_searcher.py#L29) |
+| Implementação Externa                          | Implementação Wrapper                                                                                                                                                     | 
+|------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [GridSearchCV]()                               | [ScikitLearnGridCVHyperParamsSearcher](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/scikit_learn/hyper_params_search/grid_searcher.py#L10)         | 
+| [HalvingGridSearchCV]()                        | [ScikitLearnHalvingGridCVHyperParamsSearcher](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/scikit_learn/hyper_params_search/grid_searcher.py#L34)  |
 
 Em relação a passagem de valores e parâmetros para ser testados ambas as implementações
 acima aceitam apenas declarações de valor único ou uma lista de valores:
@@ -78,9 +78,9 @@ para prever quais combinações de valores dos parâmetros podem ser mais promis
 
 Para a busca de parâmetros além do scikit-learn também foi utilizada a biblioteca .
 
-| Implementação Externa                          | Implementação Wrapper                                                                                                                                        | 
-|------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [BayesSearchCV]()                              | [ScikitLearnBayesianHyperParamsSearcher](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/hiper_params_search/bayesian_search.py#L8) |
+| Implementação Externa                          | Implementação Wrapper                                                                                                                                                 | 
+|------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [BayesSearchCV]()                              | [ScikitLearnBayesianHyperParamsSearcher](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/scikit_learn/hyper_params_search/bayesian_search.py#L9)  |
 
 Essa implementação é um pouco diferente em relação as demais para a passagem de valores
 para os parâmetros que deseja testar:
