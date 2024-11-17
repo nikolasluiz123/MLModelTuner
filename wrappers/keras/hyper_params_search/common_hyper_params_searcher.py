@@ -21,8 +21,8 @@ class KerasCommonHyperParamsSearcher(CommonHyperParamsSearch):
                  callbacks: list[Callback],
                  log_level: int = 0):
         """
-        :param objective: O que deseja maximizar durante a busca dos melhores parâmetros do modelo. Pode ser um único
-                          valor ou uma lista, por exemplo, accuracy.
+        :param objective: O que deseja maximizar ou minimizar durante a busca dos melhores parâmetros do modelo. Pode ser
+                          um único valor ou uma lista, por exemplo, accuracy.
 
         :param directory: Diretório que será utilizado internamento pelas implementações do keras para salvar os projetos.
 
