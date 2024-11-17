@@ -20,7 +20,7 @@ que conseguem facilitar a comparação de performance entre modelos e encontrar 
 ## Scikit-Learn
 
 Essa biblioteca extremamente poderosa é utilizada em um de nossos módulos e temos uma
-docuentação que pode ser acessada [aqui](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/README.md)
+documentação que pode ser acessada [aqui](https://github.com/nikolasluiz123/MLModelTunner/blob/master/scikit_learn/README.md)
 caso seja de seu interesse entender o que cada um dos módulos específicos faz de forma mais superficial,
 se desejar entender com o máximo de detalhes convido você a adentrar no código fonte do projeto.
 
@@ -68,9 +68,38 @@ modelo que está sendo testado ou não.
 mostra que pode ser obtida uma diferença entre dados escalados e não escalados, mesmo que pequena. A grandeza da mudança
 vai depender do modelo utilizado e em como são seus dados.
 
-## Tesorflow Keras (Redes Neurais)
+## Tensorflow Keras (Redes Neurais)
 
-Futuramente...
+Essa biblioteca fornece muitas implementações interessantes que auxiliam na criação de redes neurais para diferentes
+finalidades. A documentação das implementações feitas baseadas nessa biblioteca podem se encontradas [aqui](), caso
+você desejar entender de forma mais aprofundada, lhe convido a acessar o código do projeto.
+
+### Alguns Exemplos de Utilização
+
+Se você quer apenas entender na prática como a biblioteca pode auxiliar em seu projeto, abaixo serão listados alguns
+exemplos de uso com códigos simples para demonstração.
+
+### Testando uma Rede Neural
+
+O cenário mais simples de uso da biblioteca é com apenas uma rede neural, esses casos não são exatamente o foco da biblioteca,
+por conta disso, ela pode parecer um pouco menos útil já que ela apenas faria o papel de organizar os processos.
+
+Veja o exemplo [aqui]()
+
+### Testando Várias Redes Neurais
+
+Esse exemplo demonstra um pouco do poder da biblioteca, sendo possível perceber o que uma simples alteração na sua rede
+neural pode resultar no processo que esteja tentando implementar.
+
+Veja o exemplo [aqui]()
+
+### Testando as Implementações de Busca de Hiperparâmetros
+
+Também seria possível testar diferentes implementações de busca de hiperparâmetros com a intenção de entender melhor como
+cada uma delas funciona e perceber na prática as diferenças de tempos de execução, resultado do modelo e o que mais
+você imaginar.
+
+Veja o exemplo [aqui]()
 
 ## XGBoost
 
