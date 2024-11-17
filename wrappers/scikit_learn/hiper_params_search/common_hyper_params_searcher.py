@@ -1,19 +1,19 @@
 
-from abc import abstractmethod, ABC
+from abc import abstractmethod
 from typing import TypeVar
 
 from sklearn.model_selection._search import BaseSearchCV
 
+from wrappers.common.hyper_params_searcher.common_hyper_params_search import CommonHyperParamsSearch
+
 ScikitLearnSearcher = TypeVar('ScikitLearnSearcher', bound=BaseSearchCV)
 
-class ScikitLearnCommonHyperParamsSearcher(ABC):
+class ScikitLearnCommonHyperParamsSearcher(CommonHyperParamsSearch):
     """
     Classe wrapper utilizada pelas implementações específicas de busca de parâmetros.
     """
 
-    def __init__(self,
-                 n_jobs: int = -1,
-                 log_level: int = 0):
+    def __init__(self, n_jobs: int = -1, log_level: int = 0):
         """
         :param n_jobs: Número de threads utilizado no processo de busca das features, se informado -1 serão utilizadas
         todas as threads. Não são todas as implementações que utilizam esse valor no processamento.
@@ -26,11 +26,8 @@ class ScikitLearnCommonHyperParamsSearcher(ABC):
             end_search_parameter_time (int): Armazena o tempo de término da busca de parâmetros, em segundos.
         """
 
+        super().__init__(log_level)
         self.n_jobs = n_jobs
-        self.log_level = log_level
-
-        self.start_search_parameter_time = 0
-        self.end_search_parameter_time = 0
 
     @abstractmethod
     def search_hyper_parameters(self,

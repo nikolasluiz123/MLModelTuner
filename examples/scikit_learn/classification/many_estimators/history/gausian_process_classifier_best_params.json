@@ -13,74 +13,20 @@
         "estimator_params": {
             "copy_X_train": true,
             "kernel": null,
-            "max_iter_predict": 300,
-            "multi_class": "one_vs_rest",
-            "n_jobs": null,
-            "n_restarts_optimizer": 0,
-            "optimizer": "fmin_l_bfgs_b",
-            "random_state": null,
-            "warm_start": false
-        },
-        "scoring": "accuracy",
-        "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
-        "feature_selection_time": "00:00:00.000",
-        "search_time": "00:00:17.000",
-        "validation_time": "00:00:36.000"
-    },
-    {
-        "estimator": "GaussianProcessClassifier",
-        "mean": 0.7885157096424702,
-        "standard_deviation": 0.024375660436979918,
-        "median": 0.7887323943661971,
-        "variance": 0.000594172821738948,
-        "standard_error": 0.010901126746707865,
-        "min_max_score": [
-            0.7622,
-            0.8322
-        ],
-        "estimator_params": {
-            "copy_X_train": true,
-            "kernel": null,
-            "max_iter_predict": 500,
-            "multi_class": "one_vs_rest",
-            "n_jobs": null,
-            "n_restarts_optimizer": 0,
-            "optimizer": null,
-            "random_state": null,
-            "warm_start": false
-        },
-        "scoring": "accuracy",
-        "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
-        "feature_selection_time": "00:00:00.000",
-        "search_time": "00:00:25.000",
-        "validation_time": "00:01:14.000"
-    },
-    {
-        "estimator": "GaussianProcessClassifier",
-        "mean": 0.7885157096424702,
-        "standard_deviation": 0.024375660436979918,
-        "median": 0.7887323943661971,
-        "variance": 0.000594172821738948,
-        "standard_error": 0.010901126746707865,
-        "min_max_score": [
-            0.7622,
-            0.8322
-        ],
-        "estimator_params": {
-            "copy_X_train": true,
-            "kernel": null,
             "max_iter_predict": 900,
             "multi_class": "one_vs_one",
             "n_jobs": null,
-            "n_restarts_optimizer": 3,
+            "n_restarts_optimizer": 2,
             "optimizer": "fmin_l_bfgs_b",
             "random_state": null,
             "warm_start": false
         },
         "scoring": "accuracy",
         "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
+        "pre_processing_time": "00:00:00.000",
         "feature_selection_time": "00:00:00.000",
         "search_time": "00:00:34.000",
-        "validation_time": "00:01:45.000"
+        "validation_time": "00:01:32.000",
+        "scaler": "NoneType"
     }
 ]

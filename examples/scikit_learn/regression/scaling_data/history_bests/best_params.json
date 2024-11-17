@@ -1,30 +1,31 @@
 [
     {
         "estimator": "KNeighborsRegressor",
-        "mean": -441.79926255279395,
-        "standard_deviation": 304.4896575046669,
-        "median": -300.9380353167995,
-        "variance": 92713.95152730936,
-        "standard_error": 136.17191452521283,
+        "mean": -515.2333834783486,
+        "standard_deviation": 389.67381829209137,
+        "median": -341.1159802306423,
+        "variance": 151845.68466233782,
+        "standard_error": 174.26742935060346,
         "min_max_score": [
-            -1049.5545,
-            -262.5791
+            -1290.8053,
+            -255.307
         ],
         "estimator_params": {
-            "algorithm": "brute",
+            "algorithm": "kd_tree",
             "leaf_size": 30,
             "metric": "minkowski",
             "metric_params": null,
             "n_jobs": null,
-            "n_neighbors": 13,
+            "n_neighbors": 19,
             "p": 2,
             "weights": "distance"
         },
         "scoring": "neg_mean_squared_error",
         "features": "exercicio,  serie,  repeticoes",
+        "pre_processing_time": "00:00:00.000",
         "feature_selection_time": "00:00:00.000",
-        "search_time": "00:00:16.000",
-        "validation_time": "00:00:31.000",
+        "search_time": "00:00:07.000",
+        "validation_time": "00:00:24.000",
         "scaler": "str"
     }
 ]

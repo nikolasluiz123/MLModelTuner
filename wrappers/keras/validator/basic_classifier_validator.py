@@ -3,26 +3,24 @@ import time
 import numpy as np
 from keras.src.callbacks import Callback
 
-from wrappers.keras.validator.results.classifier import KerasClassifierValidationResult
+from wrappers.common.validator.common_validator import CommonValidator
+from wrappers.keras.validator.results.classifier_validation_result import KerasClassifierValidationResult
 
 
-class KerasBasicClassifierValidator:
+class KerasBasicClassifierValidator(CommonValidator):
 
     def __init__(self,
                  epochs: int,
                  batch_size: int,
-                 log_level: int,
-                 callbacks: list[Callback]):
+                 callbacks: list[Callback],
+                 log_level: int = 0):
+        super().__init__(log_level)
         self.epochs = epochs
         self.batch_size = batch_size
-        self.log_level = log_level
         self.callbacks = callbacks
 
-        self.start_validation_time = 0
-        self.end_validation_time = 0
-
     def validate(self, model_instance, train_data, validation_data) -> KerasClassifierValidationResult:
-        self.start_validation_time = time.time()
+        self.start_validation_best_model_time = time.time()
 
         history = model_instance.fit(
             train_data,
@@ -47,6 +45,6 @@ class KerasBasicClassifierValidator:
             'standard_deviation_val_loss': round(np.std(history.history['val_loss']), 2),
         }
 
-        self.end_validation_time = time.time()
+        self.end_validation_best_model_time = time.time()
 
         return KerasClassifierValidationResult(model_instance, history_dict)

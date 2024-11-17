@@ -1,85 +1,31 @@
 [
     {
         "estimator": "KNeighborsClassifier",
-        "mean": 0.7913621589677928,
-        "standard_deviation": 0.03662288648091412,
-        "median": 0.8041958041958042,
-        "variance": 0.0013412358141939224,
-        "standard_error": 0.016378252740716404,
+        "mean": 0.795557963163597,
+        "standard_deviation": 0.02820634782951381,
+        "median": 0.7902097902097902,
+        "variance": 0.0007955980578795185,
+        "standard_error": 0.012614262228759306,
         "min_max_score": [
-            0.7413,
+            0.7622,
             0.8322
         ],
         "estimator_params": {
-            "algorithm": "kd_tree",
-            "leaf_size": 3,
+            "algorithm": "ball_tree",
+            "leaf_size": 33,
             "metric": "minkowski",
             "metric_params": null,
             "n_jobs": null,
-            "n_neighbors": 6,
+            "n_neighbors": 7,
             "p": 2,
             "weights": "distance"
         },
         "scoring": "accuracy",
         "features": "classe_social,  sexo_female,  sexo_male,  porta_embarque_C,  porta_embarque_S",
+        "pre_processing_time": "00:00:00.000",
         "feature_selection_time": "00:00:00.000",
         "search_time": "00:00:00.000",
-        "validation_time": "00:00:02.000"
-    },
-    {
-        "estimator": "GaussianProcessClassifier",
-        "mean": 0.7885157096424702,
-        "standard_deviation": 0.024375660436979918,
-        "median": 0.7887323943661971,
-        "variance": 0.000594172821738948,
-        "standard_error": 0.010901126746707865,
-        "min_max_score": [
-            0.7622,
-            0.8322
-        ],
-        "estimator_params": {
-            "copy_X_train": true,
-            "kernel": null,
-            "max_iter_predict": 500,
-            "multi_class": "one_vs_rest",
-            "n_jobs": null,
-            "n_restarts_optimizer": 0,
-            "optimizer": null,
-            "random_state": null,
-            "warm_start": false
-        },
-        "scoring": "accuracy",
-        "features": "classe_social,  sexo_female,  sexo_male,  porta_embarque_C,  porta_embarque_S",
-        "feature_selection_time": "00:00:00.000",
-        "search_time": "00:00:25.000",
-        "validation_time": "00:01:14.000"
-    },
-    {
-        "estimator": "GaussianProcessClassifier",
-        "mean": 0.7885157096424702,
-        "standard_deviation": 0.024375660436979918,
-        "median": 0.7887323943661971,
-        "variance": 0.000594172821738948,
-        "standard_error": 0.010901126746707865,
-        "min_max_score": [
-            0.7622,
-            0.8322
-        ],
-        "estimator_params": {
-            "copy_X_train": true,
-            "kernel": null,
-            "max_iter_predict": 900,
-            "multi_class": "one_vs_one",
-            "n_jobs": null,
-            "n_restarts_optimizer": 3,
-            "optimizer": "fmin_l_bfgs_b",
-            "random_state": null,
-            "warm_start": false
-        },
-        "scoring": "accuracy",
-        "features": "classe_social,  sexo_female,  sexo_male,  porta_embarque_C,  porta_embarque_S",
-        "feature_selection_time": "00:00:00.000",
-        "search_time": "00:00:34.000",
-        "validation_time": "00:01:45.000"
+        "validation_time": "00:00:08.000",
+        "scaler": "str"
     }
 ]

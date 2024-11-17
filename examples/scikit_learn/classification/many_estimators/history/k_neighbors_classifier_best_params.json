@@ -1,83 +1,31 @@
 [
     {
         "estimator": "KNeighborsClassifier",
-        "mean": 0.7913621589677928,
-        "standard_deviation": 0.03662288648091412,
-        "median": 0.8041958041958042,
-        "variance": 0.0013412358141939224,
-        "standard_error": 0.016378252740716404,
+        "mean": 0.795557963163597,
+        "standard_deviation": 0.02820634782951381,
+        "median": 0.7902097902097902,
+        "variance": 0.0007955980578795185,
+        "standard_error": 0.012614262228759306,
         "min_max_score": [
-            0.7413,
+            0.7622,
             0.8322
         ],
         "estimator_params": {
-            "algorithm": "kd_tree",
-            "leaf_size": 3,
+            "algorithm": "ball_tree",
+            "leaf_size": 33,
             "metric": "minkowski",
             "metric_params": null,
             "n_jobs": null,
-            "n_neighbors": 6,
+            "n_neighbors": 7,
             "p": 2,
             "weights": "distance"
         },
         "scoring": "accuracy",
         "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
+        "pre_processing_time": "00:00:00.000",
         "feature_selection_time": "00:00:00.000",
         "search_time": "00:00:00.000",
-        "validation_time": "00:00:02.000"
-    },
-    {
-        "estimator": "KNeighborsClassifier",
-        "mean": 0.7688072490889392,
-        "standard_deviation": 0.046610340113063385,
-        "median": 0.7622377622377622,
-        "variance": 0.002172523805455446,
-        "standard_error": 0.02084477778943899,
-        "min_max_score": [
-            0.6972,
-            0.8322
-        ],
-        "estimator_params": {
-            "algorithm": "ball_tree",
-            "leaf_size": 5,
-            "metric": "manhattan",
-            "metric_params": null,
-            "n_jobs": null,
-            "n_neighbors": 6,
-            "p": 1,
-            "weights": "distance"
-        },
-        "scoring": "accuracy",
-        "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
-        "feature_selection_time": "00:00:00.000",
-        "search_time": "00:00:00.000",
-        "validation_time": "00:00:03.000"
-    },
-    {
-        "estimator": "KNeighborsClassifier",
-        "mean": 0.7674086476903378,
-        "standard_deviation": 0.04730587757756767,
-        "median": 0.7622377622377622,
-        "variance": 0.00223784605338382,
-        "standard_error": 0.02115583159974488,
-        "min_max_score": [
-            0.6972,
-            0.8322
-        ],
-        "estimator_params": {
-            "algorithm": "auto",
-            "leaf_size": 2,
-            "metric": "minkowski",
-            "metric_params": null,
-            "n_jobs": null,
-            "n_neighbors": 6,
-            "p": 1,
-            "weights": "distance"
-        },
-        "scoring": "accuracy",
-        "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
-        "feature_selection_time": "00:00:00.000",
-        "search_time": "00:00:00.000",
-        "validation_time": "00:00:04.000"
+        "validation_time": "00:00:08.000",
+        "scaler": "NoneType"
     }
 ]

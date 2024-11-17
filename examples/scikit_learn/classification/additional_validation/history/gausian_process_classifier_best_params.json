@@ -1,30 +1,32 @@
 [
     {
         "estimator": "GaussianProcessClassifier",
-        "mean": 0.7885157096424702,
-        "standard_deviation": 0.024375660436979918,
-        "median": 0.7887323943661971,
-        "variance": 0.000594172821738948,
-        "standard_error": 0.010901126746707865,
+        "mean": 0.8036918382913807,
+        "standard_deviation": 0.0469735237695519,
+        "median": 0.7807017543859649,
+        "variance": 0.0022065119353286574,
+        "standard_error": 0.02100719845828404,
         "min_max_score": [
-            0.7622,
-            0.8322
+            0.7719,
+            0.8957
         ],
         "estimator_params": {
             "copy_X_train": true,
             "kernel": null,
-            "max_iter_predict": 700,
+            "max_iter_predict": 300,
             "multi_class": "one_vs_one",
             "n_jobs": null,
-            "n_restarts_optimizer": 7,
-            "optimizer": "fmin_l_bfgs_b",
+            "n_restarts_optimizer": 8,
+            "optimizer": null,
             "random_state": null,
             "warm_start": false
         },
         "scoring": "accuracy",
         "features": "classe_social, sexo_female, sexo_male, porta_embarque_C, porta_embarque_S",
+        "pre_processing_time": "00:00:00.000",
         "feature_selection_time": "00:00:00.000",
-        "search_time": "00:00:25.000",
-        "validation_time": "00:00:42.000"
+        "search_time": "00:00:06.000",
+        "validation_time": "00:00:19.000",
+        "scaler": "NoneType"
     }
 ]

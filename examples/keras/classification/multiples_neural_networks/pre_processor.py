@@ -2,7 +2,7 @@
 import kagglehub
 import keras
 
-from wrappers.keras.pre_processing.pre_processor import KerasDataPreProcessor
+from wrappers.common.data_pre_processor.common_data_pre_processor import CommonDataPreProcessor
 
 img_height = 128
 img_width = 128
@@ -12,7 +12,7 @@ seed = 42
 
 batch_size = 128
 
-class ExamplePreProcessor(KerasDataPreProcessor):
+class ExamplePreProcessor(CommonDataPreProcessor):
 
     def _on_execute_train_process(self) -> tuple:
         path_image = kagglehub.dataset_download('hasyimabdillah/workoutexercises-images')
@@ -36,3 +36,13 @@ class ExamplePreProcessor(KerasDataPreProcessor):
         )
 
         return train, validation
+
+    def get_data_additional_validation(self):
+        path_image = kagglehub.dataset_download('hasyimabdillah/workoutexercises-images')
+
+        return keras.utils.image_dataset_from_directory(
+            path_image,
+            seed=seed,
+            image_size=(img_height, img_width),
+            batch_size=batch_size
+        )

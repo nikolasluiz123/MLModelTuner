@@ -8,16 +8,20 @@ from wrappers.keras.history_manager.classifier_history_manager import KerasClass
 from wrappers.keras.hyper_params_search.grid_searcher import KerasGridSearcher
 from wrappers.keras.hyper_params_search.hyper_band_searcher import KerasHyperBandSearcher
 from wrappers.keras.hyper_params_search.random_searcher import KerasRandomSearcher
-from wrappers.keras.process_manager.classifier_mult_process_manager import KerasClassifierMultProcessManager
+from wrappers.keras.process_manager.classifier_multi_process_manager import KerasClassifierMultProcessManager
 from wrappers.keras.process_manager.pipeline import KerasPipeline
 from wrappers.keras.validator.basic_classifier_validator import KerasBasicClassifierValidator
-from wrappers.keras.validator.classifier_validator import KerasAdditionalClassifierValidator
+from wrappers.keras.validator.classifier_additional_validator import KerasAdditionalClassifierValidator
 
 ########################################################################################################################
 #                                           Definições Estáticas do Teste                                              #
 ########################################################################################################################
 
 num_classes = 22
+
+########################################################################################################################
+#                                           Modelo Pré Treinado Utilizado                                              #
+########################################################################################################################
 
 base_model = keras.applications.InceptionV3(
     include_top=False,
@@ -71,15 +75,15 @@ validator = KerasBasicClassifierValidator(epochs=50,
 
 history_manager_hyper_band_searcher = KerasClassifierHistoryManager(output_directory='history_hyper_band_searcher',
                                                                     models_directory='models',
-                                                                    best_executions_file_name='best_executions')
+                                                                    best_params_file_name='best_executions')
 
 history_manager_random_searcher = KerasClassifierHistoryManager(output_directory='history_random_searcher',
                                                                 models_directory='models',
-                                                                best_executions_file_name='best_executions')
+                                                                best_params_file_name='best_executions')
 
 history_manager_grid_searcher = KerasClassifierHistoryManager(output_directory='history_grid_searcher',
                                                               models_directory='models',
-                                                              best_executions_file_name='best_executions')
+                                                              best_params_file_name='best_executions')
 
 pipelines = [
     KerasPipeline(
@@ -111,7 +115,7 @@ pipelines = [
 
 history_manager_best_model = KerasClassifierHistoryManager(output_directory='best_executions',
                                                            models_directory='best_models',
-                                                           best_executions_file_name='best_executions')
+                                                           best_params_file_name='best_executions')
 manager = KerasClassifierMultProcessManager(
     pipelines=pipelines,
     seed=seed,
@@ -127,12 +131,9 @@ manager.process_pipelines()
 #                                   Validação Adicional para Avaliar o Modelo                                          #
 ########################################################################################################################
 
-result = history_manager_best_model.get_validation_result(-1)
+result = history_manager_best_model.load_validation_result_from_history(-1)
 final_model = history_manager_best_model.get_saved_model(history_manager_best_model.get_history_len())
 
-data = pre_processor.get_data_additional_validation()
 additional_validator = KerasAdditionalClassifierValidator(model_instance=final_model,
-                                                          model=example_keras_hyper_model,
-                                                          history_dict=result.history,
-                                                          data=data)
+                                                          data_pre_processor=pre_processor)
 additional_validator.validate()

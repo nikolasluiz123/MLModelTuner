@@ -1,16 +1,17 @@
 from keras_tuner import HyperModel
 
+from wrappers.common.data_pre_processor.common_data_pre_processor import CommonDataPreProcessor
+from wrappers.common.process_manager.common_pipeline import CommonPipeline
 from wrappers.keras.history_manager.common_history_manager import KerasHistoryManager
-from wrappers.keras.hyper_params_search.common_searcher import KerasCommonHyperParamsSearcher
-from wrappers.keras.pre_processing.pre_processor import KerasDataPreProcessor
+from wrappers.keras.hyper_params_search.common_hyper_params_searcher import KerasCommonHyperParamsSearcher
 from wrappers.keras.validator.basic_classifier_validator import KerasBasicClassifierValidator
 
 
-class KerasPipeline:
+class KerasPipeline(CommonPipeline):
 
     def __init__(self,
                  model: HyperModel,
-                 data_pre_processor: KerasDataPreProcessor,
+                 data_pre_processor: CommonDataPreProcessor,
                  params_searcher: KerasCommonHyperParamsSearcher,
                  validator: KerasBasicClassifierValidator,
                  history_manager: KerasHistoryManager):
@@ -37,6 +38,6 @@ class KerasPipeline:
     def get_execution_times(self):
         pre_processing_time = self.data_pre_processor.end_pre_processing - self.data_pre_processor.start_pre_processing
         params_search_time = self.params_searcher.end_search_parameter_time - self.params_searcher.start_search_parameter_time
-        validation_time = self.validator.end_validation_time - self.validator.start_validation_time
+        validation_time = self.validator.end_validation_best_model_time - self.validator.start_validation_best_model_time
 
         return pre_processing_time, params_search_time, validation_time

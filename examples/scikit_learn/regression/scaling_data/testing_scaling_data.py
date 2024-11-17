@@ -1,68 +1,61 @@
 from scipy.stats import randint
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.preprocessing import StandardScaler
 
-from examples.data.data_processing import get_workout_train_data
-from wrappers.scikit_learn import RandomCVHipperParamsSearcher
-from wrappers.scikit_learn import CrossValidatorHistoryManager
-from wrappers.scikit_learn import MultiProcessManager
-from wrappers.scikit_learn import Pipeline
-from wrappers.scikit_learn import CrossValidator
-
-########################################################################################################################
-#                                            Preparando os Dados                                                       #
-########################################################################################################################
-
-df_train = get_workout_train_data()
-
-label_encoder = LabelEncoder()
-df_train['exercicio'] = label_encoder.fit_transform(df_train['exercicio'])
-
-x = df_train.drop(columns=['peso', 'data'])
-y = df_train['peso']
+from examples.scikit_learn.regression.pre_processor import ScikitLearnWorkoutPreProcessorExample
+from wrappers.scikit_learn.hiper_params_search.random_searcher import ScikitLearnRandomCVHyperParamsSearcher
+from wrappers.scikit_learn.history_manager.cross_validation_history_manager import \
+    ScikitLearnCrossValidationHistoryManager
+from wrappers.scikit_learn.process_manager.multi_process_manager import ScikitLearnMultiProcessManager
+from wrappers.scikit_learn.process_manager.pipeline import ScikitLearnPipeline
+from wrappers.scikit_learn.validator.cross_validator import ScikitLearnCrossValidator
 
 ########################################################################################################################
 #                                    Preparando Implementações que serão Testadas                                      #
 ########################################################################################################################
 
-params_searcher = RandomCVHipperParamsSearcher(number_iterations=100, log_level=1)
+pre_processor = ScikitLearnWorkoutPreProcessorExample()
 
-history_manager = CrossValidatorHistoryManager(output_directory='history',
-                                               models_directory='models',
-                                               params_file_name='params',
-                                               cv_results_file_name='cv_results')
+params_searcher = ScikitLearnRandomCVHyperParamsSearcher(number_iterations=100, log_level=1)
 
-best_params_history_manager = CrossValidatorHistoryManager(output_directory='history_bests',
-                                                           models_directory='best_models',
-                                                           params_file_name='best_params',
-                                                           cv_results_file_name='best_cv_results')
-cross_validator = CrossValidator(log_level=1)
+history_manager = ScikitLearnCrossValidationHistoryManager(output_directory='history',
+                                                           models_directory='models',
+                                                           best_params_file_name='params',
+                                                           cv_results_file_name='cv_results')
+
+best_params_history_manager = ScikitLearnCrossValidationHistoryManager(output_directory='history_bests',
+                                                                       models_directory='best_models',
+                                                                       best_params_file_name='best_params',
+                                                                       cv_results_file_name='best_cv_results')
+cross_validator = ScikitLearnCrossValidator(log_level=1)
 
 ########################################################################################################################
 #                                               Criando o Pipeline                                                     #
 ########################################################################################################################
 
 pipelines = [
-    Pipeline(
+    ScikitLearnPipeline(
         estimator=KNeighborsRegressor(),
         params={
             'n_neighbors': randint(1, 20),
             'weights': ['uniform', 'distance'],
             'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
         },
+        data_pre_processor=pre_processor,
         scaler=StandardScaler(),
         feature_searcher=None,
         params_searcher=params_searcher,
         history_manager=history_manager,
         validator=cross_validator
     ),
-    Pipeline(
+    ScikitLearnPipeline(
         estimator=KNeighborsRegressor(),
         params={
             'n_neighbors': randint(1, 20),
             'weights': ['uniform', 'distance'],
             'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
         },
+        data_pre_processor=pre_processor,
         feature_searcher=None,
         params_searcher=params_searcher,
         history_manager=history_manager,
@@ -74,15 +67,13 @@ pipelines = [
 #                                      Criando e Executando o Process Manager                                          #
 ########################################################################################################################
 
-manager = MultiProcessManager(
-    data_x=x,
-    data_y=y,
-    seed=42,
+manager = ScikitLearnMultiProcessManager(
     pipelines=pipelines,
-    fold_splits=5,
     history_manager=best_params_history_manager,
+    fold_splits=5,
     scoring='neg_mean_squared_error',
-    save_history=True
+    save_history=True,
+    history_index=None
 )
 
 manager.process_pipelines()

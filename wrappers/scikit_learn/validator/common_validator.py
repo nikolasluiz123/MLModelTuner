@@ -1,12 +1,11 @@
-from abc import ABC, abstractmethod
-from typing import TypeVar
+from abc import abstractmethod
+from typing import Generic
 
-from wrappers.scikit_learn.validator.results.common import ValidationResult
+from wrappers.common.history_manager.common_history_manager import CommonValResult
+from wrappers.common.validator.common_validator import CommonValidator
 
-Result = TypeVar('Result', bound=ValidationResult)
 
-
-class BaseValidator(ABC):
+class ScikitLearnCommonValidator(CommonValidator, Generic[CommonValResult]):
     """
     Classe base abstrata para validadores de modelos.
 
@@ -18,20 +17,15 @@ class BaseValidator(ABC):
     :param n_jobs: Número de trabalhos a serem executados em paralelo. -1 significa usar todos os processadores.
     """
 
-    def __init__(self,
-                 log_level: int = 1,
-                 n_jobs: int = -1):
+    def __init__(self, log_level: int = 1, n_jobs: int = -1):
         """
         Inicializa um novo validador base.
 
         :param log_level: Nível de log para controle de saída de informações.
         :param n_jobs: Número de trabalhos a serem executados em paralelo.
         """
-        self.log_level = log_level
+        super().__init__(log_level)
         self.n_jobs = n_jobs
-
-        self.start_best_model_validation = 0
-        self.end_best_model_validation = 0
 
     @abstractmethod
     def validate(self,
@@ -39,7 +33,7 @@ class BaseValidator(ABC):
                  data_x,
                  data_y,
                  cv=None,
-                 scoring=None) -> Result | None:
+                 scoring=None) -> CommonValResult | None:
         """
         Função abstrata para validar um modelo.
 

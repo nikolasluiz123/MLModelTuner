@@ -1,7 +1,7 @@
 from keras.src.callbacks import Callback
 from keras_tuner import HyperModel, GridSearch
 
-from wrappers.keras.hyper_params_search.common_searcher import KerasCommonHyperParamsSearcher
+from wrappers.keras.hyper_params_search.common_hyper_params_searcher import KerasCommonHyperParamsSearcher
 
 
 class KerasGridSearcher(KerasCommonHyperParamsSearcher):
@@ -12,10 +12,10 @@ class KerasGridSearcher(KerasCommonHyperParamsSearcher):
                  project_name: str,
                  epochs: int,
                  batch_size: int,
-                 log_level: int,
                  callbacks: list[Callback],
-                 max_trials: int):
-        super().__init__(objective, directory, project_name, epochs, batch_size, log_level, callbacks)
+                 max_trials: int,
+                 log_level: int = 0):
+        super().__init__(objective, directory, project_name, epochs, batch_size, callbacks, log_level)
         self.max_trials = max_trials
 
     def _on_execute(self, train_data, validation_data, model: HyperModel):

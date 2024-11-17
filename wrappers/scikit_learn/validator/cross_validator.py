@@ -3,11 +3,12 @@ import time
 import numpy as np
 from sklearn.model_selection import cross_val_score
 
-from wrappers.scikit_learn.validator.common_validator import BaseValidator, Result
-from wrappers.scikit_learn.validator.results.cross_validation import ScikitLearnCrossValidationResult
+from wrappers.common.history_manager.common_history_manager import CommonValResult
+from wrappers.scikit_learn.validator.common_validator import ScikitLearnCommonValidator
+from wrappers.scikit_learn.validator.results.cross_validation_result import ScikitLearnCrossValidationResult
 
 
-class CrossValidator(BaseValidator):
+class ScikitLearnCrossValidator(ScikitLearnCommonValidator[ScikitLearnCrossValidationResult]):
     """
     Validador que utiliza validação cruzada para avaliar modelos.
 
@@ -36,7 +37,7 @@ class CrossValidator(BaseValidator):
                  data_x,
                  data_y,
                  cv=None,
-                 scoring=None) -> Result | None:
+                 scoring=None) -> CommonValResult | None:
         """
         Valida o modelo utilizando validação cruzada.
 
@@ -59,7 +60,7 @@ class CrossValidator(BaseValidator):
         if scoring is None:
             raise Exception("The parameter scoring can't be None")
 
-        self.start_best_model_validation = time.time()
+        self.start_validation_best_model_time = time.time()
 
         scores = cross_val_score(estimator=searcher,
                                  X=data_x,
@@ -69,7 +70,7 @@ class CrossValidator(BaseValidator):
                                  verbose=self.log_level,
                                  scoring=scoring)
 
-        self.end_best_model_validation = time.time()
+        self.end_validation_best_model_time = time.time()
 
         result = ScikitLearnCrossValidationResult(
             mean=np.mean(scores),

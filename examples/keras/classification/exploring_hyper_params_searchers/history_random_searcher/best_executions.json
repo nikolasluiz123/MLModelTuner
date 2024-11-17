@@ -2,14 +2,14 @@
     {
         "model": "ExampleKerasHyperModel",
         "history": {
-            "mean_accuracy": 0.74,
-            "standard_deviation_accuracy": 0.15,
-            "mean_val_accuracy": 0.72,
-            "standard_deviation_val_accuracy": 0.72,
-            "mean_loss": 1.13,
-            "standard_deviation_loss": 0.54,
-            "mean_val_loss": 1.15,
-            "standard_deviation_val_loss": 0.21
+            "mean_accuracy": 0.72,
+            "standard_deviation_accuracy": 0.14,
+            "mean_val_accuracy": 0.66,
+            "standard_deviation_val_accuracy": 0.66,
+            "mean_loss": 1.11,
+            "standard_deviation_loss": 0.51,
+            "mean_val_loss": 1.41,
+            "standard_deviation_val_loss": 0.6
         },
         "neural_structure": {
             "space": [
@@ -57,7 +57,7 @@
             }
         },
         "pre_processing_time": "00:00:01.000",
-        "params_search_time": "00:00:52.000",
-        "validation_time": "00:00:09.000"
+        "params_search_time": "00:01:43.000",
+        "validation_time": "00:00:12.000"
     }
 ]

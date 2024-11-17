@@ -1,7 +1,7 @@
 from keras.src.callbacks import Callback
 from keras_tuner import HyperModel, Hyperband
 
-from wrappers.keras.hyper_params_search.common_searcher import KerasCommonHyperParamsSearcher
+from wrappers.keras.hyper_params_search.common_hyper_params_searcher import KerasCommonHyperParamsSearcher
 
 
 class KerasHyperBandSearcher(KerasCommonHyperParamsSearcher):
@@ -12,12 +12,12 @@ class KerasHyperBandSearcher(KerasCommonHyperParamsSearcher):
                  project_name: str,
                  epochs: int,
                  batch_size: int,
-                 log_level: int,
                  callbacks: list[Callback],
                  factor: int,
                  max_epochs: int,
-                 hyper_band_iterations: int):
-        super().__init__(objective, directory, project_name, epochs, batch_size, log_level, callbacks)
+                 hyper_band_iterations: int,
+                 log_level: int = 0):
+        super().__init__(objective, directory, project_name, epochs, batch_size, callbacks, log_level)
         self.factor = factor
         self.max_epochs = max_epochs
         self.hyper_band_iterations = hyper_band_iterations

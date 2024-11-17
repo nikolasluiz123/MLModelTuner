@@ -38,7 +38,7 @@ class ScikitLearnRecursiveFeatureSearcher(ScikitLearnCommonFeaturesSearcher):
         return data_x.iloc[:, searcher.support_]
 
 
-class RecursiveFeatureCVSearcherScikitLearn(ScikitLearnCommonFeaturesSearcher):
+class ScikitLearnRecursiveFeatureCVSearcher(ScikitLearnCommonFeaturesSearcher):
     """
     Implementação wrapper do algoritmo RFECV o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFECV.html>`_.
     """

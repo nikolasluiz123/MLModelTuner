@@ -1,52 +1,41 @@
-import pandas as pd
 from scipy.stats import randint, uniform
 from sklearn.tree import DecisionTreeClassifier
 
-from examples.data.data_processing import get_titanic_train_data
-from wrappers.scikit_learn import RecursiveFeatureCVSearcher
-from wrappers.scikit_learn import RandomCVHipperParamsSearcher
-from wrappers.scikit_learn import CrossValidatorHistoryManager
-from wrappers.scikit_learn import MultiProcessManager
-from wrappers.scikit_learn import Pipeline
-from wrappers.scikit_learn import CrossValidator
-
-########################################################################################################################
-#                                            Preparando os Dados                                                       #
-########################################################################################################################
-
-df_train = get_titanic_train_data()
-
-x = df_train.drop(columns=['sobreviveu'], axis=1)
-
-obj_columns = df_train.select_dtypes(include='object').columns
-
-x = pd.get_dummies(x, columns=obj_columns)
-y = df_train['sobreviveu']
+from examples.scikit_learn.classification.pre_processor import ScikitLearnTitanicPreProcessorExample
+from wrappers.scikit_learn.features_search.rfe_searcher import ScikitLearnRecursiveFeatureCVSearcher
+from wrappers.scikit_learn.hiper_params_search.random_searcher import ScikitLearnRandomCVHyperParamsSearcher
+from wrappers.scikit_learn.history_manager.cross_validation_history_manager import \
+    ScikitLearnCrossValidationHistoryManager
+from wrappers.scikit_learn.process_manager.multi_process_manager import ScikitLearnMultiProcessManager
+from wrappers.scikit_learn.process_manager.pipeline import ScikitLearnPipeline
+from wrappers.scikit_learn.validator.cross_validator import ScikitLearnCrossValidator
 
 ########################################################################################################################
 #                                    Preparando Implementações que serão Testadas                                      #
 ########################################################################################################################
 
-recursive_feature_cv_searcher = RecursiveFeatureCVSearcher(log_level=1)
+data_pre_processor = ScikitLearnTitanicPreProcessorExample()
 
-random_cv_hyper_params_searcher = RandomCVHipperParamsSearcher(number_iterations=500, log_level=1)
+recursive_feature_cv_searcher = ScikitLearnRecursiveFeatureCVSearcher(log_level=1)
 
-cross_validator_history_manager = CrossValidatorHistoryManager(output_directory='history',
-                                                               models_directory='models',
-                                                               params_file_name='params',
-                                                               cv_results_file_name='cv_results')
+random_cv_hyper_params_searcher = ScikitLearnRandomCVHyperParamsSearcher(number_iterations=500, log_level=1)
 
-best_params_history_manager = CrossValidatorHistoryManager(output_directory='history_bests',
-                                                           models_directory='best_models',
-                                                           params_file_name='best_params',
-                                                           cv_results_file_name='best_cv_results')
-cross_validator = CrossValidator(log_level=1)
+cross_validator_history_manager = ScikitLearnCrossValidationHistoryManager(output_directory='history',
+                                                                           models_directory='models',
+                                                                           best_params_file_name='params',
+                                                                           cv_results_file_name='cv_results')
+
+best_params_history_manager = ScikitLearnCrossValidationHistoryManager(output_directory='history_bests',
+                                                                       models_directory='best_models',
+                                                                       best_params_file_name='best_params',
+                                                                       cv_results_file_name='best_cv_results')
+cross_validator = ScikitLearnCrossValidator(log_level=1)
 
 ########################################################################################################################
 #                                               Criando o Pipeline                                                     #
 ########################################################################################################################
 
-pipeline = Pipeline(
+pipeline = ScikitLearnPipeline(
     estimator=DecisionTreeClassifier(),
     params={
         'criterion': ['gini', 'entropy', 'log_loss'],
@@ -57,6 +46,7 @@ pipeline = Pipeline(
         'min_weight_fraction_leaf': uniform(loc=0.1, scale=0.4),
         'max_features': [None, 'sqrt', 'log2'],
     },
+    data_pre_processor=data_pre_processor,
     feature_searcher=recursive_feature_cv_searcher,
     params_searcher=random_cv_hyper_params_searcher,
     history_manager=cross_validator_history_manager,
@@ -67,16 +57,14 @@ pipeline = Pipeline(
 #                                      Criando e Executando o Process Manager                                          #
 ########################################################################################################################
 
-manager = MultiProcessManager(
-    data_x=x,
-    data_y=y,
-    seed=42,
+manager = ScikitLearnMultiProcessManager(
     pipelines=pipeline,
-    fold_splits=5,
     history_manager=best_params_history_manager,
+    fold_splits=5,
     scoring='accuracy',
+    save_history=True,
+    history_index=None,
     stratified=True,
-    save_history=True
 )
 
 manager.process_pipelines()
