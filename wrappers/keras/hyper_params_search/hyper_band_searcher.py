@@ -15,7 +15,7 @@ class KerasHyperBandSearcher(KerasCommonHyperParamsSearcher):
                  project_name: str,
                  epochs: int,
                  batch_size: int,
-                 callbacks: list[Callback],
+                 callbacks: list,
                  factor: int,
                  max_epochs: int,
                  hyper_band_iterations: int,

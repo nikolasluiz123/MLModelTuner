@@ -15,7 +15,7 @@ class KerasGridSearcher(KerasCommonHyperParamsSearcher):
                  project_name: str,
                  epochs: int,
                  batch_size: int,
-                 callbacks: list[Callback],
+                 callbacks: list,
                  max_trials: int,
                  log_level: int = 0):
         """

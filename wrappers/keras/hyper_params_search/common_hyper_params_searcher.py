@@ -18,7 +18,7 @@ class KerasCommonHyperParamsSearcher(CommonHyperParamsSearch):
                  project_name: str,
                  epochs: int,
                  batch_size: int,
-                 callbacks: list[Callback],
+                 callbacks: list,
                  log_level: int = 0):
         """
         :param objective: O que deseja maximizar ou minimizar durante a busca dos melhores parâmetros do modelo. Pode ser

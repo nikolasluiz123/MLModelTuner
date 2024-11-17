@@ -15,7 +15,7 @@ class KerasBasicClassifierValidator(CommonValidator):
     def __init__(self,
                  epochs: int,
                  batch_size: int,
-                 callbacks: list[Callback],
+                 callbacks: list,
                  log_level: int = 0):
         """
         :param epochs: Número de épocas executadas para avaliar o modelo
