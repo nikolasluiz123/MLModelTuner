@@ -7,11 +7,10 @@ from wrappers.scikit_learn.validator.results.cross_validation_result import Scik
 
 class ScikitLearnCrossValidationHistoryManager(ScikitLearnCommonHistoryManager[ScikitLearnCrossValidationResult]):
     """
-    Classe que gerencia o histórico de validação cruzada dos modelos.
+    Implementação de histórico específica para armazenar dados obtidos da validação cruzada.
 
-    Esta classe estende a classe HistoryManager para implementar o armazenamento específico
-    dos resultados de validação cruzada. Os resultados são salvos em formato JSON e o modelo treinado
-    é armazenado usando pickle, permitindo o uso posterior do modelo.
+    Por conta desse tipo de validação fornecer muitos dados adicionais é preciso uma implementação específica de manutenção
+    do histórico.
     """
 
     def __init__(self, output_directory: str, models_directory: str, best_params_file_name: str, cv_results_file_name: str):
@@ -50,6 +49,10 @@ class ScikitLearnCrossValidationHistoryManager(ScikitLearnCommonHistoryManager[S
         self._save_model(validation_result.estimator)
 
     def _save_cv_results(self, cv_results):
+        """
+        Função para armazenar as combinações de parâmetros testadas na busca em um JSON.
+        """
+
         df = pd.DataFrame.from_dict(cv_results, orient='columns')
         self._save_dictionary_in_json(df.to_dict(), file_name=self.cv_results_file_name)
 

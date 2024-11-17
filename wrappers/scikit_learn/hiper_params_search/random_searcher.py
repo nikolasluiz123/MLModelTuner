@@ -10,7 +10,7 @@ from wrappers.scikit_learn.hiper_params_search.common_hyper_params_searcher impo
 
 class ScikitLearnRandomCVHyperParamsSearcher(ScikitLearnCommonHyperParamsSearcher):
     """
-    Implementação wrapper da busca RandomizedSearchCV o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html>`_.
+    Implementação wrapper da busca RandomizedSearchCV.
     """
 
     def __init__(self, number_iterations: int, n_jobs: int = -1, log_level: int = 0):
@@ -40,7 +40,7 @@ class ScikitLearnRandomCVHyperParamsSearcher(ScikitLearnCommonHyperParamsSearche
 
 class ScikitLearnHalvingRandomCVHyperParamsSearcher(ScikitLearnCommonHyperParamsSearcher):
     """
-    Implementação wrapper da busca HalvingRandomSearchCV o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.HalvingRandomSearchCV.html>`_.
+    Implementação wrapper da busca HalvingRandomSearchCV.
     """
 
     def __init__(self,
@@ -53,18 +53,19 @@ class ScikitLearnHalvingRandomCVHyperParamsSearcher(ScikitLearnCommonHyperParams
                  log_level: int = 0):
         """
         :param number_candidates: Número máximo de iterações (candidatos) realizadas na busca do melhor modelo. Também
-        pode ser utilizado o valor `exhaust` e o processo será baseado em `max_resources` e `min_resources`.
+                                  pode ser utilizado o valor `exhaust` e o processo será baseado em `max_resources` e
+                                  `min_resources`.
 
         :param resource: Especifica o recurso a ser usado para avaliar o desempenho de cada combinação de hiperparâmetros.
-        Pode ser um número de amostras, tempo de treinamento ou qualquer outro recurso que se deseja limitar durante a
-        validação.
+                         Pode ser um número de amostras, tempo de treinamento ou qualquer outro recurso que se deseja limitar durante a
+                         validação.
 
         :param max_resources: Define a quantidade máxima do recurso que pode ser utilizado durante a execução. Se você
-        especificar max_resources=100, a busca usará no máximo 100 amostras (ou outra métrica definida em resource)
-        durante a validação de cada combinação.
+                              especificar max_resources=100, a busca usará no máximo 100 amostras (ou outra métrica definida em resource)
+                              durante a validação de cada combinação.
 
         :param min_resources: Determina a quantidade mínima do recurso que deve ser usada na primeira iteração da busca.
-        É o ponto de partida que garante que a busca comece com uma base sólida de amostras ou recursos.
+                              É o ponto de partida que garante que a busca comece com uma base sólida de amostras ou recursos.
 
         :param factor: Determina a proporção dos candidatos em cada iteração. Por padrão 1/3.
         """

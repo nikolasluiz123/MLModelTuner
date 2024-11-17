@@ -14,21 +14,7 @@ from wrappers.scikit_learn.validator.results.cross_validation_result import Scik
 
 class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeline, ScikitLearnCommonHistoryManager, ScikitLearnCrossValidationResult]):
     """
-    Gerencia a execução de múltiplos pipelines de machine learning em um processo de validação cruzada.
-
-    Esta classe executa múltiplos pipelines de modelagem, permitindo a busca de hiperparâmetros,
-    seleção de features e validação do modelo. Os resultados são armazenados em um gerenciador de histórico.
-
-    :param data_x: Conjunto de dados de características (features) para treinamento e validação.
-    :param data_y: Conjunto de dados de rótulos (labels) correspondentes a data_x.
-    :param seed: Semente para a randomização do processo de validação cruzada.
-    :param fold_splits: Número de divisões (folds) para a validação cruzada.
-    :param pipelines: Um ou mais pipelines que serão processados.
-    :param history_manager: Gerenciador de histórico para armazenar resultados.
-    :param scoring: Métrica a ser utilizada para validação do modelo.
-    :param stratified: Indica se a validação cruzada deve ser estratificada (default: False).
-    :param save_history: Indica se os resultados devem ser salvos no histórico (default: True).
-    :param history_index: Índice do histórico a ser carregado, se aplicável (default: None).
+    Implementação para gerenciamento de processos necessário para obtenção do melhor modelo do scikit-learn.
     """
 
     def __init__(self,
@@ -41,24 +27,29 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
                  seed: int = 42,
                  stratified: bool = False):
         """
-        Inicializa o MultiProcessManager.
-
-        :param data_x: Conjunto de dados de características (features).
-        :param data_y: Conjunto de dados de rótulos (labels).
-        :param seed: Semente para a randomização.
-        :param fold_splits: Número de folds para a validação cruzada.
-        :param pipelines: Um ou mais pipelines a serem processados.
-        :param history_manager: Gerenciador de histórico para armazenar resultados.
         :param scoring: Métrica a ser utilizada para validação.
+        :param fold_splits: Número de folds para a validação cruzada.
         :param stratified: Indica se a validação cruzada deve ser estratificada.
-        :param save_history: Indica se os resultados devem ser salvos no histórico.
-        :param history_index: Índice do histórico a ser carregado, se aplicável.
+
+        Atributos Internos:
+            data_x: Dados das features obtidos a partir do pré-processamento
+
+            data_y: Dados do target obtidos a partir do pré-processamento
+
+            data_x_scaled: Dados das features após aplicar um scaler. Pode ser None caso não desejar realizar esse processo.
+
+            data_x_best_features: Dados das features que são melhores para o modelo específico que está rodando no momento.
+            Pode ser None caso não desejar realizar esse processo.
+
+            cv: Implementação de Fold para validação cruzada
         """
+
         super().__init__(pipelines, history_manager, save_history, history_index, seed)
         self.scoring = scoring
         self.data_x = None
         self.data_y = None
         self.data_x_scaled = None
+        self.data_x_best_features = None
 
         np.random.seed(seed)
 
@@ -68,24 +59,28 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
             self.cv = KFold(n_splits=fold_splits, shuffle=True, random_state=seed)
 
     def _process_single_pipeline(self, pipeline):
-        """
-        Processa um único pipeline, incluindo seleção de features, busca de hiperparâmetros
-        e validação.
-
-        :param pipeline: O pipeline a ser processado.
-        """
         self._show_log_init_process(pipeline)
         self.__pre_process_data(pipeline)
         self.__scale_data(pipeline)
-        self._process_feature_selection(pipeline)
+        self.__process_feature_selection(pipeline)
 
-        search_cv = self._process_hyper_params_search(pipeline)
-        validation_result = self._process_validation(pipeline, search_cv)
+        search_cv = self.__process_hyper_params_search(pipeline)
+        validation_result = self.__process_validation(pipeline, search_cv)
 
-        self._save_data_in_history(pipeline, validation_result, search_cv)
+        self.__save_data_in_history(pipeline, validation_result, search_cv)
         self._append_new_result(pipeline, validation_result)
 
     def __pre_process_data(self, pipeline: ScikitLearnPipeline):
+        """
+        Executa o pré-processamento dos dados de acordo com o pipeline. Os dados pré-processados são atribuídos em variáveis
+        de acesso global dentro da implementação.
+
+        Somente é executado o pré-processamento dos dados quando não for fornecido `history_index` ou aquele pipeline
+        não tiver sido executado ainda (não existir histórico para ser recuperado).
+
+        :param pipeline: Pipeline que está sendo executado
+        """
+
         if self.history_index is None or not pipeline.history_manager.has_history():
             data_x, data_y = pipeline.data_pre_processor.get_train_data()
 
@@ -93,21 +88,30 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
             self.data_y = data_y
 
     def __scale_data(self, pipeline: ScikitLearnPipeline):
+        """
+        Função que aplica o scaler nos dados das features para treinar o modelo posteriormente.
+
+        Esse processo é opcional, portanto, se no pipeline não for definido um scaler, não será executado esse processo.
+
+        :param pipeline: Pipeline que está sendo executado
+        """
+
         if pipeline.scaler is not None:
             self.data_x_scaled = pipeline.scaler.fit_transform(self.data_x)
 
-    def __get_dataframe_from_scaled_data(self):
-        if self.data_x_scaled is not None:
-            return pd.DataFrame(self.data_x_scaled, columns=self.data_x.columns)
-        else:
-            return self.data_x
-
-    def _process_feature_selection(self, pipeline: ScikitLearnPipeline):
+    def __process_feature_selection(self, pipeline: ScikitLearnPipeline):
         """
-        Realiza a seleção de features usando o pipeline especificado.
+        Realiza a seleção das melhores features a partir dos dados presentes em `data_x`.
 
-        :param pipeline: O pipeline que contém a lógica de seleção de features.
+        Somente é executado esse processo quando não for fornecido `history_index` ou aquele pipeline
+        não tiver sido executado ainda (não existir histórico para ser recuperado).
+
+        Além disso, a seleção das melhores features é um processo opcional, se não for definida uma implementação no
+        pipeline esse processo não será realizado.
+
+        :param pipeline: Pipeline que está sendo executado
         """
+
         if self.history_index is None or not pipeline.history_manager.has_history():
             if pipeline.feature_searcher is None:
                 self.data_x_best_features = self.data_x
@@ -122,12 +126,28 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
 
                 self.data_x_best_features = features
 
-    def _process_hyper_params_search(self, pipeline: ScikitLearnPipeline) -> ScikitLearnSearcher | None:
+    def __get_dataframe_from_scaled_data(self):
         """
-        Realiza a busca de hiperparâmetros para o pipeline especificado, se não houver histórico a ser carregado.
+        Função utilizada apenas para retornar um DataFrame dos dados após o scaler ter sido aplicado. Isso possibilita
+        a seleção de features ocorrer normalmente pois ela espera os dados nesse formado e 'escalar' eles transforma-os
+        em um outro tipo de estrutura.
 
-        :param pipeline: O pipeline que contém a lógica de busca de hiperparâmetros.
-        :return: O objeto Searcher resultante da busca, ou None se estiver carregando do histórico.
+        A criação do DataFrame só ocorrerá se `data_x_scaled` tiver valor definido, ou seja, foi realizada a execução
+        do scaler.
+        """
+        if self.data_x_scaled is not None:
+            return pd.DataFrame(self.data_x_scaled, columns=self.data_x.columns)
+        else:
+            return self.data_x
+
+    def __process_hyper_params_search(self, pipeline: ScikitLearnPipeline) -> ScikitLearnSearcher | None:
+        """
+        Realiza a busca de hiperparâmetros de acordo com o pipeline.
+
+        Somente é executada a busca dos hiperparâmetros quando não for fornecido `history_index` ou aquele pipeline não
+        tiver sido executado ainda (não existir histórico para ser recuperado).
+
+        :param pipeline: Pipeline que está sendo executado
         """
         if self.history_index is None or not pipeline.history_manager.has_history():
             return pipeline.params_searcher.search_hyper_parameters(
@@ -141,28 +161,34 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
         else:
             return None
 
-    def _process_validation(self, pipeline: ScikitLearnPipeline, search_cv: ScikitLearnSearcher) -> ScikitLearnCrossValidationResult:
+    def __process_validation(self, pipeline: ScikitLearnPipeline, search_cv: ScikitLearnSearcher) -> ScikitLearnCrossValidationResult:
         """
-        Valida o pipeline usando os dados e a lógica de validação apropriados.
+        Realiza a validação do modelo de acordo com o pipeline.
 
-        :param pipeline: O pipeline a ser validado.
-        :param search_cv: O objeto Searcher resultante da busca de hiperparâmetros.
+        Somente é executada a validação quando não for fornecido `history_index` ou aquele pipeline não tiver sido
+        executado ainda (não existir histórico para ser recuperado).
+
+        :param pipeline: Pipeline que está sendo executado
+        :param search_cv: Retorno da busca dos melhores hiperparâmetros
         """
-        if search_cv is None:
-            return pipeline.history_manager.load_validation_result_from_history(self.history_index)
-        else:
+        if self.history_index is None or not pipeline.history_manager.has_history():
             return pipeline.validator.validate(searcher=search_cv,
                                                data_x=self.data_x_best_features,
                                                data_y=self.data_y,
                                                scoring=self.scoring,
                                                cv=self.cv)
+        else:
+            return pipeline.history_manager.load_validation_result_from_history(self.history_index)
 
-    def _save_data_in_history(self,
-                              pipeline: ScikitLearnPipeline,
-                              result: ScikitLearnCrossValidationResult,
-                              searcher: ScikitLearnSearcher):
+    def __save_data_in_history(self,
+                               pipeline: ScikitLearnPipeline,
+                               result: ScikitLearnCrossValidationResult,
+                               searcher: ScikitLearnSearcher):
         """
-        Salva os resultados da validação no gerenciador de histórico, se a opção de salvar estiver habilitada.
+        Realiza a persistência das informações de execução no arquivo de histórico de acordo com o pipeline.
+
+        Somente serão salvas as informações se `save_history` for True e não for uma execução baseada em dados do histórico
+        ou aquele pipeline não ter sido executado ainda (não existir histórico para ser recuperado).
 
         :param pipeline: O pipeline que gerou os resultados.
         :param result: O resultado da validação a ser salvo.
@@ -180,40 +206,23 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
                                                  cv_results=searcher.cv_results_,
                                                  scaler=pipeline.scaler)
 
-    def _calculate_processes_time(self, validation_result_dictionary: dict, pipeline: ScikitLearnPipeline):
-        """
-        Calcula e formata os tempos de execução e os adiciona às métricas de desempenho.
-
-        :param validation_result_dictionary: Dicionário contendo as métricas de desempenho.
-        :param pipeline: O pipeline que contém as informações de tempo.
-        """
+    def _calculate_processes_time(self, execution_data_dictionary: dict, pipeline: ScikitLearnPipeline):
         pre_processing_time, feature_selection_time, search_time, validation_time = pipeline.get_execution_times()
 
-        validation_result_dictionary['pre_processing_time'] = DateTimeUtils.format_time(pre_processing_time)
-        validation_result_dictionary['feature_selection_time'] = DateTimeUtils.format_time(feature_selection_time)
-        validation_result_dictionary['search_time'] = DateTimeUtils.format_time(search_time)
-        validation_result_dictionary['validation_time'] = DateTimeUtils.format_time(validation_time)
+        execution_data_dictionary['pre_processing_time'] = DateTimeUtils.format_time(pre_processing_time)
+        execution_data_dictionary['feature_selection_time'] = DateTimeUtils.format_time(feature_selection_time)
+        execution_data_dictionary['search_time'] = DateTimeUtils.format_time(search_time)
+        execution_data_dictionary['validation_time'] = DateTimeUtils.format_time(validation_time)
 
-    def _load_processes_time_from_history(self, validation_result_dictionary: dict, pipeline: ScikitLearnPipeline):
-        """
-        Carrega os tempos de execução do histórico e os adiciona às métricas de desempenho.
-
-        :param validation_result_dictionary: Dicionário contendo as métricas de desempenho.
-        :param pipeline: O pipeline cujas informações estão sendo carregadas.
-        """
+    def _load_processes_time_from_history(self, execution_data_dictionary: dict, pipeline: ScikitLearnPipeline):
         history_dict = pipeline.history_manager.get_dictionary_from_params_json(self.history_index)
 
-        validation_result_dictionary['pre_processing_time'] = history_dict['pre_processing_time']
-        validation_result_dictionary['feature_selection_time'] = history_dict['feature_selection_time']
-        validation_result_dictionary['search_time'] = history_dict['feature_selection_time']
-        validation_result_dictionary['validation_time'] = history_dict['feature_selection_time']
+        execution_data_dictionary['pre_processing_time'] = history_dict['pre_processing_time']
+        execution_data_dictionary['feature_selection_time'] = history_dict['feature_selection_time']
+        execution_data_dictionary['search_time'] = history_dict['feature_selection_time']
+        execution_data_dictionary['validation_time'] = history_dict['feature_selection_time']
 
     def _show_results(self) -> DataFrame:
-        """
-        Exibe os resultados em um formato tabular e retorna um DataFrame dos resultados.
-
-        :return: DataFrame contendo os resultados dos pipelines processados.
-        """
         df_results = pd.DataFrame(self.results)
         df_results = df_results.sort_values(by=['mean', 'median', 'standard_deviation'], ascending=[False, False, True])
 
@@ -222,11 +231,6 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
         return df_results
 
     def _save_best_model(self, df_results: DataFrame):
-        """
-        Salva o melhor estimador no gerenciador de histórico, se a opção de salvar estiver habilitada.
-
-        :param df_results: DataFrame contendo os resultados dos pipelines.
-        """
         pipeline_not_executed = self._get_has_pipeline_not_executed()
 
         if self.save_history and (self.history_index is None or pipeline_not_executed):
@@ -248,18 +252,11 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
                                              scaler=dict_history['scaler'])
 
 
-    def _is_best_pipeline(self, df: DataFrame, pipe: ScikitLearnPipeline):
-        """
-        Verifica se o pipeline é o melhor com base nos resultados.
-
-        :param df: DataFrame contendo os melhores resultados.
-        :param pipe: O pipeline a ser verificado.
-        :return: True se o pipeline for o melhor, False caso contrário.
-        """
+    def _is_best_pipeline(self, df_results: DataFrame, pipe: ScikitLearnPipeline):
         return (
-                df['estimator'].values[0] == type(pipe.estimator).__name__ and
-                df['data_pre_processor'].values[0] == type(pipe.data_pre_processor).__name__ and
-                df['feature_searcher'].values[0] == type(pipe.feature_searcher).__name__ and
-                df['params_searcher'].values[0] == type(pipe.params_searcher).__name__ and
-                df['validator'].values[0] == type(pipe.validator).__name__
+                df_results['estimator'].values[0] == type(pipe.estimator).__name__ and
+                df_results['data_pre_processor'].values[0] == type(pipe.data_pre_processor).__name__ and
+                df_results['feature_searcher'].values[0] == type(pipe.feature_searcher).__name__ and
+                df_results['params_searcher'].values[0] == type(pipe.params_searcher).__name__ and
+                df_results['validator'].values[0] == type(pipe.validator).__name__
         )

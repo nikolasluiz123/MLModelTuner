@@ -5,15 +5,21 @@ from wrappers.common.validator.common_additional_validator import CommonClassifi
 
 
 class KerasAdditionalClassifierValidator(CommonClassifierAdditionalValidator):
-
+    """
+    Implementação para realizar a validação adicional de uma rede neural de classificação.
+    """
     def __init__(self,
                  model_instance,
                  data_pre_processor: CommonDataPreProcessor,
                  show_graphics: bool = True):
+        """
+        :param model_instance: Instância do modelo que já passou pelos processos de treino e foi avaliado como o melhor
+                               modelo pelos processos comuns genéricos
+        """
         super().__init__(data_pre_processor, show_graphics)
         self.model_instance = model_instance
 
-    def validate(self, show_graphic: bool = False):
+    def validate(self):
         dataset = self.data_pre_processor.get_data_additional_validation()
         true_labels = []
 

@@ -5,6 +5,9 @@ from wrappers.keras.hyper_params_search.common_hyper_params_searcher import Kera
 
 
 class KerasHyperBandSearcher(KerasCommonHyperParamsSearcher):
+    """
+    Implementação wrapper da busca de hiperparâmetros utilizando Hyperband do Keras Tuner.
+    """
 
     def __init__(self,
                  objective: str | list[str],
@@ -17,6 +20,20 @@ class KerasHyperBandSearcher(KerasCommonHyperParamsSearcher):
                  max_epochs: int,
                  hyper_band_iterations: int,
                  log_level: int = 0):
+        """
+        :param factor: Define o fator pelo qual os recursos são reduzidos entre as rodadas dentro de cada execução.
+                       Este parâmetro controla a agressividade da redução, valores menores resultam em maior número de
+                       modelos avaliados inicialmente, enquanto valores maiores reduzem rapidamente o número de modelos
+                       testados.
+
+        :param max_epochs: Especifica o número máximo de épocas que um modelo pode usar durante a execução de cada tentativa.
+                           Este parâmetro define o limite superior do recurso que será alocado para os modelos mais
+                           promissores no final do processo.
+
+        :param hyper_band_iterations: Número de vezes que todas as tentativas serão executadas. Vamos supor que `factor`
+                                      foi definido como 3 e `max_epochs` foi definido como 10, serão executadas 30 tentativas,
+                                      o número definido nesse parâmetro é quantas vezes serão executadas essas 30 tentativas.
+        """
         super().__init__(objective, directory, project_name, epochs, batch_size, callbacks, log_level)
         self.factor = factor
         self.max_epochs = max_epochs

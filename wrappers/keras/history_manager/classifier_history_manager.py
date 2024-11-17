@@ -1,9 +1,9 @@
 from wrappers.common.history_manager.common_history_manager import CommonValResult
-from wrappers.keras.history_manager.common_history_manager import KerasHistoryManager
+from wrappers.keras.history_manager.common_history_manager import KerasCommonHistoryManager
 from wrappers.keras.validator.results.classifier_validation_result import KerasClassifierValidationResult
 
 
-class KerasClassifierHistoryManager(KerasHistoryManager[KerasClassifierValidationResult]):
+class KerasClassifierHistoryManager(KerasCommonHistoryManager[KerasClassifierValidationResult]):
 
     def load_validation_result_from_history(self, index: int = -1) -> CommonValResult:
         execution_data = self.get_dictionary_from_params_json(index)

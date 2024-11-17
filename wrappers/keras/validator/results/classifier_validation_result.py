@@ -4,6 +4,9 @@ from wrappers.keras.validator.results.common_validation_result import KerasValid
 
 
 class KerasClassifierValidationResult(KerasValidationResult):
+    """
+    Implementação de um objeto de resultado para validações de redes neurais de classificação.
+    """
 
     def append_data(self, pipeline_infos: dict[str, Any]) -> dict[str, Any]:
         pipeline_infos['mean_accuracy'] = self.history['mean_accuracy']

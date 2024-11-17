@@ -9,7 +9,7 @@ from wrappers.scikit_learn.hiper_params_search.common_hyper_params_searcher impo
 
 class ScikitLearnGridCVHyperParamsSearcher(ScikitLearnCommonHyperParamsSearcher):
     """
-    Implementação wrapper da busca GridSearchCV o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html>`_.
+    Implementação wrapper da busca GridSearchCV.
     """
 
     def __init__(self, n_jobs: int = -1, log_level: int = 0):
@@ -33,7 +33,7 @@ class ScikitLearnGridCVHyperParamsSearcher(ScikitLearnCommonHyperParamsSearcher)
 
 class ScikitLearnHalvingGridCVHyperParamsSearcher(ScikitLearnCommonHyperParamsSearcher):
     """
-    Implementação wrapper da busca GridSearchCV o qual é detalhado na `documentação do scikit-learn <https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.HalvingGridSearchCV.html>`_.
+    Implementação wrapper da busca HalvingGridSearchCV.
     """
 
     def __init__(self,
@@ -44,15 +44,15 @@ class ScikitLearnHalvingGridCVHyperParamsSearcher(ScikitLearnCommonHyperParamsSe
                  log_level: int = 0):
         """
         :param resource: Especifica o recurso a ser usado para avaliar o desempenho de cada combinação de hiperparâmetros.
-        Pode ser um número de amostras, tempo de treinamento ou qualquer outro recurso que se deseja limitar durante a
-        validação.
+                         Pode ser um número de amostras, tempo de treinamento ou qualquer outro recurso que se deseja limitar durante a
+                         validação.
 
         :param max_resources: Define a quantidade máxima do recurso que pode ser utilizado durante a execução. Se você
-        especificar max_resources=100, a busca usará no máximo 100 amostras (ou outra métrica definida em resource)
-        durante a validação de cada combinação.
+                              especificar max_resources=100, a busca usará no máximo 100 amostras (ou outra métrica definida em resource)
+                              durante a validação de cada combinação.
 
         :param min_resources: Determina a quantidade mínima do recurso que deve ser usada na primeira iteração da busca.
-        É o ponto de partida que garante que a busca comece com uma base sólida de amostras ou recursos.
+                              É o ponto de partida que garante que a busca comece com uma base sólida de amostras ou recursos.
         """
 
         super().__init__(n_jobs, log_level)

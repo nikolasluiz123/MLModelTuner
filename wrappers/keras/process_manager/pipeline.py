@@ -2,7 +2,7 @@ from keras_tuner import HyperModel
 
 from wrappers.common.data_pre_processor.common_data_pre_processor import CommonDataPreProcessor
 from wrappers.common.process_manager.common_pipeline import CommonPipeline
-from wrappers.keras.history_manager.common_history_manager import KerasHistoryManager
+from wrappers.keras.history_manager.common_history_manager import KerasCommonHistoryManager
 from wrappers.keras.hyper_params_search.common_hyper_params_searcher import KerasCommonHyperParamsSearcher
 from wrappers.keras.validator.basic_classifier_validator import KerasBasicClassifierValidator
 
@@ -14,14 +14,14 @@ class KerasPipeline(CommonPipeline):
                  data_pre_processor: CommonDataPreProcessor,
                  params_searcher: KerasCommonHyperParamsSearcher,
                  validator: KerasBasicClassifierValidator,
-                 history_manager: KerasHistoryManager):
+                 history_manager: KerasCommonHistoryManager):
         self.model = model
         self.data_pre_processor = data_pre_processor
         self.params_searcher = params_searcher
         self.validator = validator
         self.history_manager = history_manager
 
-    def get_dict_pipeline_data(self) -> dict[str, str]:
+    def get_dictionary_pipeline_data(self) -> dict[str, str]:
         return {
             'model': type(self.model).__name__,
             'data_pre_processor': type(self.data_pre_processor).__name__,

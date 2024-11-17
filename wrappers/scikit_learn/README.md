@@ -3,6 +3,12 @@
 Esse módulo tem como objetivo referenciar todas as implementações para a busca dos melhores 
 modelos existentes dentro do [scikit-learn](https://scikit-learn.org/stable/).
 
+### Pré-Processamento dos Dados
+
+Antes de realizar qualquer processo precisamos tratar e organizar os dados que serão utilizados,
+seja lá de onde eles forem obtidos. Internamente essa é o primeiro passo executado e ele é detalhado
+dentro [desse readme]().
+
 ### Busca das Features
 
 O scikit-learn fornece diversas implementações de busca das melhores features que podem ser

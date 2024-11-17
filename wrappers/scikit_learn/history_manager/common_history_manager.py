@@ -9,24 +9,13 @@ from wrappers.common.history_manager.common_history_manager import CommonHistory
 
 class ScikitLearnCommonHistoryManager(CommonHistoryManager[CommonValResult], ABC):
     """
-    Classe utilizada para gerenciamento do histórico das execuções.
-
-    Os resultados das execuções são salvos em um diretório especificado e em um arquivo JSON com o nome desejado. A
-    estrutura do JSON é uma lista e os campos inseridos nele dependem do objeto `Result` e de quais campos desse objeto
-    for julgado relevante manter no histórico.
-
-    Além de salvar os dados do objeto de resultado da validação, também salvamos o modelo em si, utilizando o pickle. Dessa
-    forma, é possível reutilizar o modelo treinado e validado para algum fim específico.
+    Implementação comum utilizada para manipular os dados históricos das execuções dos modelos baseados no scikit-learn.
     """
 
     def __init__(self, output_directory: str, models_directory: str, best_params_file_name: str, cv_results_file_name: str):
         """
-        Inicializa o HistoryManager com os diretórios e nome de arquivo apropriados.
-
-        :param output_directory: Diretório de histórico que vai armazenar o arquivo JSON e os modelos.
-        :param models_directory: Diretório específico para os modelos.
-        :param best_params_file_name: Nome do arquivo JSON o qual conterá os parâmetros e resultados.
-        :param cv_results_file_name: Nome do arquivo JSON que conterá as combinações de valores dos parâmetros da execução.
+        :param cv_results_file_name: Nome do arquivo JSON que conterá as combinações de valores dos parâmetros testados
+                                     durante a busca dos melhores hiperparâmetros do modelo.
         """
         super().__init__(output_directory, models_directory, best_params_file_name)
         self.cv_results_file_name = cv_results_file_name
@@ -43,42 +32,49 @@ class ScikitLearnCommonHistoryManager(CommonHistoryManager[CommonValResult], ABC
                     features: list[str],
                     scaler: StandardScaler | None):
         """
-        Função que deve ser implementada para salvar os dados do objeto `Result` no arquivo JSON.
+        Função que salva todas as informações relevantes ao histórico.
 
         :param validation_result: Objeto com os dados da validação do melhor modelo encontrado.
         :param cv_results: Dicionário obtido da implementação de busca de parâmetros com as combinações testadas.
-        :param feature_selection_time: Implementação de seleção de features utilizada.
-        :param search_time: Tempo que demorou o processamento de busca de parâmetros.
-        :param validation_time: Tempo que demorou o processamento de validação do melhor modelo.
+        :param pre_processing_time: Tempo que levou o pré-processamento dos dados.
+        :param feature_selection_time: Tempo que levou a seleção das melhores features.
+        :param search_time: Tempo que levou o processamento de busca de parâmetros.
+        :param validation_time: Tempo que levou o processamento de validação do melhor modelo.
         :param scoring: Métrica de validação utilizada.
         :param features: Features selecionadas pela implementação.
         :param scaler: Implementação opcional utilizada para escalar os dados
         """
 
     def get_dictionary_from_cv_results_json(self, index: int):
+        """
+        Função que retorna um dicionário com as combinações de valores de parâmetros testadas pela implementação de busca.
+
+        Os dados são recuperados do arquivo JSON e retornados como dicionário.
+        """
+
         return self._get_dictionary_from_json(index, self.cv_results_file_name)
 
-    def _save_model(self, estimator):
+    def _save_model(self, model):
         """
         Salva o modelo treinado utilizando pickle.
 
-        O modelo é salvo em um arquivo .pkl no diretório específico para modelos,
-        com um nome baseado no tamanho do histórico atual.
+        O modelo é salvo em um arquivo .pkl no diretório específico para modelos, com um nome baseado no tamanho do
+        histórico atual.
 
-        :param estimator: O modelo a ser salvo.
+        :param model: O modelo a ser salvo.
         """
         history_len = self.get_history_len()
         output_path = os.path.join(self.models_directory, f"model_{history_len}.pkl")
 
         with open(output_path, 'wb') as file:
-            pickle.dump(estimator, file)
+            pickle.dump(model, file)
 
     def get_saved_model(self, version: int):
         """
-        Recupera um modelo salvo a partir de seu índice/version.
+        Retorna um modelo salvo a partir da versão.
 
         :param version: O índice do modelo a ser recuperado.
-        :return: O modelo recuperado.
+
         :raises FileNotFoundError: Se o modelo não for encontrado.
         """
         output_path = os.path.join(self.models_directory, f"model_{version}.pkl")

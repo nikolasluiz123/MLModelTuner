@@ -8,11 +8,27 @@ from wrappers.common.validator.results.common_validation_result import CommonVal
 CommonValResult = TypeVar('CommonValResult', bound=CommonValidationResult)
 
 class CommonHistoryManager(ABC, Generic[CommonValResult]):
+    """
+    Implementação base para o gerenciadores de histórico, contendo as implementações padrões.
 
+    A manutenção do histórico é baseada em persistir os dados das execuções em uma lista no formato JSON,
+    dessa forma, deve ser possível reproduzir uma execução que esteja nesse histórico com o intuito de visualizar novamente
+    os dados. Além disso, se for preciso criar algum tipo de análise dos dados das execuções realizadas seria possível
+    criar uma implementação específica para isso e os dados viriam desse histórico.
+
+    Além de manter os dados das execuções mantemos os modelos treinados e validados pelos processos internos, dessa forma,
+    é possível recuperar esse modelo e utilizá-lo para algum fim específico.
+    """
     def __init__(self,
                  output_directory: str,
                  models_directory: str,
                  best_params_file_name: str):
+        """
+        :param output_directory: Diretório principal onde todos os dados do histórico serão armazenados
+        :param models_directory: Diretório criado abaixo de `output_directory` especificamente para armazenar os modelos
+        :param best_params_file_name: Nome do arquivo JSON que será criado para armazenar a lista de execuções
+        """
+
         self.output_directory = output_directory
         self.models_directory = os.path.join(self.output_directory, models_directory)
         self.best_params_file_name = best_params_file_name
@@ -22,19 +38,29 @@ class CommonHistoryManager(ABC, Generic[CommonValResult]):
     @abstractmethod
     def load_validation_result_from_history(self, index: int = -1) -> CommonValResult:
         """
-        Função abstrata para carregar um resultado de validação do histórico.
+        Função abstrata para carregar um resultado de validação do histórico. Deve retornar o objeto com os dados da
+        validação do modelo que foi previamente executada a partir dos dados históricos.
 
-        :param index: Índice do resultado a ser carregado. Se -1, o último resultado é retornado.
-        :return: O objeto Result correspondente ao histórico solicitado.
+        :param index: Índice do resultado a ser carregado. Por padrão retorna o último resultado da lista que
+                      representaria a execução mais recente
         """
 
     @abstractmethod
     def _save_model(self, model):
-        ...
+        """
+        Função que deve ser implementada com os processos necessários para salvar o modelo treinado e validado em um
+        arquivo no formado que funciona melhor para cada biblioteca.
+
+        :param model Representação do modelo da biblioteca que será salvo como arquivo
+        """
 
     @abstractmethod
     def get_saved_model(self, version: int):
-        ...
+        """
+        Função responsável por retornar um modelo que já tenha sido salvo como arquivo.
+
+        :param version: Versão do modelo que deseja recuperar, isso normalmente é concatenado no nome do arquivo ao salvar.
+        """
 
     def _create_output_dir(self):
         """
@@ -65,16 +91,19 @@ class CommonHistoryManager(ABC, Generic[CommonValResult]):
         with open(output_path, 'w') as file:
             json.dump(data, file, indent=4)
 
-    def get_dictionary_from_params_json(self, index: int):
+    def get_dictionary_from_params_json(self, index: int) -> dict:
+        """
+        Função que retorna um dicionário que contém os dados de uma execução específica realizada.
+        """
         return self._get_dictionary_from_json(index, self.best_params_file_name)
 
-    def _get_dictionary_from_json(self, index: int, file_name: str):
+    def _get_dictionary_from_json(self, index: int, file_name: str) -> dict:
         """
-        Obtém um dicionário de resultados a partir do arquivo JSON.
+        Retorna um dicionário de um índice específico obtido de um arquivo JSON que representa uma lista.
 
         :param index: Índice do resultado a ser recuperado.
         :param file_name: Nome do arquivo JSON a ser utilizado.
-        :return: Dicionário contendo os dados do resultado.
+
         :raises FileNotFoundError: Se o arquivo JSON não for encontrado.
         :raises IndexError: Se o índice estiver fora dos limites do histórico.
         """
@@ -95,17 +124,13 @@ class CommonHistoryManager(ABC, Generic[CommonValResult]):
 
     def has_history(self) -> bool:
         """
-        Verifica se já existem entradas no histórico de resultados.
-
-        :return: True se o histórico contiver entradas, caso contrário False.
+        Retorna se já existem entradas no histórico de resultados.
         """
         return self.get_history_len() > 0
 
     def get_history_len(self) -> int:
         """
         Retorna o número de entradas no histórico de resultados.
-
-        :return: O comprimento do histórico (número de entradas no arquivo JSON).
         """
         output_path = os.path.join(self.output_directory, f"{self.best_params_file_name}.json")
 

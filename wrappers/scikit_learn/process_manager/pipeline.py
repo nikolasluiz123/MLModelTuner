@@ -13,12 +13,7 @@ from wrappers.scikit_learn.validator.common_validator import ScikitLearnCommonVa
 
 class ScikitLearnPipeline(CommonPipeline):
     """
-    Representa um pipeline de machine learning que combina estimadores,
-    busca de hiperparâmetros, seleção de características e validação de modelos.
-
-    Esta classe fornece uma estrutura para integrar todos os componentes
-    necessários para a modelagem e validação, permitindo uma execução fluida
-    de processos de machine learning.
+    Implementação de pipeline específica para buscar o melhor modelo do scikit-learn
     """
 
     def __init__(self,
@@ -51,14 +46,7 @@ class ScikitLearnPipeline(CommonPipeline):
         self.history_manager = history_manager
         self.validator = validator
 
-    def get_dict_pipeline_data(self) -> dict[str, Any]:
-        """
-        Retorna um dicionário com informações sobre o pipeline, incluindo
-        tipos dos componentes utilizados.
-
-        :return: Dicionário contendo os nomes dos tipos de cada componente
-                 do pipeline.
-        """
+    def get_dictionary_pipeline_data(self) -> dict[str, Any]:
         return {
             'estimator': type(self.estimator).__name__,
             'scaler': type(self.scaler).__name__,

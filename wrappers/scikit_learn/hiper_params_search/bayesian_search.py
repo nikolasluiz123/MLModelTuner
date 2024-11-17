@@ -8,7 +8,7 @@ from wrappers.scikit_learn.hiper_params_search.common_hyper_params_searcher impo
 
 class ScikitLearnBayesianHyperParamsSearcher(ScikitLearnCommonHyperParamsSearcher):
     """
-    Implementação wrapper da busca BayesSearchCV o qual é detalhado na `documentação do scikit-optimize <https://scikit-optimize.github.io/stable/modules/generated/skopt.BayesSearchCV.html>`_.
+    Implementação wrapper da busca BayesSearchCV.
     """
 
     def __init__(self, number_iterations: int, n_jobs: int = -1, log_level: int = 0):

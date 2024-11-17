@@ -6,6 +6,10 @@ from wrappers.keras.process_manager.common_multi_process_manager import KerasMul
 
 
 class KerasClassifierMultProcessManager(KerasMultiProcessManager):
+    """
+    Implementação de gerenciador de processos específica para classificação, isso é necessário devido aos campos retornados
+    na validação desse tipo de modelo de rede reural.
+    """
 
     def _show_results(self) -> DataFrame:
         df_results = pd.DataFrame(self.results)

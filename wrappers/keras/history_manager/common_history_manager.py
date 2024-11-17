@@ -11,7 +11,7 @@ from wrappers.keras.validator.results.common_validation_result import KerasValid
 
 KerasValResult = TypeVar('KerasValResult', bound=KerasValidationResult)
 
-class KerasHistoryManager(CommonHistoryManager[KerasValResult], ABC):
+class KerasCommonHistoryManager(CommonHistoryManager[KerasValResult], ABC):
 
     def __init__(self,
                  output_directory: str,

@@ -4,6 +4,9 @@ from wrappers.common.validator.results.common_validation_result import CommonVal
 
 
 class ScikitLearnCrossValidationResult(CommonValidationResult):
+    """
+    Implementação do objeto de validação cruzada utilizada nos processos que se baseiam nas implementações do scikit-learn.
+    """
 
     def __init__(self,
                  mean: float,
@@ -14,6 +17,17 @@ class ScikitLearnCrossValidationResult(CommonValidationResult):
                  min_max_score: tuple[float, float],
                  estimator,
                  scoring: str):
+        """
+        :param mean: Média dos resultados.
+        :param standard_deviation: Desvio padrão dos resultados.
+        :param median: Mediana dos resultados.
+        :param variance: Variância dos resultados.
+        :param standard_error: Erro padrão dos resultados.
+        :param min_max_score: Valor mínimo e máximo dos resultados.
+        :param estimator: Modelo avaliado.
+        :param scoring: Critério de avaiação, por exemplo, accuracy (classificação) ou neg_mean_squared_error (regressão)
+        """
+
         self.mean = mean
         self.standard_deviation = standard_deviation
         self.median = median
