@@ -3,7 +3,7 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.preprocessing import StandardScaler
 
 from examples.scikit_learn.regression.pre_processor import ScikitLearnWorkoutPreProcessorExample
-from wrappers.scikit_learn.hiper_params_search.random_searcher import ScikitLearnRandomCVHyperParamsSearcher
+from wrappers.scikit_learn.hyper_params_search.random_searcher import ScikitLearnRandomCVHyperParamsSearcher
 from wrappers.scikit_learn.history_manager.cross_validation_history_manager import \
     ScikitLearnCrossValidationHistoryManager
 from wrappers.scikit_learn.process_manager.multi_process_manager import ScikitLearnMultiProcessManager

@@ -3,7 +3,7 @@ import time
 from sklearn.experimental import enable_halving_search_cv
 from sklearn.model_selection import GridSearchCV, HalvingGridSearchCV
 
-from wrappers.scikit_learn.hiper_params_search.common_hyper_params_searcher import ScikitLearnCommonHyperParamsSearcher, \
+from wrappers.scikit_learn.hyper_params_search.common_hyper_params_searcher import ScikitLearnCommonHyperParamsSearcher, \
     ScikitLearnSearcher
 
 

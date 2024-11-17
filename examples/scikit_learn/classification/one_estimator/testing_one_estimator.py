@@ -3,7 +3,7 @@ from sklearn.tree import DecisionTreeClassifier
 
 from examples.scikit_learn.classification.pre_processor import ScikitLearnTitanicPreProcessorExample
 from wrappers.scikit_learn.features_search.rfe_searcher import ScikitLearnRecursiveFeatureCVSearcher
-from wrappers.scikit_learn.hiper_params_search.random_searcher import ScikitLearnRandomCVHyperParamsSearcher
+from wrappers.scikit_learn.hyper_params_search.random_searcher import ScikitLearnRandomCVHyperParamsSearcher
 from wrappers.scikit_learn.history_manager.cross_validation_history_manager import \
     ScikitLearnCrossValidationHistoryManager
 from wrappers.scikit_learn.process_manager.multi_process_manager import ScikitLearnMultiProcessManager

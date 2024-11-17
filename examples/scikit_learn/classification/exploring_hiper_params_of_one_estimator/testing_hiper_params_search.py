@@ -8,10 +8,10 @@ from skopt.space import Real, Categorical, Integer
 
 from examples.scikit_learn.classification.pre_processor import ScikitLearnTitanicPreProcessorExample
 from wrappers.scikit_learn.features_search.select_k_best_searcher import ScikitLearnSelectKBestSearcher
-from wrappers.scikit_learn.hiper_params_search.bayesian_search import ScikitLearnBayesianHyperParamsSearcher
-from wrappers.scikit_learn.hiper_params_search.grid_searcher import ScikitLearnGridCVHyperParamsSearcher, \
+from wrappers.scikit_learn.hyper_params_search.bayesian_search import ScikitLearnBayesianHyperParamsSearcher
+from wrappers.scikit_learn.hyper_params_search.grid_searcher import ScikitLearnGridCVHyperParamsSearcher, \
     ScikitLearnHalvingGridCVHyperParamsSearcher
-from wrappers.scikit_learn.hiper_params_search.random_searcher import ScikitLearnRandomCVHyperParamsSearcher, \
+from wrappers.scikit_learn.hyper_params_search.random_searcher import ScikitLearnRandomCVHyperParamsSearcher, \
     ScikitLearnHalvingRandomCVHyperParamsSearcher
 from wrappers.scikit_learn.history_manager.cross_validation_history_manager import \
     ScikitLearnCrossValidationHistoryManager

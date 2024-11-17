@@ -6,7 +6,7 @@ from tabulate import tabulate
 
 from wrappers.common.process_manager.common_process_manager import CommonMultiProcessManager
 from wrappers.common.utils.date_time_utils import DateTimeUtils
-from wrappers.scikit_learn.hiper_params_search.common_hyper_params_searcher import ScikitLearnSearcher
+from wrappers.scikit_learn.hyper_params_search.common_hyper_params_searcher import ScikitLearnSearcher
 from wrappers.scikit_learn.history_manager.common_history_manager import ScikitLearnCommonHistoryManager
 from wrappers.scikit_learn.process_manager.pipeline import ScikitLearnPipeline
 from wrappers.scikit_learn.validator.results.cross_validation_result import ScikitLearnCrossValidationResult
