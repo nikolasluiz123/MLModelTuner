@@ -74,6 +74,7 @@ class KerasCommonHistoryManager(CommonHistoryManager[KerasValResult], ABC):
 
     def delete_trials(self, directory: str, project_name: str):
         trials_path = os.path.join(directory, project_name)
-        shutil.rmtree(trials_path)
 
-        print(f'Diretório "{trials_path}" e todos os arquivos/subdiretórios foram removidos com sucesso.')
+        if os.path.exists(trials_path):
+            shutil.rmtree(trials_path)
+            print(f'Diretório "{trials_path}" e todos os arquivos/subdiretórios foram removidos com sucesso.')

@@ -75,7 +75,7 @@ manager = KerasClassifierMultProcessManager(
     pipelines=pipeline,
     seed=seed,
     history_manager=history_manager_best_model,
-    history_index=-1,
+    history_index=None,
     save_history=True,
     delete_trials_after_execution=True
 )
