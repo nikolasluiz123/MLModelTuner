@@ -12,10 +12,14 @@ setup(
     url='https://github.com/nikolasluiz123/MLModelTunner',
     packages=find_packages(),
     install_requires=[
-        'contourpy', 'cycler', 'fonttools', 'joblib', 'kiwisolver', 'matplotlib',
-        'numpy', 'packaging', 'pandas', 'pillow', 'pyaml', 'pyparsing', 'python-dateutil',
-        'pytz', 'PyYAML', 'scikit-learn', 'scikit-optimize', 'scipy', 'seaborn', 'six',
-        'tabulate', 'threadpoolctl', 'tzdata', 'xgboost', 'keras', 'keras-tuner'
+        'absl-py', 'astunparse', 'certifi', 'charset-normalizer', 'colorama', 'contourpy', 'cycler', 'flatbuffers',
+        'fonttools', 'gast', 'google-pasta', 'grpcio', 'h5py', 'idna', 'joblib', 'kagglehub', 'keras', 'keras-tuner',
+        'kiwisolver', 'kt-legacy', 'libclang', 'Markdown', 'markdown-it-py', 'MarkupSafe', 'matplotlib', 'mdurl',
+        'ml-dtypes', 'namex', 'numpy', 'opencv-python', 'opt_einsum', 'optree', 'packaging', 'pandas', 'pillow',
+        'protobuf', 'pyaml', 'Pygments', 'pyparsing', 'python-dateutil', 'pytz', 'PyYAML', 'requests', 'rich',
+        'scikit-learn', 'scikit-optimize', 'scipy', 'seaborn', 'setuptools-scm', 'six', 'tabulate', 'tensorboard',
+        'tensorboard-data-server', 'tensorflow', 'tensorflow-io-gcs-filesystem', 'tensorflow_intel', 'termcolor',
+        'threadpoolctl', 'tomli', 'tqdm', 'typing_extensions', 'tzdata', 'urllib3', 'Werkzeug', 'wrapt', 'xgboost'
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
