@@ -20,16 +20,24 @@ class CommonClassifierAdditionalValidator:
     def __init__(self,
                  data_pre_processor: CommonDataPreProcessor,
                  confusion_matrix_file_name: str,
-                 show_graphics: bool = True):
+                 show_graphics: bool = True,
+                 validate_with_train_data: bool = False):
         """
         :param data_pre_processor: Implementação de :class:`wrappers.common.data_pre_processor.common_data_pre_processor.CommonDataPreProcessor`
         para pré-processar os dados para realizar a validação do modelo.
 
-        :param show_graphics: Flag que indica se deve ou não serem exibidos os gráficos gerados nessa validação adicional. Por padrão todos os gráficos são salvos como imagem, isso torna possivel não exibir em tempo de execução.
+        :param confusion_matrix_file_name: Nome utilizado no arquivo svg da matriz de confusão
+
+        :param show_graphics: Flag que indica se deve ou não serem exibidos os gráficos gerados nessa validação adicional.
+                              Por padrão todos os gráficos são salvos como imagem, isso torna possivel não exibir em tempo de execução.
+
+        :param validate_with_train_data: Flag que indica se deve ser utilizado dados de treino ou validação para o processo
+                                         da validação adicional
         """
         self.data_pre_processor = data_pre_processor
         self.confusion_matrix_file_name = confusion_matrix_file_name
         self.show_graphics = show_graphics
+        self.validate_with_train_data = validate_with_train_data
 
     @abstractmethod
     def validate(self):

@@ -15,19 +15,23 @@ class ScikitLearnClassifierAdditionalValidator(CommonClassifierAdditionalValidat
                  data_pre_processor: CommonDataPreProcessor,
                  confusion_matrix_file_name: str,
                  random_state=42,
-                 show_graphics: bool = True):
+                 show_graphics: bool = True,
+                 validate_with_train_data: bool = False):
         """
         :param estimator: Modelo do scikit-learn que será avaliado
         :param: random_state: Seed utilizada no split dos dados. É necessária, pois a validação adicional ocorre fora do
                               ProcessManager.
         """
 
-        super().__init__(data_pre_processor, confusion_matrix_file_name, show_graphics)
+        super().__init__(data_pre_processor, confusion_matrix_file_name, show_graphics, validate_with_train_data)
         self.estimator = estimator
         self.random_state = random_state
 
     def validate(self):
-        data_x, data_y = self.data_pre_processor.get_data_additional_validation()
+        if self.validate_with_train_data:
+            data_x, data_y = self.data_pre_processor.get_train_data()
+        else:
+            data_x, data_y = self.data_pre_processor.get_data_additional_validation()
 
         x_train, x_test, y_train, y_test = train_test_split(data_x,
                                                             data_y,

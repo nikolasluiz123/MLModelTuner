@@ -12,16 +12,21 @@ class KerasAdditionalClassifierValidator(CommonClassifierAdditionalValidator):
                  model_instance,
                  data_pre_processor: CommonDataPreProcessor,
                  confusion_matrix_file_name: str,
-                 show_graphics: bool = True):
+                 show_graphics: bool = True,
+                 validate_with_train_data: bool = False):
         """
         :param model_instance: Instância do modelo que já passou pelos processos de treino e foi avaliado como o melhor
                                modelo pelos processos comuns genéricos
         """
-        super().__init__(data_pre_processor, confusion_matrix_file_name, show_graphics)
+        super().__init__(data_pre_processor, confusion_matrix_file_name, show_graphics, validate_with_train_data)
         self.model_instance = model_instance
 
     def validate(self):
-        dataset = self.data_pre_processor.get_data_additional_validation()
+        if self.validate_with_train_data:
+            _, dataset = self.data_pre_processor.get_train_data()
+        else:
+            dataset = self.data_pre_processor.get_data_additional_validation()
+
         true_labels = []
 
         for _, label in dataset:
