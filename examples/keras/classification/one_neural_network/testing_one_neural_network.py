@@ -90,5 +90,6 @@ result = history_manager_best_model.load_validation_result_from_history(-1)
 final_model = history_manager_best_model.get_saved_model(history_manager_best_model.get_history_len())
 
 additional_validator = KerasAdditionalClassifierValidator(model_instance=final_model,
-                                                          data_pre_processor=pre_processor)
+                                                          data_pre_processor=pre_processor,
+                                                          confusion_matrix_file_name='confusion_matrix')
 additional_validator.validate()

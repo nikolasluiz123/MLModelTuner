@@ -141,5 +141,9 @@ manager.process_pipelines()
 ########################################################################################################################
 
 best_estimator = best_params_history_manager.load_validation_result_from_history().estimator
-final_validator = ScikitLearnClassifierAdditionalValidator(estimator=best_estimator, data_pre_processor=pre_processor)
+final_validator = ScikitLearnClassifierAdditionalValidator(
+    estimator=best_estimator,
+    data_pre_processor=pre_processor,
+    confusion_matrix_file_name='confusion_matrix'
+)
 final_validator.validate()

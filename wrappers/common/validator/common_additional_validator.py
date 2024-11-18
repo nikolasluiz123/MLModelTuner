@@ -17,7 +17,10 @@ class CommonClassifierAdditionalValidator:
     complemento, é recomendado que sejam feitas algumas validações adicionais com o melhor modelo encontrado.
     """
 
-    def __init__(self, data_pre_processor: CommonDataPreProcessor, show_graphics: bool = True):
+    def __init__(self,
+                 data_pre_processor: CommonDataPreProcessor,
+                 confusion_matrix_file_name: str,
+                 show_graphics: bool = True):
         """
         :param data_pre_processor: Implementação de :class:`wrappers.common.data_pre_processor.common_data_pre_processor.CommonDataPreProcessor`
         para pré-processar os dados para realizar a validação do modelo.
@@ -25,6 +28,7 @@ class CommonClassifierAdditionalValidator:
         :param show_graphics: Flag que indica se deve ou não serem exibidos os gráficos gerados nessa validação adicional. Por padrão todos os gráficos são salvos como imagem, isso torna possivel não exibir em tempo de execução.
         """
         self.data_pre_processor = data_pre_processor
+        self.confusion_matrix_file_name = confusion_matrix_file_name
         self.show_graphics = show_graphics
 
     @abstractmethod
@@ -74,7 +78,7 @@ class CommonClassifierAdditionalValidator:
         plt.ylabel('Classes Reais')
         plt.title('Matriz de Confusão')
 
-        plt.savefig(f'confusion_matrix.svg', format='svg')
+        plt.savefig(f'{self.confusion_matrix_file_name}.svg', format='svg')
 
         if self.show_graphics:
             plt.show()

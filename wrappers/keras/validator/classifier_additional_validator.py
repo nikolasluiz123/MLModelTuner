@@ -11,12 +11,13 @@ class KerasAdditionalClassifierValidator(CommonClassifierAdditionalValidator):
     def __init__(self,
                  model_instance,
                  data_pre_processor: CommonDataPreProcessor,
+                 confusion_matrix_file_name: str,
                  show_graphics: bool = True):
         """
         :param model_instance: Instância do modelo que já passou pelos processos de treino e foi avaliado como o melhor
                                modelo pelos processos comuns genéricos
         """
-        super().__init__(data_pre_processor, show_graphics)
+        super().__init__(data_pre_processor, confusion_matrix_file_name, show_graphics)
         self.model_instance = model_instance
 
     def validate(self):
