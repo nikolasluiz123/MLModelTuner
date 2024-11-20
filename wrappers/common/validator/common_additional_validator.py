@@ -1,14 +1,11 @@
 import os
+from abc import abstractmethod
 
 import pandas as pd
 import seaborn as sns
-
-from abc import abstractmethod
 from matplotlib import pyplot as plt
 from sklearn.metrics import classification_report, confusion_matrix
 from tabulate import tabulate
-
-from wrappers.common.data_pre_processor.common_data_pre_processor import CommonDataPreProcessor
 
 
 class CommonClassifierAdditionalValidator:
@@ -20,14 +17,12 @@ class CommonClassifierAdditionalValidator:
     """
 
     def __init__(self,
-                 data_pre_processor: CommonDataPreProcessor,
+                 data,
                  validation_results_directory: str,
                  prefix_file_names: str,
-                 show_graphics: bool = True,
-                 validate_with_train_data: bool = False):
+                 show_graphics: bool = True):
         """
-        :param data_pre_processor: Implementação de :class:`wrappers.common.data_pre_processor.common_data_pre_processor.CommonDataPreProcessor`
-        para pré-processar os dados para realizar a validação do modelo.
+        :param data: Dados que serão usados na validação
 
         :param prefix_file_names: Prefixo utilizado no nome de todos os arquivos que são salvos
 
@@ -35,15 +30,11 @@ class CommonClassifierAdditionalValidator:
 
         :param show_graphics: Flag que indica se deve ou não serem exibidos os gráficos gerados nessa validação adicional.
                               Por padrão todos os gráficos são salvos como imagem, isso torna possivel não exibir em tempo de execução.
-
-        :param validate_with_train_data: Flag que indica se deve ser utilizado dados de treino ou validação para o processo
-                                         da validação adicional
         """
-        self.data_pre_processor = data_pre_processor
+        self.data = data
         self.validation_results_directory = validation_results_directory
         self.prefix_file_names = prefix_file_names
         self.show_graphics = show_graphics
-        self.validate_with_train_data = validate_with_train_data
 
         self._create_output_dir()
 

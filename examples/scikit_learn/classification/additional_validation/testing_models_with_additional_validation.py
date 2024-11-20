@@ -143,8 +143,8 @@ manager.process_pipelines()
 best_estimator = best_params_history_manager.load_validation_result_from_history().estimator
 final_validator = ScikitLearnClassifierAdditionalValidator(
     estimator=best_estimator,
-    data_pre_processor=pre_processor,
     prefix_file_names='best_estimator',
-    validation_results_directory='additional_validations'
+    validation_results_directory='additional_validations',
+    data=pre_processor.get_data_additional_validation()
 )
 final_validator.validate()
