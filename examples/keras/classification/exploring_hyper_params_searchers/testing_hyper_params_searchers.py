@@ -120,7 +120,7 @@ manager = KerasClassifierMultProcessManager(
     pipelines=pipelines,
     seed=seed,
     history_manager=history_manager_best_model,
-    history_index=None,
+    history_index=-1,
     save_history=True,
     delete_trials_after_execution=True
 )
@@ -136,5 +136,6 @@ final_model = history_manager_best_model.get_saved_model(history_manager_best_mo
 
 additional_validator = KerasAdditionalClassifierValidator(model_instance=final_model,
                                                           data_pre_processor=pre_processor,
-                                                          confusion_matrix_file_name='confusion_matrix')
+                                                          prefix_file_names='final_model',
+                                                          validation_results_directory='additional_validations')
 additional_validator.validate()

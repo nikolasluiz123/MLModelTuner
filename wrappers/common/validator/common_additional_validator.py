@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import seaborn as sns
 
@@ -19,14 +21,17 @@ class CommonClassifierAdditionalValidator:
 
     def __init__(self,
                  data_pre_processor: CommonDataPreProcessor,
-                 confusion_matrix_file_name: str,
+                 validation_results_directory: str,
+                 prefix_file_names: str,
                  show_graphics: bool = True,
                  validate_with_train_data: bool = False):
         """
         :param data_pre_processor: Implementação de :class:`wrappers.common.data_pre_processor.common_data_pre_processor.CommonDataPreProcessor`
         para pré-processar os dados para realizar a validação do modelo.
 
-        :param confusion_matrix_file_name: Nome utilizado no arquivo svg da matriz de confusão
+        :param prefix_file_names: Prefixo utilizado no nome de todos os arquivos que são salvos
+
+        :param validation_results_directory: Diretório onde todos os resultados das validações serão salvas
 
         :param show_graphics: Flag que indica se deve ou não serem exibidos os gráficos gerados nessa validação adicional.
                               Por padrão todos os gráficos são salvos como imagem, isso torna possivel não exibir em tempo de execução.
@@ -35,9 +40,20 @@ class CommonClassifierAdditionalValidator:
                                          da validação adicional
         """
         self.data_pre_processor = data_pre_processor
-        self.confusion_matrix_file_name = confusion_matrix_file_name
+        self.validation_results_directory = validation_results_directory
+        self.prefix_file_names = prefix_file_names
         self.show_graphics = show_graphics
         self.validate_with_train_data = validate_with_train_data
+
+        self._create_output_dir()
+
+    def _create_output_dir(self):
+        """
+        Cria os diretórios de saída para as validações, caso não existam.
+        """
+        if not os.path.exists(self.validation_results_directory):
+            os.makedirs(self.validation_results_directory)
+
 
     @abstractmethod
     def validate(self):
@@ -46,8 +62,7 @@ class CommonClassifierAdditionalValidator:
         para realizar a validação do modelo, utilizando as funções implementadas previamente para auxiliar.
         """
 
-    @staticmethod
-    def _show_classification_report(predicted_classes: list, true_classes: list):
+    def _show_classification_report(self, predicted_classes: list, true_classes: list):
         """
         Função que utiliza classification_report do scikit-learn para exibir informações sobre a previsão realizada
         de forma tabular que pode auxiliar na avaliação do modelo.
@@ -58,6 +73,11 @@ class CommonClassifierAdditionalValidator:
 
         report = classification_report(true_classes, predicted_classes, output_dict=True)
         df_report = pd.DataFrame(report).transpose()
+
+        file_name = f'{self.prefix_file_names}_classification_report.csv'
+        output_dir = os.path.join(self.validation_results_directory, file_name)
+
+        df_report.to_csv(output_dir)
 
         print()
         print('Relatório de Classificação:\n')
@@ -86,7 +106,9 @@ class CommonClassifierAdditionalValidator:
         plt.ylabel('Classes Reais')
         plt.title('Matriz de Confusão')
 
-        plt.savefig(f'{self.confusion_matrix_file_name}.svg', format='svg')
+        file_name = f'{self.prefix_file_names}_confusion_matrix.svg'
+        output_dir = os.path.join(self.validation_results_directory, file_name)
+        plt.savefig(output_dir, format='svg')
 
         if self.show_graphics:
             plt.show()

@@ -13,7 +13,8 @@ class ScikitLearnClassifierAdditionalValidator(CommonClassifierAdditionalValidat
     def __init__(self,
                  estimator,
                  data_pre_processor: CommonDataPreProcessor,
-                 confusion_matrix_file_name: str,
+                 validation_results_directory: str,
+                 prefix_file_names: str,
                  random_state=42,
                  show_graphics: bool = True,
                  validate_with_train_data: bool = False):
@@ -23,7 +24,7 @@ class ScikitLearnClassifierAdditionalValidator(CommonClassifierAdditionalValidat
                               ProcessManager.
         """
 
-        super().__init__(data_pre_processor, confusion_matrix_file_name, show_graphics, validate_with_train_data)
+        super().__init__(data_pre_processor, validation_results_directory, prefix_file_names, show_graphics, validate_with_train_data)
         self.estimator = estimator
         self.random_state = random_state
 

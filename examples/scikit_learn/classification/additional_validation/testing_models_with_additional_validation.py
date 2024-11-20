@@ -130,7 +130,7 @@ manager = ScikitLearnMultiProcessManager(
     fold_splits=5,
     scoring='accuracy',
     save_history=True,
-    history_index=None,
+    history_index=-1,
     stratified=True,
 )
 
@@ -144,6 +144,7 @@ best_estimator = best_params_history_manager.load_validation_result_from_history
 final_validator = ScikitLearnClassifierAdditionalValidator(
     estimator=best_estimator,
     data_pre_processor=pre_processor,
-    confusion_matrix_file_name='confusion_matrix'
+    prefix_file_names='best_estimator',
+    validation_results_directory='additional_validations'
 )
 final_validator.validate()
