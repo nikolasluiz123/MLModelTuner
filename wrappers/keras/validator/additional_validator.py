@@ -1,6 +1,8 @@
 import numpy as np
+from sklearn.preprocessing import MinMaxScaler
 
-from wrappers.common.validator.common_additional_validator import CommonClassifierAdditionalValidator
+from wrappers.common.validator.common_additional_validator import CommonClassifierAdditionalValidator, \
+    CommonRegressorAdditionalValidator
 
 
 class KerasAdditionalClassifierValidator(CommonClassifierAdditionalValidator):
@@ -21,7 +23,6 @@ class KerasAdditionalClassifierValidator(CommonClassifierAdditionalValidator):
         self.model_instance = model_instance
 
     def validate(self):
-
         true_labels = []
 
         for _, label in self.data:
@@ -37,3 +38,23 @@ class KerasAdditionalClassifierValidator(CommonClassifierAdditionalValidator):
 
         self._show_classification_report(predicted_class_names, true_class_names)
         self._show_confusion_matrix(predicted_class_names, true_class_names, classes_names)
+
+class KerasAdditionalRegressorValidator(CommonRegressorAdditionalValidator):
+    def __init__(self,
+                 data,
+                 model_instance,
+                 validation_results_directory: str,
+                 prefix_file_names: str,
+                 show_graphics: bool = True):
+        super().__init__(data, validation_results_directory, prefix_file_names, show_graphics)
+        self.model_instance = model_instance
+
+    def validate(self):
+        scaler_y = MinMaxScaler()
+
+        predictions_scaled = self.model_instance.predict(self.data[0])
+        predictions = scaler_y.inverse_transform(predictions_scaled)
+        y_test_original = scaler_y.inverse_transform(self.data[1])
+
+        self._show_regression_report(predictions, y_test_original)
+        self._show_regression_graph(predictions, y_test_original)

@@ -8,7 +8,7 @@ from wrappers.keras.hyper_params_search.hyper_band_searcher import KerasHyperBan
 from wrappers.keras.process_manager.classifier_multi_process_manager import KerasClassifierMultProcessManager
 from wrappers.keras.process_manager.pipeline import KerasPipeline
 from wrappers.keras.validator.basic_classifier_validator import KerasBasicClassifierValidator
-from wrappers.keras.validator.classifier_additional_validator import KerasAdditionalClassifierValidator
+from wrappers.keras.validator.additional_validator import KerasAdditionalClassifierValidator
 
 ########################################################################################################################
 #                                           Definições Estáticas do Teste                                              #

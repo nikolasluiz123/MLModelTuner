@@ -1,11 +1,19 @@
 import os
-from abc import abstractmethod
 
+import numpy as np
 import pandas as pd
 import seaborn as sns
+
+from abc import abstractmethod
 from matplotlib import pyplot as plt
 from sklearn.metrics import classification_report, confusion_matrix
 from tabulate import tabulate
+from sklearn.metrics import (
+    mean_absolute_error,
+    mean_squared_error,
+    r2_score,
+    explained_variance_score
+)
 
 
 class CommonClassifierAdditionalValidator:
@@ -44,7 +52,6 @@ class CommonClassifierAdditionalValidator:
         """
         if not os.path.exists(self.validation_results_directory):
             os.makedirs(self.validation_results_directory)
-
 
     @abstractmethod
     def validate(self):
@@ -98,6 +105,63 @@ class CommonClassifierAdditionalValidator:
         plt.title('Matriz de Confusão')
 
         file_name = f'{self.prefix_file_names}_confusion_matrix.svg'
+        output_dir = os.path.join(self.validation_results_directory, file_name)
+        plt.savefig(output_dir, format='svg')
+
+        if self.show_graphics:
+            plt.show()
+
+
+class CommonRegressorAdditionalValidator:
+
+    def __init__(self,
+                 data,
+                 validation_results_directory: str,
+                 prefix_file_names: str,
+                 show_graphics: bool = True):
+        self.data = data
+        self.validation_results_directory = validation_results_directory
+        self.prefix_file_names = prefix_file_names
+        self.show_graphics = show_graphics
+
+        self._create_output_dir()
+
+    def _create_output_dir(self):
+        if not os.path.exists(self.validation_results_directory):
+            os.makedirs(self.validation_results_directory)
+
+    @abstractmethod
+    def validate(self):
+        pass
+
+    def _show_regression_report(self, predicted_classes: list, true_classes: list):
+        report = {
+            "Mean Absolute Error (MAE)": mean_absolute_error(true_classes, predicted_classes),
+            "Mean Squared Error (MSE)": mean_squared_error(true_classes, predicted_classes),
+            "Root Mean Squared Error (RMSE)": np.sqrt(mean_squared_error(true_classes, predicted_classes)),
+            "R² Score": r2_score(true_classes, predicted_classes),
+            "Explained Variance": explained_variance_score(true_classes, predicted_classes),
+        }
+
+        df_report = pd.DataFrame(report).transpose()
+
+        file_name = f'{self.prefix_file_names}_regression_report.csv'
+        output_dir = os.path.join(self.validation_results_directory, file_name)
+
+        df_report.to_csv(output_dir)
+
+        print()
+        print('Relatório de Regressão:\n')
+        print(tabulate(df_report, headers='keys', tablefmt="fancy_grid"))
+
+    def _show_regression_graph(self, predicted_classes: list, true_classes: list):
+        plt.figure(figsize=(12, 6))
+        plt.plot(true_classes, label="Valores Reais")
+        plt.plot(predicted_classes, label="Previsões")
+        plt.legend()
+        plt.title("Regressão: Real vs Previsto")
+
+        file_name = f'{self.prefix_file_names}_regression_result.svg'
         output_dir = os.path.join(self.validation_results_directory, file_name)
         plt.savefig(output_dir, format='svg')
 

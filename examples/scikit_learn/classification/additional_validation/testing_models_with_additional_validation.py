@@ -12,7 +12,7 @@ from wrappers.scikit_learn.history_manager.cross_validation_history_manager impo
     ScikitLearnCrossValidationHistoryManager
 from wrappers.scikit_learn.process_manager.multi_process_manager import ScikitLearnMultiProcessManager
 from wrappers.scikit_learn.process_manager.pipeline import ScikitLearnPipeline
-from wrappers.scikit_learn.validator.classifier_additional_validator import ScikitLearnClassifierAdditionalValidator
+from wrappers.scikit_learn.validator.additional_validator import ScikitLearnClassifierAdditionalValidator
 from wrappers.scikit_learn.validator.cross_validator import ScikitLearnCrossValidator
 
 ########################################################################################################################
