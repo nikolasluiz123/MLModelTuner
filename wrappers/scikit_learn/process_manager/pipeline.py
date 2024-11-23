@@ -23,8 +23,7 @@ class ScikitLearnPipeline(CommonPipeline):
                  feature_searcher: ScikitLearnCommonFeaturesSearcher | None,
                  params_searcher: ScikitLearnCommonHyperParamsSearcher,
                  history_manager: ScikitLearnCommonHistoryManager[CommonValResult],
-                 validator: ScikitLearnCommonValidator,
-                 scaler: StandardScaler | None = None):
+                 validator: ScikitLearnCommonValidator):
         """
         Inicializa o Pipeline com os componentes fornecidos.
 
@@ -35,12 +34,9 @@ class ScikitLearnPipeline(CommonPipeline):
         :param params_searcher: Objeto que realiza a busca de hiperparâmetros.
         :param history_manager: Gerenciador de histórico para salvar resultados.
         :param validator: Validador para a validação do modelo.
-        :param scaler: Transformer para manipular os dados de alguma maneira, por exemplo, escalar eles. É opcional,
-        pois alguns modelos não se beneficiam dessa estratégia.
         """
         self.estimator = estimator
         self.params = params
-        self.scaler = scaler
         self.data_pre_processor = data_pre_processor
         self.feature_searcher = feature_searcher
         self.params_searcher = params_searcher
@@ -50,7 +46,6 @@ class ScikitLearnPipeline(CommonPipeline):
     def get_dictionary_pipeline_data(self) -> dict[str, Any]:
         return {
             'estimator': type(self.estimator).__name__,
-            'scaler': type(self.scaler).__name__,
             'data_pre_processor': type(self.data_pre_processor).__name__,
             'feature_searcher': type(self.feature_searcher).__name__,
             'params_searcher': type(self.params_searcher).__name__,

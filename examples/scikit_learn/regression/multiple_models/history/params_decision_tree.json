@@ -1,0 +1,98 @@
+[
+    {
+        "estimator": "DecisionTreeRegressor",
+        "mean": -1618.658156894288,
+        "standard_deviation": 529.4469613060413,
+        "median": -1359.8473607993142,
+        "variance": 280314.0848362008,
+        "standard_error": 236.77587919220184,
+        "min_max_score": [
+            -2659.5368,
+            -1261.3961
+        ],
+        "estimator_params": {
+            "ccp_alpha": 0.0,
+            "criterion": "friedman_mse",
+            "max_depth": 9,
+            "max_features": null,
+            "max_leaf_nodes": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 10,
+            "min_samples_split": 17,
+            "min_weight_fraction_leaf": 0.0,
+            "monotonic_cst": null,
+            "random_state": null,
+            "splitter": "best"
+        },
+        "scoring": "neg_mean_squared_error",
+        "features": "exercicio, serie, repeticoes",
+        "pre_processing_time": "00:00:00.000",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:01.000",
+        "validation_time": "00:00:04.000"
+    },
+    {
+        "estimator": "DecisionTreeRegressor",
+        "mean": -1626.8404539692388,
+        "standard_deviation": 512.5105452460153,
+        "median": -1362.3382984173982,
+        "variance": 262667.05898836796,
+        "standard_error": 229.20168367111438,
+        "min_max_score": [
+            -2635.8136,
+            -1277.619
+        ],
+        "estimator_params": {
+            "ccp_alpha": 0.0,
+            "criterion": "friedman_mse",
+            "max_depth": 9,
+            "max_features": null,
+            "max_leaf_nodes": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 10,
+            "min_samples_split": 17,
+            "min_weight_fraction_leaf": 0.0,
+            "monotonic_cst": null,
+            "random_state": null,
+            "splitter": "best"
+        },
+        "scoring": "neg_mean_squared_error",
+        "features": "exercicio, serie, repeticoes",
+        "pre_processing_time": "00:00:00.000",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:01.000",
+        "validation_time": "00:00:03.000"
+    },
+    {
+        "estimator": "DecisionTreeRegressor",
+        "mean": -1646.830632594884,
+        "standard_deviation": 510.9033964508425,
+        "median": -1417.4832646069085,
+        "variance": 261022.28050500673,
+        "standard_error": 228.48294487992172,
+        "min_max_score": [
+            -2652.1071,
+            -1261.5881
+        ],
+        "estimator_params": {
+            "ccp_alpha": 0.0,
+            "criterion": "friedman_mse",
+            "max_depth": 9,
+            "max_features": null,
+            "max_leaf_nodes": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 10,
+            "min_samples_split": 17,
+            "min_weight_fraction_leaf": 0.0,
+            "monotonic_cst": null,
+            "random_state": null,
+            "splitter": "best"
+        },
+        "scoring": "neg_mean_squared_error",
+        "features": "exercicio, serie, repeticoes",
+        "pre_processing_time": "00:00:00.000",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:01.000",
+        "validation_time": "00:00:03.000"
+    }
+]

@@ -24,8 +24,7 @@ class ScikitLearnCrossValidationHistoryManager(ScikitLearnCommonHistoryManager[S
                     search_time: str,
                     validation_time: str,
                     scoring: str,
-                    features: list[str],
-                    scaler: StandardScaler | None):
+                    features: list[str]):
         dictionary_execution_infos = {
             'estimator': type(validation_result.estimator).__name__,
             'mean': validation_result.mean,
@@ -40,8 +39,7 @@ class ScikitLearnCrossValidationHistoryManager(ScikitLearnCommonHistoryManager[S
             'pre_processing_time': pre_processing_time,
             'feature_selection_time': feature_selection_time,
             'search_time': search_time,
-            'validation_time': validation_time,
-            'scaler': type(scaler).__name__
+            'validation_time': validation_time
         }
 
         self._save_dictionary_in_json(dictionary_execution_infos, file_name=self.best_params_file_name)

@@ -29,8 +29,7 @@ class ScikitLearnCommonHistoryManager(CommonHistoryManager[CommonValResult], ABC
                     search_time: str,
                     validation_time: str,
                     scoring: str,
-                    features: list[str],
-                    scaler: StandardScaler | None):
+                    features: list[str]):
         """
         Função que salva todas as informações relevantes ao histórico.
 

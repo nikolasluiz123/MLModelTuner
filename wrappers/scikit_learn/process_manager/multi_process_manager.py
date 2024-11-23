@@ -48,7 +48,6 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
         self.scoring = scoring
         self.data_x = None
         self.data_y = None
-        self.data_x_scaled = None
         self.data_x_best_features = None
 
         np.random.seed(seed)
@@ -61,7 +60,6 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
     def _process_single_pipeline(self, pipeline):
         self._show_log_init_process(pipeline)
         self.__pre_process_data(pipeline)
-        self.__scale_data(pipeline)
         self.__process_feature_selection(pipeline)
 
         search_cv = self.__process_hyper_params_search(pipeline)
@@ -87,18 +85,6 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
             self.data_x = data_x
             self.data_y = data_y
 
-    def __scale_data(self, pipeline: ScikitLearnPipeline):
-        """
-        Função que aplica o scaler nos dados das features para treinar o modelo posteriormente.
-
-        Esse processo é opcional, portanto, se no pipeline não for definido um scaler, não será executado esse processo.
-
-        :param pipeline: Pipeline que está sendo executado
-        """
-
-        if pipeline.scaler is not None and (self.history_index is None or not pipeline.history_manager.has_history()):
-            self.data_x_scaled = pipeline.scaler.fit_transform(self.data_x)
-
     def __process_feature_selection(self, pipeline: ScikitLearnPipeline):
         """
         Realiza a seleção das melhores features a partir dos dados presentes em `data_x`.
@@ -118,27 +104,13 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
             else:
                 features = pipeline.feature_searcher.select_features(
                     estimator=pipeline.estimator,
-                    data_x=self.__get_dataframe_from_scaled_data(),
+                    data_x=self.data_x,
                     data_y=self.data_y,
                     scoring=self.scoring,
                     cv=self.cv
                 )
 
                 self.data_x_best_features = features
-
-    def __get_dataframe_from_scaled_data(self):
-        """
-        Função utilizada apenas para retornar um DataFrame dos dados após o scaler ter sido aplicado. Isso possibilita
-        a seleção de features ocorrer normalmente pois ela espera os dados nesse formado e 'escalar' eles transforma-os
-        em um outro tipo de estrutura.
-
-        A criação do DataFrame só ocorrerá se `data_x_scaled` tiver valor definido, ou seja, foi realizada a execução
-        do scaler.
-        """
-        if self.data_x_scaled is not None:
-            return pd.DataFrame(self.data_x_scaled, columns=self.data_x.columns)
-        else:
-            return self.data_x
 
     def __process_hyper_params_search(self, pipeline: ScikitLearnPipeline) -> ScikitLearnSearcher | None:
         """
@@ -203,8 +175,7 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
                                                  validation_time=DateTimeUtils.format_time(validation_time),
                                                  scoring=self.scoring,
                                                  features=self.data_x_best_features.columns.tolist(),
-                                                 cv_results=searcher.cv_results_,
-                                                 scaler=pipeline.scaler)
+                                                 cv_results=searcher.cv_results_)
 
     def _calculate_processes_time(self, execution_data_dictionary: dict, pipeline: ScikitLearnPipeline):
         pre_processing_time, feature_selection_time, search_time, validation_time = pipeline.get_execution_times()
@@ -246,8 +217,7 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
                                              validation_time=best['validation_time'].values[0],
                                              scoring=best['scoring'].values[0],
                                              features=dict_history['features'].split(','),
-                                             cv_results=dict_cv_results,
-                                             scaler=dict_history['scaler'])
+                                             cv_results=dict_cv_results)
 
 
     def _is_best_pipeline(self, df_results: DataFrame, pipe: ScikitLearnPipeline):

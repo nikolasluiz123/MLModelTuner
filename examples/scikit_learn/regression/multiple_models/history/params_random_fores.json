@@ -1,0 +1,74 @@
+[
+    {
+        "estimator": "RandomForestRegressor",
+        "mean": -1621.2436491526619,
+        "standard_deviation": 530.2441092069422,
+        "median": -1339.3605852402006,
+        "variance": 281158.81534866366,
+        "standard_error": 237.13237457110895,
+        "min_max_score": [
+            -2665.0182,
+            -1257.6435
+        ],
+        "estimator_params": {
+            "bootstrap": true,
+            "criterion": "friedman_mse",
+            "max_depth": 19,
+            "max_features": "sqrt",
+            "max_leaf_nodes": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 3,
+            "min_samples_split": 16,
+            "min_variance": 0.0,
+            "min_weight_fraction_leaf": 0.0,
+            "n_estimators": 32,
+            "n_jobs": 1,
+            "oob_score": false,
+            "random_state": null,
+            "verbose": 0,
+            "warm_start": false
+        },
+        "scoring": "neg_mean_squared_error",
+        "features": "exercicio, serie, repeticoes",
+        "pre_processing_time": "00:00:00.000",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:10.000",
+        "validation_time": "00:00:44.000"
+    },
+    {
+        "estimator": "RandomForestRegressor",
+        "mean": -1629.016782924299,
+        "standard_deviation": 516.1038637393682,
+        "median": -1373.347999948912,
+        "variance": 266363.19816670433,
+        "standard_error": 230.8086645543032,
+        "min_max_score": [
+            -2646.8201,
+            -1275.2975
+        ],
+        "estimator_params": {
+            "bootstrap": true,
+            "criterion": "poisson",
+            "max_depth": 11,
+            "max_features": "sqrt",
+            "max_leaf_nodes": null,
+            "min_impurity_decrease": 0.0,
+            "min_samples_leaf": 2,
+            "min_samples_split": 13,
+            "min_variance": 0.0,
+            "min_weight_fraction_leaf": 0.0,
+            "n_estimators": 44,
+            "n_jobs": 1,
+            "oob_score": false,
+            "random_state": null,
+            "verbose": 0,
+            "warm_start": false
+        },
+        "scoring": "neg_mean_squared_error",
+        "features": "exercicio, serie, repeticoes",
+        "pre_processing_time": "00:00:00.000",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:10.000",
+        "validation_time": "00:00:47.000"
+    }
+]
