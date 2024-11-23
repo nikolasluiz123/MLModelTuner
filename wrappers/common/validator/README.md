@@ -16,6 +16,10 @@ Essa implementação específica para validação adicional de classificadores f
 e [confusion_matrix](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html) para trazer uma visão diferenciada sobre o modelo e possibilitar o julgamento dele como uma 
 validação final.
 
+A implementação específica para validação adicional de regressores faz uso de várias funções para montar algo semelhante ao classification_report, são elas: [mean_absolute_error](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.mean_absolute_error.html), [mean_squared_error](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.mean_squared_error.html), [r2_score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.mean_squared_error.html) e [explained_variance_score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.explained_variance_score.html). Para uma possível visualização do modelo é implementado um gráfico de linhas simples, exibindo os dados reais e previstos.
+
+Algo que é comum entre as duas implementações (classificação e regressão) é que os dados dessas validações são sempre salvas como arquivos para que fiquem armazenados e possam ser reconsultados.
+
 ### Classe de Resultado
 
 Para as implementações que utilizam **CommonValidator** detalhado acima, normalmente temos
