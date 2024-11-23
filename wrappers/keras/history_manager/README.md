@@ -1,6 +1,6 @@
 ## Módulo de Histórico das Execuções
 
-É possível ver detalhes referentes a implementação comum de manutenção do histórico acessando [esse readme]().
+É possível ver detalhes referentes a implementação comum de manutenção do histórico acessando [esse readme](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/common/history_manager/README.md).
 
 Em relação ao keras, existem implementações de histórico implementadas internamente no processo
 de busca de hiperparâmetros, nesses processos internos o keras armazena as tentativas executadas
@@ -21,8 +21,8 @@ Uma última peculiaridade que pode ser encontrada nesse gerenciador de históric
 precisamos implementar um gerenciador específico para classificação, isso ocorre devido ao objeto
 de retorno da validação ser diferente para classificação e regressão.
 
-Para facilitar a implementação de classificação e regressão foi criada a classe [KerasCommonHistoryManager]()
+Para facilitar a implementação de classificação e regressão foi criada a classe [KerasCommonHistoryManager](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/keras/history_manager/common_history_manager.py#L14)
 que centraliza todos os comportamentos comuns do keras em relação a histórico.
 
-Como implementação específica de classificação temos [KerasClassifierHistoryManager]() e para regressão
-ainda não possuímos nada implementado.
+Como implementação específica de classificação temos [KerasClassifierHistoryManager](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/keras/history_manager/classifier_history_manager.py#L6) e para regressão
+temos [KerasRegressorHistoryManager](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/keras/history_manager/regressor_history_manager.py#L6).
