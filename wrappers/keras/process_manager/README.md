@@ -14,3 +14,5 @@ problemas gerados por falta de recursos, existem também alguns valores parametr
 específicos para processamento de redes neurais e, por fim, o keras mantém uma implementação
 de histórico específica para a busca de hiperparâmetros, o qual devemos manupular tanto para obter
 informações quanto para eliminar quando não for mais necessário.
+
+Para modelos que realizarão classificação deve ser utilizado [KerasClassifierMultProcessManager](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/keras/process_manager/classifier_multi_process_manager.py#L8). Se o objetivo é regressão, utilize [KerasRegressorMultProcessManager](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/keras/process_manager/regressor_multi_process_manager.py#L8).
