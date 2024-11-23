@@ -10,9 +10,7 @@ Os validadores que utilizam implementações específicas das bibliotecas devem 
 
 Os validadores adicionais que complementam a validação realizada devem estender a classe
 referente ao objetivo específico do modelo, por exemplo, a classificação possui [CommonClassifierAdditionalValidator](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/common/validator/common_additional_validator.py#L19)
-como implementação base.
-
-Para regressão temos [CommonRegressorAdditionalValidator](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/common/validator/common_additional_validator.py#L115)
+como implementação base e para regressão temos [CommonRegressorAdditionalValidator](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/common/validator/common_additional_validator.py#L115).
 
 Essa implementação específica para validação adicional de classificadores faz uso de [classification_report](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html)
 e [confusion_matrix](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html) para trazer uma visão diferenciada sobre o modelo e possibilitar o julgamento dele como uma 
