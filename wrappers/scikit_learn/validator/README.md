@@ -26,3 +26,7 @@ a métrica de avaliação utilizada na validação.
 Além do uso de métricas matemáticas gerais podemos utilizar algumas implementações fornecidas
 pelo scikit-learn que são especificamente úteis para os cenários de classificação. A implementação
 [ScikitLearnClassifierAdditionalValidator](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/scikit_learn/validator/classifier_additional_validator.py#L8) pode ser utilizada nesses cenários.
+
+### Validações Específicas de Regressão
+
+Foi realizada uma implementação que pode ser utilizada para avaliar modelos de regressão, como a biblioteca não traz um relatório pronto foi criado um com informações que podem ser úteis. Além disso, foi implementado um gráfico de regressão para comparação dos dados reais com os dados previstos, isso pode ser visto na implementação [ScikitLearnRegressorAdditionalValidator](https://github.com/nikolasluiz123/MLModelTuner/blob/master/wrappers/scikit_learn/validator/additional_validator.py#L42).
