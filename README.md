@@ -101,6 +101,10 @@ você imaginar.
 
 Veja o exemplo [aqui](https://github.com/nikolasluiz123/MLModelTuner/blob/master/examples/keras/classification/exploring_hyper_params_searchers/testing_hyper_params_searchers.py)
 
+### Testando Modelos de Rede Neural para Regressão
+
+Foi implementado um exemplo com regressão apenas para ser possível perceber como seria essa variação, a ideia é que seja muito parecido como a classificação. Você pode conferir isso [aqui](https://github.com/nikolasluiz123/MLModelTuner/blob/master/examples/keras/regression/multiples_neural_networks/testing_multiples_neural_networks.py).
+
 ## XGBoost
 
 Futuramente...
