@@ -113,6 +113,13 @@ class CommonClassifierAdditionalValidator:
 
 
 class CommonRegressorAdditionalValidator:
+    """
+    Implementação que contém tudo que é comum na validação adicional de um modelo de machine learning para regressão.
+
+    O processo de validação foi inspirado no que é disponibilizado para classificadores, dessa forma, foi implementada
+    uma função que reune métricas matemáticas utilizadas para avaliar um modelo de regressão. Além disso, gráficos também
+    foram utilizados para demonstração visual.
+    """
 
     def __init__(self,
                  data,
@@ -132,9 +139,22 @@ class CommonRegressorAdditionalValidator:
 
     @abstractmethod
     def validate(self):
-        pass
+        """
+        Função principal da implementação, basicamente é nessa função que devem ser implementados os processos necessários
+        para realizar a validação do modelo, utilizando as funções implementadas previamente para auxiliar.
+        """
 
     def _show_regression_report(self, predicted_classes: list, true_classes: list):
+        """
+        Função que cria um relatório com métricas que podem auxiliar no julgamento de um modelo de regressão.
+
+        Esse relatório é exibido como um dataframe tabular, além de ser salvo como csv no diretório desejado para posterior
+        reavaliação.
+
+        :param predicted_classes: Lista das classes previstas pelo modelo avaliado
+        :param true_classes: Lista das classes reais do conjunto de dados que o modelo realizou a previsão
+        """
+
         report = {
             "Mean Absolute Error (MAE)": mean_absolute_error(true_classes, predicted_classes),
             "Mean Squared Error (MSE)": mean_squared_error(true_classes, predicted_classes),
@@ -143,7 +163,9 @@ class CommonRegressorAdditionalValidator:
             "Explained Variance": explained_variance_score(true_classes, predicted_classes),
         }
 
-        df_report = pd.DataFrame(report).transpose()
+        df_report = pd.DataFrame.from_dict(report, orient='index', columns=['Valor'])
+        df_report.index.name = 'Métrica'
+        df_report.reset_index(inplace=True)
 
         file_name = f'{self.prefix_file_names}_regression_report.csv'
         output_dir = os.path.join(self.validation_results_directory, file_name)
@@ -155,6 +177,13 @@ class CommonRegressorAdditionalValidator:
         print(tabulate(df_report, headers='keys', tablefmt="fancy_grid"))
 
     def _show_regression_graph(self, predicted_classes: list, true_classes: list):
+        """
+        Função utilizada para gerar um gráfico onde os dados reais e as predições são sobrepostas em forma de linha,
+        dessa maneira é possível verificar o quão bem o modelo está se ajustando aos dados.
+
+        :param predicted_classes: Lista das classes previstas pelo modelo avaliado
+        :param true_classes: Lista das classes reais do conjunto de dados que o modelo realizou a previsão
+        """
         plt.figure(figsize=(12, 6))
         plt.plot(true_classes, label="Valores Reais")
         plt.plot(predicted_classes, label="Previsões")

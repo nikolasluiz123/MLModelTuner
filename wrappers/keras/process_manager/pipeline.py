@@ -4,17 +4,28 @@ from wrappers.common.data_pre_processor.common_data_pre_processor import CommonD
 from wrappers.common.process_manager.common_pipeline import CommonPipeline
 from wrappers.keras.history_manager.common_history_manager import KerasCommonHistoryManager
 from wrappers.keras.hyper_params_search.common_hyper_params_searcher import KerasCommonHyperParamsSearcher
-from wrappers.keras.validator.basic_classifier_validator import KerasBasicClassifierValidator
+from wrappers.keras.validator.common_basic_validator import KerasCommonBasicValidator
 
 
 class KerasPipeline(CommonPipeline):
+    """
+    Implementação de pipeline específica para buscar o melhor modelo de rede neural implementado com keras
+    """
 
     def __init__(self,
                  model: HyperModel,
                  data_pre_processor: CommonDataPreProcessor,
                  params_searcher: KerasCommonHyperParamsSearcher,
-                 validator: KerasBasicClassifierValidator,
+                 validator: KerasCommonBasicValidator,
                  history_manager: KerasCommonHistoryManager):
+        """
+        :param model: Implementação de uma classe HyperModel com a rede estruturada
+        :param data_pre_processor: Implementação responsável por pré-processar os dados
+        :param params_searcher: Objeto que realiza a busca de hiperparâmetros.
+        :param validator: Validador para a validação do modelo.
+        :param history_manager: Gerenciador de histórico para salvar resultados.
+        """
+
         self.model = model
         self.data_pre_processor = data_pre_processor
         self.params_searcher = params_searcher

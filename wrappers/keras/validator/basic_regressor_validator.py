@@ -3,15 +3,15 @@ import time
 import numpy as np
 
 from wrappers.keras.validator.common_basic_validator import KerasCommonBasicValidator
-from wrappers.keras.validator.results.classifier_validation_result import KerasClassifierValidationResult
+from wrappers.keras.validator.results.regressor_validation_result import KerasRegressorValidationResult
 
 
-class KerasBasicClassifierValidator(KerasCommonBasicValidator[KerasClassifierValidationResult]):
+class KerasBasicRegressorValidator(KerasCommonBasicValidator[KerasRegressorValidationResult]):
     """
-    Implementação para realizar a validação de uma rede neural de classificação.
+    Implementação para realizar a validação de uma rede neural de regressão.
     """
 
-    def validate(self, model_instance, train_data, validation_data) -> KerasClassifierValidationResult:
+    def validate(self, model_instance, train_data, validation_data) -> KerasRegressorValidationResult:
         self.start_validation_best_model_time = time.time()
 
         history = model_instance.fit(
@@ -24,11 +24,11 @@ class KerasBasicClassifierValidator(KerasCommonBasicValidator[KerasClassifierVal
         )
 
         history_dict = {
-            'mean_accuracy': round(np.mean(history.history['accuracy']), 2),
-            'standard_deviation_accuracy': round(np.std(history.history['accuracy']), 2),
+            'mean_absolute_error': round(np.mean(history.history['mean_absolute_error']), 2),
+            'standard_deviation_absolute_error': round(np.std(history.history['mean_absolute_error']), 2),
 
-            'mean_val_accuracy': round(np.mean(history.history['val_accuracy']), 2),
-            'standard_deviation_val_accuracy': round(np.mean(history.history['val_accuracy']), 2),
+            'mean_val_absolute_error': round(np.mean(history.history['val_mean_absolute_error']), 2),
+            'standard_deviation_val_absolute_error': round(np.mean(history.history['val_mean_absolute_error']), 2),
 
             'mean_loss': round(np.mean(history.history['loss']), 2),
             'standard_deviation_loss': round(np.std(history.history['loss']), 2),
@@ -39,4 +39,4 @@ class KerasBasicClassifierValidator(KerasCommonBasicValidator[KerasClassifierVal
 
         self.end_validation_best_model_time = time.time()
 
-        return KerasClassifierValidationResult(model_instance, history_dict)
+        return KerasRegressorValidationResult(model_instance, history_dict)

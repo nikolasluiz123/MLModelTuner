@@ -1,0 +1,122 @@
+[
+    {
+        "model": "WeightSuggestorLSTMV1",
+        "history": {
+            "model": "WeightSuggestorLSTMV1",
+            "history": {
+                "mean_absolute_error": 0.02,
+                "standard_deviation_absolute_error": 0.0,
+                "mean_val_absolute_error": 0.03,
+                "standard_deviation_val_absolute_error": 0.03,
+                "mean_loss": 0.0,
+                "standard_deviation_loss": 0.0,
+                "mean_val_loss": 0.0,
+                "standard_deviation_val_loss": 0.0
+            },
+            "neural_structure": {
+                "space": [
+                    {
+                        "class_name": "Int",
+                        "config": {
+                            "name": "lstm_units_1",
+                            "default": null,
+                            "conditions": [],
+                            "min_value": 32,
+                            "max_value": 1024,
+                            "step": 32,
+                            "sampling": "linear"
+                        }
+                    },
+                    {
+                        "class_name": "Float",
+                        "config": {
+                            "name": "dropout_lstm_1",
+                            "default": 0.1,
+                            "conditions": [],
+                            "min_value": 0.1,
+                            "max_value": 0.5,
+                            "step": 0.1,
+                            "sampling": "linear"
+                        }
+                    },
+                    {
+                        "class_name": "Float",
+                        "config": {
+                            "name": "learning_rate",
+                            "default": 0.0001,
+                            "conditions": [],
+                            "min_value": 0.0001,
+                            "max_value": 0.01,
+                            "step": 0.0001,
+                            "sampling": "linear"
+                        }
+                    }
+                ],
+                "values": {
+                    "lstm_units_1": 32,
+                    "dropout_lstm_1": 0.1,
+                    "learning_rate": 0.0001
+                }
+            },
+            "hyperband_iterations": 1,
+            "max_epochs": 20,
+            "min_epochs": 1,
+            "factor": 3,
+            "pre_processing_time": "00:00:01.000",
+            "params_search_time": "00:05:25.000",
+            "validation_time": "00:01:09.000"
+        },
+        "neural_structure": {
+            "space": [
+                {
+                    "class_name": "Int",
+                    "config": {
+                        "name": "lstm_units_1",
+                        "default": null,
+                        "conditions": [],
+                        "min_value": 32,
+                        "max_value": 1024,
+                        "step": 32,
+                        "sampling": "linear"
+                    }
+                },
+                {
+                    "class_name": "Float",
+                    "config": {
+                        "name": "dropout_lstm_1",
+                        "default": 0.1,
+                        "conditions": [],
+                        "min_value": 0.1,
+                        "max_value": 0.5,
+                        "step": 0.1,
+                        "sampling": "linear"
+                    }
+                },
+                {
+                    "class_name": "Float",
+                    "config": {
+                        "name": "learning_rate",
+                        "default": 0.0001,
+                        "conditions": [],
+                        "min_value": 0.0001,
+                        "max_value": 0.01,
+                        "step": 0.0001,
+                        "sampling": "linear"
+                    }
+                }
+            ],
+            "values": {
+                "lstm_units_1": 32,
+                "dropout_lstm_1": 0.1,
+                "learning_rate": 0.0001
+            }
+        },
+        "hyperband_iterations": 1,
+        "max_epochs": 20,
+        "min_epochs": 1,
+        "factor": 3,
+        "pre_processing_time": "00:00:01.000",
+        "params_search_time": "00:05:25.000",
+        "validation_time": "00:01:09.000"
+    }
+]

@@ -56,5 +56,63 @@
         "search_time": "00:00:07.000",
         "validation_time": "00:00:24.000",
         "scaler": "NoneType"
+    },
+    {
+        "estimator": "KNeighborsRegressor",
+        "mean": -515.7160721725137,
+        "standard_deviation": 392.3508522043387,
+        "median": -342.07124411019,
+        "variance": 153939.19122547083,
+        "standard_error": 175.4646353117749,
+        "min_max_score": [
+            -1296.6201,
+            -255.307
+        ],
+        "estimator_params": {
+            "algorithm": "brute",
+            "leaf_size": 30,
+            "metric": "minkowski",
+            "metric_params": null,
+            "n_jobs": null,
+            "n_neighbors": 17,
+            "p": 2,
+            "weights": "distance"
+        },
+        "scoring": "neg_mean_squared_error",
+        "features": "exercicio, serie, repeticoes",
+        "pre_processing_time": "00:00:00.000",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:10.000",
+        "validation_time": "00:00:22.000",
+        "scaler": "StandardScaler"
+    },
+    {
+        "estimator": "KNeighborsRegressor",
+        "mean": -514.0804260416207,
+        "standard_deviation": 390.8460852059731,
+        "median": -342.07124411019,
+        "variance": 152760.6623208348,
+        "standard_error": 174.79168305204615,
+        "min_max_score": [
+            -1291.4644,
+            -247.9278
+        ],
+        "estimator_params": {
+            "algorithm": "kd_tree",
+            "leaf_size": 30,
+            "metric": "minkowski",
+            "metric_params": null,
+            "n_jobs": null,
+            "n_neighbors": 19,
+            "p": 2,
+            "weights": "distance"
+        },
+        "scoring": "neg_mean_squared_error",
+        "features": "exercicio, serie, repeticoes",
+        "pre_processing_time": "00:00:00.000",
+        "feature_selection_time": "00:00:00.000",
+        "search_time": "00:00:06.000",
+        "validation_time": "00:00:23.000",
+        "scaler": "NoneType"
     }
 ]

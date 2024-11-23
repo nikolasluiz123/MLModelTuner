@@ -8,6 +8,7 @@ from wrappers.scikit_learn.history_manager.cross_validation_history_manager impo
     ScikitLearnCrossValidationHistoryManager
 from wrappers.scikit_learn.process_manager.multi_process_manager import ScikitLearnMultiProcessManager
 from wrappers.scikit_learn.process_manager.pipeline import ScikitLearnPipeline
+from wrappers.scikit_learn.validator.additional_validator import ScikitLearnRegressorAdditionalValidator
 from wrappers.scikit_learn.validator.cross_validator import ScikitLearnCrossValidator
 
 ########################################################################################################################
@@ -77,3 +78,19 @@ manager = ScikitLearnMultiProcessManager(
 )
 
 manager.process_pipelines()
+
+########################################################################################################################
+#                            Realizando Testes Adicionais com o Melhor Modelo Encontrado                               #
+########################################################################################################################
+
+best_estimator = best_params_history_manager.get_saved_model(best_params_history_manager.get_history_len())
+
+final_validator = ScikitLearnRegressorAdditionalValidator(
+    estimator=best_estimator,
+    prefix_file_names='best_estimator',
+    validation_results_directory='additional_validations',
+    data=pre_processor.get_data_additional_validation(),
+    show_graphics=False
+)
+
+final_validator.validate()

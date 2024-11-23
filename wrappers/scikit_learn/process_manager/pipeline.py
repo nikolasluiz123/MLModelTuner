@@ -30,6 +30,7 @@ class ScikitLearnPipeline(CommonPipeline):
 
         :param estimator: O estimador a ser utilizado no pipeline.
         :param params: Parâmetros para a busca de hiperparâmetros.
+        :param data_pre_processor: Implementação responsável por pré-processar os dados.
         :param feature_searcher: Objeto que realiza a seleção de características.
         :param params_searcher: Objeto que realiza a busca de hiperparâmetros.
         :param history_manager: Gerenciador de histórico para salvar resultados.

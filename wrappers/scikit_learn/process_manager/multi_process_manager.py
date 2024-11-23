@@ -96,7 +96,7 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
         :param pipeline: Pipeline que está sendo executado
         """
 
-        if pipeline.scaler is not None:
+        if pipeline.scaler is not None and (self.history_index is None or not pipeline.history_manager.has_history()):
             self.data_x_scaled = pipeline.scaler.fit_transform(self.data_x)
 
     def __process_feature_selection(self, pipeline: ScikitLearnPipeline):
@@ -231,9 +231,7 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
         return df_results
 
     def _save_best_model(self, df_results: DataFrame):
-        pipeline_not_executed = self._get_has_pipeline_not_executed()
-
-        if self.save_history and (self.history_index is None or pipeline_not_executed):
+        if self.save_history:
             best = df_results.head(1)
 
             best_pipeline = self._get_best_pipeline(best)
