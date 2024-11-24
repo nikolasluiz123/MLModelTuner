@@ -144,23 +144,23 @@ class CommonRegressorAdditionalValidator:
         para realizar a validação do modelo, utilizando as funções implementadas previamente para auxiliar.
         """
 
-    def _show_regression_report(self, predicted_classes: list, true_classes: list):
+    def _show_regression_report(self, predicted_values: list, true_values: list):
         """
         Função que cria um relatório com métricas que podem auxiliar no julgamento de um modelo de regressão.
 
         Esse relatório é exibido como um dataframe tabular, além de ser salvo como csv no diretório desejado para posterior
         reavaliação.
 
-        :param predicted_classes: Lista das classes previstas pelo modelo avaliado
-        :param true_classes: Lista das classes reais do conjunto de dados que o modelo realizou a previsão
+        :param predicted_values: Lista das valores previstos pelo modelo avaliado
+        :param true_values: Lista dos valores reais do conjunto de dados que o modelo realizou a previsão
         """
 
         report = {
-            "Mean Absolute Error (MAE)": mean_absolute_error(true_classes, predicted_classes),
-            "Mean Squared Error (MSE)": mean_squared_error(true_classes, predicted_classes),
-            "Root Mean Squared Error (RMSE)": np.sqrt(mean_squared_error(true_classes, predicted_classes)),
-            "R² Score": r2_score(true_classes, predicted_classes),
-            "Explained Variance": explained_variance_score(true_classes, predicted_classes),
+            "Mean Absolute Error (MAE)": mean_absolute_error(true_values, predicted_values),
+            "Mean Squared Error (MSE)": mean_squared_error(true_values, predicted_values),
+            "Root Mean Squared Error (RMSE)": np.sqrt(mean_squared_error(true_values, predicted_values)),
+            "R² Score": r2_score(true_values, predicted_values),
+            "Explained Variance": explained_variance_score(true_values, predicted_values),
         }
 
         df_report = pd.DataFrame.from_dict(report, orient='index', columns=['Valor'])
@@ -176,17 +176,17 @@ class CommonRegressorAdditionalValidator:
         print('Relatório de Regressão:\n')
         print(tabulate(df_report, headers='keys', tablefmt="fancy_grid"))
 
-    def _show_regression_graph(self, predicted_classes: list, true_classes: list):
+    def _show_regression_graph(self, predicted_values: list, true_values: list):
         """
         Função utilizada para gerar um gráfico onde os dados reais e as predições são sobrepostas em forma de linha,
         dessa maneira é possível verificar o quão bem o modelo está se ajustando aos dados.
 
-        :param predicted_classes: Lista das classes previstas pelo modelo avaliado
-        :param true_classes: Lista das classes reais do conjunto de dados que o modelo realizou a previsão
+        :param predicted_values: Lista das valores previstos pelo modelo avaliado
+        :param true_values: Lista dos valores reais do conjunto de dados que o modelo realizou a previsão
         """
         plt.figure(figsize=(12, 6))
-        plt.plot(true_classes, label="Valores Reais")
-        plt.plot(predicted_classes, label="Previsões")
+        plt.plot(true_values, label="Valores Reais")
+        plt.plot(predicted_values, label="Previsões")
         plt.legend()
         plt.title("Regressão: Real vs Previsto")
 
