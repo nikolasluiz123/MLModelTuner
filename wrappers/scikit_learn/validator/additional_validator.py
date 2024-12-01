@@ -33,14 +33,8 @@ class ScikitLearnClassifierAdditionalValidator(CommonClassifierAdditionalValidat
         self.label_encoder = label_encoder
 
     def validate(self):
-        x_train, x_test, y_train, y_test = train_test_split(self.data[0],
-                                                            self.data[1],
-                                                            test_size=0.2,
-                                                            random_state=self.random_state,
-                                                            stratify=self.data[1])
-
-        self.estimator.fit(x_train, y_train)
-        y_pred = self.estimator.predict(x_test)
+        y_test = self.data[1]
+        y_pred = self.estimator.predict(self.data[0])
 
         if self.label_encoder is not None:
             y_test = self.label_encoder.inverse_transform(y_test)
