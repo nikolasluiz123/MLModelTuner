@@ -36,7 +36,8 @@ class ScikitLearnClassifierAdditionalValidator(CommonClassifierAdditionalValidat
         x_train, x_test, y_train, y_test = train_test_split(self.data[0],
                                                             self.data[1],
                                                             test_size=0.2,
-                                                            random_state=self.random_state)
+                                                            random_state=self.random_state,
+                                                            stratify=self.data[1])
 
         self.estimator.fit(x_train, y_train)
         y_pred = self.estimator.predict(x_test)
