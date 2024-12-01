@@ -44,9 +44,12 @@ class ScikitLearnClassifierAdditionalValidator(CommonClassifierAdditionalValidat
         if self.label_encoder is not None:
             y_test = self.label_encoder.inverse_transform(y_test)
             y_pred = self.label_encoder.inverse_transform(y_pred)
+            all_classes_names = list(self.label_encoder.inverse_transform(list(np.unique(self.data[1]))))
+        else:
+            all_classes_names = list(np.unique(self.data[1]))
 
         self._show_classification_report(y_test, y_pred)
-        self._show_confusion_matrix(y_test, y_pred, list(np.unique(self.data[1])))
+        self._show_confusion_matrix(y_test, y_pred, all_classes_names)
 
 class ScikitLearnRegressorAdditionalValidator(CommonRegressorAdditionalValidator):
 
