@@ -24,17 +24,17 @@ class KerasBasicRegressorValidator(KerasCommonBasicValidator[KerasRegressorValid
         )
 
         history_dict = {
-            'mean_absolute_error': round(np.mean(history.history['mean_absolute_error']), 2),
-            'standard_deviation_absolute_error': round(np.std(history.history['mean_absolute_error']), 2),
+            'mean_absolute_error': np.mean(history.history['mean_absolute_error']),
+            'standard_deviation_absolute_error': np.std(history.history['mean_absolute_error']),
 
-            'mean_val_absolute_error': round(np.mean(history.history['val_mean_absolute_error']), 2),
-            'standard_deviation_val_absolute_error': round(np.mean(history.history['val_mean_absolute_error']), 2),
+            'mean_val_absolute_error': np.mean(history.history['val_mean_absolute_error']),
+            'standard_deviation_val_absolute_error': np.mean(history.history['val_mean_absolute_error']),
 
-            'mean_loss': round(np.mean(history.history['loss']), 2),
-            'standard_deviation_loss': round(np.std(history.history['loss']), 2),
+            'mean_loss': np.mean(history.history['loss']),
+            'standard_deviation_loss': np.std(history.history['loss']),
 
-            'mean_val_loss': round(np.mean(history.history['val_loss']), 2),
-            'standard_deviation_val_loss': round(np.std(history.history['val_loss']), 2),
+            'mean_val_loss': np.mean(history.history['val_loss']),
+            'standard_deviation_val_loss': np.std(history.history['val_loss']),
         }
 
         self.end_validation_best_model_time = time.time()

@@ -24,17 +24,17 @@ class KerasBasicClassifierValidator(KerasCommonBasicValidator[KerasClassifierVal
         )
 
         history_dict = {
-            'mean_accuracy': round(np.mean(history.history['accuracy']), 2),
-            'standard_deviation_accuracy': round(np.std(history.history['accuracy']), 2),
+            'mean_accuracy': np.mean(history.history['accuracy']),
+            'standard_deviation_accuracy': np.std(history.history['accuracy']),
 
-            'mean_val_accuracy': round(np.mean(history.history['val_accuracy']), 2),
-            'standard_deviation_val_accuracy': round(np.mean(history.history['val_accuracy']), 2),
+            'mean_val_accuracy': np.mean(history.history['val_accuracy']),
+            'standard_deviation_val_accuracy': np.mean(history.history['val_accuracy']),
 
-            'mean_loss': round(np.mean(history.history['loss']), 2),
-            'standard_deviation_loss': round(np.std(history.history['loss']), 2),
+            'mean_loss': np.mean(history.history['loss']),
+            'standard_deviation_loss': np.std(history.history['loss']),
 
-            'mean_val_loss': round(np.mean(history.history['val_loss']), 2),
-            'standard_deviation_val_loss': round(np.std(history.history['val_loss']), 2),
+            'mean_val_loss': np.mean(history.history['val_loss']),
+            'standard_deviation_val_loss': np.std(history.history['val_loss']),
         }
 
         self.end_validation_best_model_time = time.time()
