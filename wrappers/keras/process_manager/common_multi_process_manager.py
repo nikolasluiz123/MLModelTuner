@@ -182,7 +182,7 @@ class KerasMultiProcessManager(CommonMultiProcessManager[KerasPipeline, KerasCom
 
             self.history_manager.save_result(model_instance=model_instance,
                                              model=best_pipeline.model,
-                                             validation_history=dict_history,
+                                             validation_history=dict_history['history'],
                                              params_search_directory=best_pipeline.params_searcher.directory,
                                              params_search_project=best_pipeline.params_searcher.project_name,
                                              oracle_fields_list=best_pipeline.params_searcher.get_fields_oracle_json_file(),
