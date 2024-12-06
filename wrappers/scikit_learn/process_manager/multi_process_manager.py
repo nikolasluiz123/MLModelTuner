@@ -79,18 +79,13 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
         :param pipeline: Pipeline que está sendo executado
         """
 
-        execute = self.get_execute_pipeline(pipeline)
+        execute = self._get_execute_pipeline(pipeline)
 
         if execute:
             data_x, data_y = pipeline.data_pre_processor.get_train_data()
 
             self.data_x = data_x
             self.data_y = data_y
-
-    def get_execute_pipeline(self, pipeline):
-        return (self.history_index is None or
-                not pipeline.history_manager.has_history() or
-                self.history_index > pipeline.history_manager.get_history_len() - 1)
 
     def __process_feature_selection(self, pipeline: ScikitLearnPipeline):
         """
@@ -104,7 +99,7 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
 
         :param pipeline: Pipeline que está sendo executado
         """
-        execute = self.get_execute_pipeline(pipeline)
+        execute = self._get_execute_pipeline(pipeline)
 
         if execute:
             if pipeline.feature_searcher is None:
@@ -129,7 +124,7 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
 
         :param pipeline: Pipeline que está sendo executado
         """
-        execute = self.get_execute_pipeline(pipeline)
+        execute = self._get_execute_pipeline(pipeline)
 
         if execute:
             return pipeline.params_searcher.search_hyper_parameters(
@@ -153,7 +148,7 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
         :param pipeline: Pipeline que está sendo executado
         :param search_cv: Retorno da busca dos melhores hiperparâmetros
         """
-        execute = self.get_execute_pipeline(pipeline)
+        execute = self._get_execute_pipeline(pipeline)
 
         if execute:
             return pipeline.validator.validate(searcher=search_cv,
@@ -177,7 +172,7 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
         :param pipeline: O pipeline que gerou os resultados.
         :param result: O resultado da validação a ser salvo.
         """
-        execute = self.get_execute_pipeline(pipeline)
+        execute = self._get_execute_pipeline(pipeline)
 
         if self.save_history and execute:
             pre_processing_time, feature_selection_time, search_time, validation_time = pipeline.get_execution_times()

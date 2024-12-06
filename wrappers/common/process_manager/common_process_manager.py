@@ -193,7 +193,9 @@ class CommonMultiProcessManager(ABC, Generic[Pipeline, HistoryManager, CommonVal
 
         :param pipeline: Pipeline que vai ser executado
         """
-        if self.history_index is None or not pipeline.history_manager.has_history():
+        execute = self._get_execute_pipeline(pipeline)
+
+        if execute:
             print()
             print('Iniciando o Processamento')
 
@@ -203,6 +205,11 @@ class CommonMultiProcessManager(ABC, Generic[Pipeline, HistoryManager, CommonVal
 
             print(tabulate(df, headers='keys', tablefmt='fancy_grid', showindex=False))
             print()
+
+    def _get_execute_pipeline(self, pipeline):
+        return (self.history_index is None or
+                not pipeline.history_manager.has_history() or
+                self.history_index > pipeline.history_manager.get_history_len() - 1)
 
     def _append_new_result(self, pipeline: Pipeline, result: CommonValResult):
         """
@@ -214,7 +221,9 @@ class CommonMultiProcessManager(ABC, Generic[Pipeline, HistoryManager, CommonVal
         pipeline_dictionary = pipeline.get_dictionary_pipeline_data()
         execution_data_dictionary = result.append_data(pipeline_dictionary)
 
-        if self.history_index is None or not pipeline.history_manager.has_history():
+        execute = self._get_execute_pipeline(pipeline)
+
+        if execute:
             self._calculate_processes_time(execution_data_dictionary, pipeline)
         else:
             self._load_processes_time_from_history(execution_data_dictionary, pipeline)
