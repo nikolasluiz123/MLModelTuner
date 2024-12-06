@@ -79,11 +79,18 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
         :param pipeline: Pipeline que está sendo executado
         """
 
-        if self.history_index is None or not pipeline.history_manager.has_history():
+        execute = self.get_execute_pipeline(pipeline)
+
+        if execute:
             data_x, data_y = pipeline.data_pre_processor.get_train_data()
 
             self.data_x = data_x
             self.data_y = data_y
+
+    def get_execute_pipeline(self, pipeline):
+        return (self.history_index is None or
+                not pipeline.history_manager.has_history() or
+                self.history_index > pipeline.history_manager.get_history_len() - 1)
 
     def __process_feature_selection(self, pipeline: ScikitLearnPipeline):
         """
@@ -97,8 +104,9 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
 
         :param pipeline: Pipeline que está sendo executado
         """
+        execute = self.get_execute_pipeline(pipeline)
 
-        if self.history_index is None or not pipeline.history_manager.has_history():
+        if execute:
             if pipeline.feature_searcher is None:
                 self.data_x_best_features = self.data_x
             else:
@@ -121,7 +129,9 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
 
         :param pipeline: Pipeline que está sendo executado
         """
-        if self.history_index is None or not pipeline.history_manager.has_history():
+        execute = self.get_execute_pipeline(pipeline)
+
+        if execute:
             return pipeline.params_searcher.search_hyper_parameters(
                 estimator=pipeline.estimator,
                 params=pipeline.params,
@@ -143,7 +153,9 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
         :param pipeline: Pipeline que está sendo executado
         :param search_cv: Retorno da busca dos melhores hiperparâmetros
         """
-        if self.history_index is None or not pipeline.history_manager.has_history():
+        execute = self.get_execute_pipeline(pipeline)
+
+        if execute:
             return pipeline.validator.validate(searcher=search_cv,
                                                data_x=self.data_x_best_features,
                                                data_y=self.data_y,
@@ -165,7 +177,9 @@ class ScikitLearnMultiProcessManager(CommonMultiProcessManager[ScikitLearnPipeli
         :param pipeline: O pipeline que gerou os resultados.
         :param result: O resultado da validação a ser salvo.
         """
-        if self.save_history and (self.history_index is None or not pipeline.history_manager.has_history()):
+        execute = self.get_execute_pipeline(pipeline)
+
+        if self.save_history and execute:
             pre_processing_time, feature_selection_time, search_time, validation_time = pipeline.get_execution_times()
 
             pipeline.history_manager.save_result(result,
